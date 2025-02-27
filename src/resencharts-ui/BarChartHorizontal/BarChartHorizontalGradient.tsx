@@ -1,16 +1,25 @@
 import React, { CSSProperties } from "react";
 import { scaleBand, scaleLinear, max } from "d3";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 const data = [
-  { key: "Technology", value: 38.1 },
-  { key: "Financials", value: 25.3 },
-  { key: "Energy", value: 23.1 },
-  { key: "Cyclical", value: 19.5 },
-  { key: "Defensive", value: 14.7 },
-  { key: "Utilities", value: 5.8 },
+  { key: "Technology", value: 38.1, color: "from-pink-300 to-pink-400" },
+  { key: "Financials", value: 25.3, color: "from-purple-300 to-purple-400" },
+  { key: "Energy", value: 23.1, color: "from-indigo-300 to-indigo-400" },
+  { key: "Cyclical", value: 19.5, color: "from-sky-300 to-sky-400" },
+  { key: "Defensive", value: 14.7, color: "from-orange-200 to-orange-300" },
+  { key: "Utilities", value: 5.8, color: "from-lime-300 to-lime-400" },
 ].toSorted((a, b) => b.value - a.value);
 
-export function BarChartHorizontal() {
+export function BarChartHorizontalGradient({
+  withTooltip = true,
+}: {
+  withTooltip?: boolean;
+}) {
   // Scales
   const yScale = scaleBand()
     .domain(data.map((d) => d.key))
@@ -39,9 +48,9 @@ export function BarChartHorizontal() {
         className="absolute inset-0
           z-10
           h-[calc(100%-var(--marginTop)-var(--marginBottom))]
+          translate-y-[var(--marginTop)]
           w-[calc(100%-var(--marginLeft)-var(--marginRight))]
           translate-x-[var(--marginLeft)]
-          translate-y-[var(--marginTop)]
           overflow-visible
         "
       >
@@ -50,18 +59,44 @@ export function BarChartHorizontal() {
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
+          if (!withTooltip) {
+            return (
+              <div
+                key={index}
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: `${yScale(d.key)}%`,
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                }}
+                className={`bg-gradient-to-b ${d.color}`}
+              />
+            );
+          }
+
           return (
-            <div
-              key={index}
-              style={{
-                left: "0",
-                top: `${yScale(d.key)}%`,
-                width: `${barWidth}%`,
-                height: `${barHeight}%`,
-                borderRadius: "0 6px 6px 0", // Rounded right corners
-              }}
-              className={`absolute bg-purple-300 dark:bg-purple-400`}
-            />
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <div
+                  key={index}
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0", // Rounded right corners
+                  }}
+                  className={`bg-gradient-to-b ${d.color}`}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>{d.key}</div>
+                <div className="text-gray-500 text-sm">{d.value}</div>
+              </TooltipContent>
+            </ClientTooltip>
           );
         })}
         <svg
@@ -108,10 +143,10 @@ export function BarChartHorizontal() {
       {/* Y Axis (Letters) */}
       <div
         className="
-          h-[calc(100%-var(--marginTop)-var(--marginBottom))]
-          w-[var(--marginLeft)]
-          translate-y-[var(--marginTop)]
-          overflow-visible"
+           h-[calc(100%-var(--marginTop)-var(--marginBottom))]
+           w-[var(--marginLeft)]
+           translate-y-[var(--marginTop)]
+           overflow-visible"
       >
         {data.map((entry, i) => (
           <span

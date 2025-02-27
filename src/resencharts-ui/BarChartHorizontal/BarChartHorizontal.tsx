@@ -1,5 +1,10 @@
 import React, { CSSProperties } from "react";
 import { scaleBand, scaleLinear, max } from "d3";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../utils/Tooltip/Tooltip";
 
 const data = [
   { key: "Technology", value: 38.1 },
@@ -10,7 +15,11 @@ const data = [
   { key: "Utilities", value: 5.8 },
 ].toSorted((a, b) => b.value - a.value);
 
-export function BarChartHorizontal() {
+export function BarChartHorizontal({
+  withTooltip = true,
+}: {
+  withTooltip?: boolean;
+}) {
   // Scales
   const yScale = scaleBand()
     .domain(data.map((d) => d.key))
@@ -50,6 +59,35 @@ export function BarChartHorizontal() {
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
+          if (withTooltip) {
+            return (
+              <ClientTooltip key={index}>
+                <TooltipTrigger>
+                  <div
+                    key={index}
+                    style={{
+                      left: "0",
+                      top: `${yScale(d.key)}%`,
+                      width: `${barWidth}%`,
+                      height: `${barHeight}%`,
+                      borderRadius: "0 6px 6px 0", // Rounded right corners
+                    }}
+                    className={`absolute bg-purple-300 dark:bg-purple-400`}
+                  />
+                </TooltipTrigger>
+                <TooltipContent>
+                  <div className="flex gap-2.5 items-center">
+                    <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
+                    <div>
+                      <div>{d.key}</div>
+                      <div className="text-gray-500 text-sm/5">{d.value}%</div>
+                    </div>
+                  </div>
+                </TooltipContent>
+              </ClientTooltip>
+            );
+          }
+
           return (
             <div
               key={index}
@@ -64,6 +102,7 @@ export function BarChartHorizontal() {
             />
           );
         })}
+
         <svg
           className="h-full w-full"
           viewBox="0 0 100 100"

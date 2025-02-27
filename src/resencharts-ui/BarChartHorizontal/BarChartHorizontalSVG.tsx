@@ -1,5 +1,10 @@
 import React, { CSSProperties } from "react";
 import { scaleBand, scaleLinear, max } from "d3";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 const data = [
   { key: "Company A", value: 55.8, color: "bg-pink-300 dark:bg-pink-400" },
@@ -14,7 +19,11 @@ const data = [
   },
 ];
 
-export function BarChartHorizontalLogo() {
+export function BarChartHorizontalSVG({
+  withTooltip = true,
+}: {
+  withTooltip?: boolean;
+}) {
   // Scales
   const yScale = scaleBand()
     .domain(data.map((d) => d.key))
@@ -106,19 +115,44 @@ export function BarChartHorizontalLogo() {
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
+          if (!withTooltip) {
+            return (
+              <div
+                key={index}
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: `${yScale(d.key)}%`,
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                }}
+                className={`${d.color}`}
+              />
+            );
+          }
+
           return (
-            <div
-              key={index}
-              style={{
-                position: "absolute",
-                left: "0",
-                top: `${yScale(d.key)}%`,
-                width: `${barWidth}%`,
-                height: `${barHeight}%`,
-                borderRadius: "0 6px 6px 0", // Rounded right corners
-              }}
-              className={`${d.color}`}
-            />
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <div
+                  key={index}
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0", // Rounded right corners
+                  }}
+                  className={`${d.color}`}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>{d.key}</div>
+                <div className="text-gray-500 text-sm">{d.value}</div>
+              </TooltipContent>
+            </ClientTooltip>
           );
         })}
         <svg
