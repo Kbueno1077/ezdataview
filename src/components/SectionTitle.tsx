@@ -1,7 +1,7 @@
 import React from 'react';
 
 interface SectionTitleProps {
-    children: React.ReactElement;
+    children: React.ReactElement<any>;
 }
 
 const SectionTitle: React.FC<SectionTitleProps> = ({ children }) => {
