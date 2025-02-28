@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { Source_Sans_3, Manrope } from "next/font/google";
 
-import Header from "@/components/Header";
-import Footer from "@/components/Footer";
-import { siteDetails } from "@/data/siteDetails";
+import { siteDetails } from "@/modules/Landing/data/siteDetails";
 
 import "./globals.css";
+import Header from "@/modules/Landing/Header";
+import Footer from "@/modules/Landing/Footer";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const sourceSans = Source_Sans_3({ subsets: ["latin"] });

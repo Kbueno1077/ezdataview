@@ -24,7 +24,7 @@ const dataExample = [
 
 const PX_BETWEEN_BARS = 5;
 
-export function BarChartMultiVertical({
+export function BarChartVerticalMulti({
   withTooltip = true,
 }: {
   withTooltip?: boolean;

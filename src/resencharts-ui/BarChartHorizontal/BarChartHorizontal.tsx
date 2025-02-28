@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../utils/Tooltip/Tooltip";
+} from "../utils/Tooltip/Tooltip";
 
 const data = [
   { key: "Technology", value: 38.1 },

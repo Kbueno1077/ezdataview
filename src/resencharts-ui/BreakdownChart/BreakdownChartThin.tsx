@@ -31,7 +31,7 @@ const data = [
   },
 ];
 
-export function BarChartThinBreakdown() {
+export function BreakdownChartThin() {
   const gap = 0.3; // gap between bars
   const totalValue = data.reduce((acc, d) => acc + d.value, 0);
   const barHeight = 12;

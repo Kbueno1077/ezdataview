@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 const data = [
   { key: "France", value: 38.1 },
@@ -26,7 +26,7 @@ const data = [
   { key: "Croatia", value: 5.8 },
 ].toSorted((a, b) => b.value - a.value);
 
-export function BarChartThinHorizontal({
+export function BarChartHorizontalThin({
   withTooltip = true,
 }: {
   withTooltip?: boolean;

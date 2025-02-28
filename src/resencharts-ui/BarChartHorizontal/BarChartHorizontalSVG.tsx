@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 const data = [
   { key: "Company A", value: 55.8, color: "bg-pink-300 dark:bg-pink-400" },

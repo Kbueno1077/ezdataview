@@ -1,13 +1,15 @@
-import Benefits from "@/components/Benefits/Benefits";
+import Benefits from "@/modules/Landing/Benefits/Benefits";
 import Container from "@/components/Container";
-import CTA from "@/components/CTA";
-import FAQ from "@/components/FAQ";
-import Hero from "@/components/Hero";
-import Logos from "@/components/Logos";
-import Pricing from "@/components/Pricing/Pricing";
+import CTA from "@/modules/Landing/CTA/CTA";
+import FAQ from "@/modules/Landing/FAQ";
+import Hero from "@/modules/Landing/Hero";
+import Logos from "@/modules/Landing/Logos";
+import Pricing from "@/modules/Landing/Pricing/Pricing";
 import Section from "@/components/Section";
-import Stats from "@/components/Stats";
-import Testimonials from "@/components/Testimonials";
+import Stats from "@/modules/Landing/Stats";
+import Testimonials from "@/modules/Landing/Testimonials";
+import ChartShowcase from "@/modules/Landing/ChartShowcase/ChartShowcase";
+
 const HomePage: React.FC = () => {
   return (
     <>
@@ -15,6 +17,14 @@ const HomePage: React.FC = () => {
       <Logos />
       <Container>
         <Benefits />
+
+        <Section
+          id="charts"
+          title="Powerful Chart Types"
+          description="Visualize your data with our comprehensive suite of interactive charts."
+        >
+          <ChartShowcase />
+        </Section>
 
         <Section
           id="pricing"
