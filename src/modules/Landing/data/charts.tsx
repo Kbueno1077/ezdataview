@@ -1,12 +1,26 @@
-import { BarChartHorizontalGradient } from "@/resencharts-ui/BarChartHorizontal/BarChartHorizontalGradient";
-import { BarChartHorizontalSVG } from "@/resencharts-ui/BarChartHorizontal/BarChartHorizontalSVG";
-import { BarChartVertical } from "@/resencharts-ui/BarChartVertical/BarChartVertical";
-import { BreackDownChart } from "@/resencharts-ui/BreakdownChart/BreakdownChart";
-import { LineChart } from "@/resencharts-ui/LineCharts/LineChart";
-import { LineChartMultiple } from "@/resencharts-ui/LineCharts/LineChartMultiple";
-import { DonutChart } from "@/resencharts-ui/PieCharts/DonutChart";
-import { PieChart } from "@/resencharts-ui/PieCharts/PieChart";
-import { IChartShowcase } from "@/types";
+import { BarChartHorizontalGradient } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalGradient";
+import { BarChartHorizontalSVG } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalSVG";
+import { BarChartVertical } from "@/components/resencharts-ui/BarChartVertical/BarChartVertical";
+import { BreakdownChart } from "@/components/resencharts-ui/BreakdownChart/BreakdownChart";
+import { LineChart } from "@/components/resencharts-ui/LineCharts/LineChart";
+import { LineChartMultiple } from "@/components/resencharts-ui/LineCharts/LineChartMultiple";
+import { DonutChart } from "@/components/resencharts-ui/PieCharts/DonutChart";
+import { PieChart } from "@/components/resencharts-ui/PieCharts/PieChart";
+import {
+  barVertical,
+  dataGradient,
+  dataSVG,
+} from "@/components/resencharts-ui/utils/fixtures/BarCharts";
+import { breakdownChartData } from "@/components/resencharts-ui/utils/fixtures/BreakdownCharts";
+import {
+  lineChartData,
+  lineChartMultipleData,
+} from "@/components/resencharts-ui/utils/fixtures/LineChart";
+import {
+  donutChartData,
+  pieChartData,
+} from "@/components/resencharts-ui/utils/fixtures/PieChart";
+import { IChartShowcase } from "@/modules/Landing/types";
 
 export const chartShowcases: IChartShowcase[] = [
   {
@@ -19,7 +33,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive tooltips for detailed information",
       "Responsive design that adapts to any screen size",
     ],
-    chartType: <BarChartHorizontalGradient />,
+    chartType: <BarChartHorizontalGradient data={dataGradient} />,
   },
   {
     title: "Vertical Bar Charts",
@@ -31,7 +45,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Hover interactions for detailed data inspection",
       "Customizable appearance to match your brand",
     ],
-    chartType: <BarChartVertical />,
+    chartType: <BarChartVertical data={barVertical} />,
   },
 
   {
@@ -44,7 +58,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive elements for exploring specific values",
       "Subtle grid lines for better readability",
     ],
-    chartType: <LineChart />,
+    chartType: <LineChart data={lineChartData} />,
   },
 
   {
@@ -57,7 +71,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive elements to explore specific data points",
       "Legend support for identifying each data series",
     ],
-    chartType: <LineChartMultiple />,
+    chartType: <LineChartMultiple data={lineChartMultipleData} />,
   },
 
   {
@@ -70,7 +84,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Customizable appearance and formatting",
       "Optimized performance for large datasets",
     ],
-    chartType: <BarChartHorizontalSVG />,
+    chartType: <BarChartHorizontalSVG data={dataSVG} />,
   },
 
   {
@@ -83,7 +97,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive tooltips for detailed information",
       "Optimized for both small and large datasets",
     ],
-    chartType: <PieChart />,
+    chartType: <PieChart data={pieChartData} />,
   },
 
   {
@@ -96,7 +110,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive elements for exploring segment details",
       "Customizable appearance and proportions",
     ],
-    chartType: <DonutChart />,
+    chartType: <DonutChart data={donutChartData} />,
   },
   {
     title: "Breakdown Charts",
@@ -108,6 +122,6 @@ export const chartShowcases: IChartShowcase[] = [
       "Consistent color schemes for category identification",
       "Responsive design that works across all devices",
     ],
-    chartType: <BreackDownChart />,
+    chartType: <BreakdownChart data={breakdownChartData} />,
   },
 ];

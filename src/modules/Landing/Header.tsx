@@ -1,14 +1,18 @@
 "use client";
 
+import { Transition } from "@headlessui/react";
 import Link from "next/link";
 import React, { useState } from "react";
-import { Transition } from "@headlessui/react";
-import { HiOutlineXMark, HiBars3 } from "react-icons/hi2";
 import { FaFingerprint } from "react-icons/fa";
+import { HiBars3, HiOutlineXMark } from "react-icons/hi2";
 
-import { siteDetails } from "@/modules/Landing/data/siteDetails";
-import { menuItems } from "@/modules/Landing/data/menuItems";
 import Container from "@/components/Container";
+import { menuItems } from "@/modules/Landing/data/menuItems";
+import { siteDetails } from "@/modules/Landing/data/siteDetails";
+import { SignedIn, SignedOut } from "@clerk/nextjs";
+import CustomSignInButton from "../auth/SignInButton";
+import CustomSignUpButton from "../auth/SignUpButton";
+import UserButtonClerk from "../auth/UserButtonClerk";
 
 const Header: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -41,14 +45,16 @@ const Header: React.FC = () => {
                 </Link>
               </li>
             ))}
-            <li>
-              <Link
-                href="#cta"
-                className="text-black bg-primary hover:bg-primary-accent px-8 py-3 rounded-full transition-colors"
-              >
-                Download
-              </Link>
-            </li>
+
+            <>
+              <SignedOut>
+                <CustomSignInButton />
+                <CustomSignUpButton />
+              </SignedOut>
+              <SignedIn>
+                <UserButtonClerk />
+              </SignedIn>
+            </>
           </ul>
 
           {/* Mobile Menu Button */}

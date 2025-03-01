@@ -1,22 +1,25 @@
-import Benefits from "@/modules/Landing/Benefits/Benefits";
 import Container from "@/components/Container";
-import CTA from "@/modules/Landing/CTA/CTA";
-import FAQ from "@/modules/Landing/FAQ";
-import Hero from "@/modules/Landing/Hero";
-import Logos from "@/modules/Landing/Logos";
-import Pricing from "@/modules/Landing/Pricing/Pricing";
 import Section from "@/components/Section";
-import Stats from "@/modules/Landing/Stats";
-import Testimonials from "@/modules/Landing/Testimonials";
 import ChartShowcase from "@/modules/Landing/ChartShowcase/ChartShowcase";
+import CTA from "@/modules/Landing/CTA/CTA";
+import FAQ from "@/modules/Landing/FAQ/FAQ";
+import FeatureGrid from "@/modules/Landing/Features/FeaturesGrid";
+import Hero from "@/modules/Landing/Hero";
+import Pricing from "@/modules/Landing/Pricing/Pricing";
+import Stats from "@/modules/Landing/Stats";
 
 const HomePage: React.FC = () => {
   return (
     <>
       <Hero />
-      <Logos />
       <Container>
-        <Benefits />
+        <Section
+          id="features"
+          title="Our Features"
+          description="Discover what makes our platform stand out from the competition"
+        >
+          <FeatureGrid />
+        </Section>
 
         <Section
           id="charts"
@@ -32,14 +35,6 @@ const HomePage: React.FC = () => {
           description="Simple, transparent pricing. No surprises."
         >
           <Pricing />
-        </Section>
-
-        <Section
-          id="testimonials"
-          title="What Our Clients Say"
-          description="Hear from those who have partnered with us."
-        >
-          <Testimonials />
         </Section>
 
         <FAQ />

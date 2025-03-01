@@ -3,7 +3,13 @@ import Image from "next/image";
 
 import ExampleResultButton from "./CTA/AppStoreButton";
 import ExampleBuildButton from "./CTA/PlayStoreButton";
-import { heroDetails } from "./data/hero";
+
+export const heroDetails = {
+  heading: "Beautiful Charts Made Simple",
+  subheading:
+    "Transform your data into stunning visualizations in minutes with EZdataView's intuitive, accessible charting tools",
+  centerImageSrc: "/images/hero-mockup.webp",
+};
 
 const Hero: React.FC = () => {
   return (

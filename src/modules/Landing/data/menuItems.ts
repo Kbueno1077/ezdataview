@@ -1,4 +1,4 @@
-import { IMenuItem } from "@/types";
+import { IMenuItem } from "@/modules/Landing/types";
 
 export const menuItems: IMenuItem[] = [
   {
@@ -13,9 +13,5 @@ export const menuItems: IMenuItem[] = [
   {
     text: "Pricing",
     url: "#pricing",
-  },
-  {
-    text: "Testimonials",
-    url: "#testimonials",
   },
 ];

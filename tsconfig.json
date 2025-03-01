@@ -27,7 +27,7 @@
     "**/*.ts",
     "**/*.tsx",
     ".next/types/**/*.ts",
-    "src/resencharts-ui/BarChartHorizontal"
+    "src/components/resencharts-ui/BarChartHorizontal"
   ],
   "exclude": ["node_modules"]
 }

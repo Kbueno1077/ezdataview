@@ -1,10 +1,11 @@
 "use client";
+
 import clsx from "clsx";
 import { motion } from "motion/react";
 import { FiCheck } from "react-icons/fi";
 
 import SectionTitle from "@/components/SectionTitle";
-import { IChartShowcase } from "@/types";
+import { IChartShowcase } from "@/modules/Landing/types";
 
 interface Props {
   chart: IChartShowcase;

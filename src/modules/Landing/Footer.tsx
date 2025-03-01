@@ -3,7 +3,7 @@ import React from "react";
 import { FaFingerprint } from "react-icons/fa";
 
 import { siteDetails } from "@/modules/Landing/data/siteDetails";
-import { getPlatformIconByName } from "@/utils";
+import { getPlatformIconByName } from "@/modules/Landing/utils";
 import { footerDetails } from "./data/footer";
 
 const Footer: React.FC = () => {
