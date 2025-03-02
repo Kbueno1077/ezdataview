@@ -20,7 +20,7 @@ import {
   donutChartData,
   pieChartData,
 } from "@/components/resencharts-ui/utils/fixtures/PieChart";
-import { IChartShowcase } from "@/modules/Landing/types";
+import { IChartShowcase } from "@/modules/landing/types";
 
 export const chartShowcases: IChartShowcase[] = [
   {

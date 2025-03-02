@@ -1,7 +1,7 @@
 import { BsBarChartFill, BsFillStarFill } from "react-icons/bs";
 import { PiGlobeFill } from "react-icons/pi";
 
-import { IStats } from "@/modules/Landing/types";
+import { IStats } from "@/modules/landing/types";
 
 export const stats: IStats[] = [
   {

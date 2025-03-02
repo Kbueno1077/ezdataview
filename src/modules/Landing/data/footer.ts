@@ -1,4 +1,4 @@
-import { IMenuItem, ISocials } from "@/modules/Landing/types";
+import { IMenuItem, ISocials } from "@/modules/landing/types";
 
 export const footerDetails: {
   subheading: string;

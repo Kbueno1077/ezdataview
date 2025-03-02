@@ -1,4 +1,4 @@
-import { IMenuItem } from "@/modules/Landing/types";
+import { IMenuItem } from "@/modules/landing/types";
 
 export const menuItems: IMenuItem[] = [
   {

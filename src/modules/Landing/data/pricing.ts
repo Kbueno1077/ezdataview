@@ -1,4 +1,4 @@
-import { IPricing } from "@/modules/Landing/types";
+import { IPricing } from "@/modules/landing/types";
 
 export const tiers: IPricing[] = [
   {

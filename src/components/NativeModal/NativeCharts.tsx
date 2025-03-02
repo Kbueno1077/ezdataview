@@ -51,7 +51,10 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
             style={{ opacity: isHovered ? 1 : 0 }}
           />
         </div>
-        <div className={styles.chartPreview}>{previewChartNode}</div>
+
+        <div className={styles.chartPreview}>
+          <div className="w-full h-full">{previewChartNode}</div>
+        </div>
       </div>
     </div>
   );

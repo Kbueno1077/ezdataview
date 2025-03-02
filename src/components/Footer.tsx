@@ -2,9 +2,9 @@ import Link from "next/link";
 import React from "react";
 import { FaFingerprint } from "react-icons/fa";
 
-import { siteDetails } from "@/modules/Landing/data/siteDetails";
-import { getPlatformIconByName } from "@/modules/Landing/utils";
-import { footerDetails } from "../modules/Landing/data/footer";
+import { siteDetails } from "@/modules/landing/data/siteDetails";
+import { getPlatformIconByName } from "@/modules/landing/utils";
+import { footerDetails } from "../modules/landing/data/footer";
 
 const Footer: React.FC = () => {
   return (

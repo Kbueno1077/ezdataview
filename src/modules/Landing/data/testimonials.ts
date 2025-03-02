@@ -1,4 +1,4 @@
-import { ITestimonial } from "@/modules/Landing/types";
+import { ITestimonial } from "@/modules/landing/types";
 import { siteDetails } from "./siteDetails";
 
 export const testimonials: ITestimonial[] = [

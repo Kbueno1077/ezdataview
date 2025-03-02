@@ -1,4 +1,4 @@
-import { stats } from "@/modules/Landing/data/stats";
+import { stats } from "@/modules/landing/data/stats";
 
 const Stats: React.FC = () => {
   return (

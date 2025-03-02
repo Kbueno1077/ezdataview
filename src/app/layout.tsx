@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Manrope, Source_Sans_3 } from "next/font/google";
 
-import { siteDetails } from "@/modules/Landing/data/siteDetails";
+import { siteDetails } from "@/modules/landing/data/siteDetails";
 
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";

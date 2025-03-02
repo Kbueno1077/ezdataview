@@ -8,7 +8,7 @@ import {
 import { BiMinus, BiPlus } from "react-icons/bi";
 
 import SectionTitle from "@/components/SectionTitle";
-import { IFAQ } from "@/modules/Landing/types";
+import { IFAQ } from "@/modules/landing/types";
 import { siteDetails } from "../data/siteDetails";
 
 export const faqs: IFAQ[] = [

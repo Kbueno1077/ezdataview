@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { testimonials } from "@/modules/Landing/data/testimonials";
+import { testimonials } from "@/modules/landing/data/testimonials";
 
 const Testimonials: React.FC = () => {
   return (

@@ -1,7 +1,7 @@
 import React from "react";
 import clsx from "clsx";
 
-import { ctaDetails } from "@/modules/Landing/data/cta";
+import { ctaDetails } from "@/modules/landing/data/cta";
 
 const ExampleResultButton = ({ dark }: { dark?: boolean }) => {
   return (

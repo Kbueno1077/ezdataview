@@ -3,7 +3,7 @@
 import type React from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
-import type { IFeature } from "@/modules/Landing/types";
+import type { IFeature } from "@/modules/landing/types";
 
 interface Props {
   feature: IFeature;

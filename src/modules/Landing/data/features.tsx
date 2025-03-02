@@ -1,4 +1,4 @@
-import { IFeature } from "@/modules/Landing/types";
+import { IFeature } from "@/modules/landing/types";
 import {
   FiServer,
   FiSliders,

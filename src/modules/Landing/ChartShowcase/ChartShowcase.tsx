@@ -1,5 +1,5 @@
 import ChartShowcaseSection from "./ChartShowcaseSection";
-import { chartShowcases } from "@/modules/Landing/data/charts";
+import { chartShowcases } from "@/modules/landing/data/charts";
 
 const ChartShowcase: React.FC = () => {
   return (

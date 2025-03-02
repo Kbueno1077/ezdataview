@@ -1,6 +1,6 @@
 import PricingColumn from "./PricingColumn";
 
-import { tiers } from "@/modules/Landing/data/pricing";
+import { tiers } from "@/modules/landing/data/pricing";
 
 const Pricing: React.FC = () => {
   return (

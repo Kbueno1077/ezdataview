@@ -5,7 +5,7 @@ import { motion } from "motion/react";
 import { FiCheck } from "react-icons/fi";
 
 import SectionTitle from "@/components/SectionTitle";
-import { IChartShowcase } from "@/modules/Landing/types";
+import { IChartShowcase } from "@/modules/landing/types";
 
 interface Props {
   chart: IChartShowcase;

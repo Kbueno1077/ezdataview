@@ -1,4 +1,4 @@
-import { ctaDetails } from "@/modules/Landing/data/cta";
+import { ctaDetails } from "@/modules/landing/data/cta";
 
 import ExampleResultButton from "./ExampleResultButton";
 import ExampleBuildButton from "./ExampleBuildButton";
