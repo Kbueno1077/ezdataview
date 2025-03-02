@@ -18,7 +18,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   const chartRef = useRef<HTMLDivElement>(null);
   const modalChartRef = useRef<HTMLDivElement>(null);
 
-  const previewChartNode = getChartTypeByName(chart.data, chart.type, true); // Enable tooltips in preview
+  const previewChartNode = getChartTypeByName(chart.data, chart.type, true);
 
   const handleChartClick = () => {
     setShowModal(true);
@@ -29,7 +29,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   };
 
   return (
-    <div className={styles.container}>
+    <div className="relative">
       <NativeModal title={title} isOpen={showModal} onClose={handleCloseModal}>
         <div ref={modalChartRef} className={styles.modalChart}>
           {previewChartNode}
@@ -43,11 +43,11 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
         onMouseLeave={() => setIsHovered(false)}
         ref={chartRef}
       >
-        <div className={styles.chartHeader}>
+        <div className="py-3 px-4 font-semibold text-base bg-background border-b border-gray-200 flex items-center justify-between">
           {title}
           <FaExternalLinkAlt
             size={10}
-            className={styles.expandIcon}
+            className="ml-2 text-xs text-gray-600  transition-opacity duration-200 ease-in-out"
             style={{ opacity: isHovered ? 1 : 0 }}
           />
         </div>

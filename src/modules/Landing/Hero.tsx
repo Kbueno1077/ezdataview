@@ -1,8 +1,8 @@
 import React from "react";
 import Image from "next/image";
 
-import ExampleResultButton from "./CTA/AppStoreButton";
-import ExampleBuildButton from "./CTA/PlayStoreButton";
+import ExampleResultButton from "./CTA/ExampleResultButton";
+import ExampleBuildButton from "./CTA/ExampleBuildButton";
 
 export const heroDetails = {
   heading: "Beautiful Charts Made Simple",

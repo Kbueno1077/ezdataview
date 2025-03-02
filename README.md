@@ -1,8 +1,8 @@
-[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnexi-launch%ezDataView-landing-page)
+[![Deploy with Vercel](https://vercel.com/button)](https://vercel.com/new/clone?repository-url=https%3A%2F%2Fgithub.com%2Fnexi-launch%2FEZdataView)
 
-# EzDataView - Next.js + Tailwind Landing Page Template
+# EZdataView - Interactive Data Visualization Platform
 
-EzDataView is a lightweight, easily configurable, and customizable **Next.js** and **Tailwind CSS** landing page template. It’s built to be adaptable, performant, and perfect for any product launch, portfolio, or promotional site.
+EZdataView is a powerful, user-friendly platform that helps you create, customize, and share interactive charts and data visualizations with ease. Built with **Next.js**, **Tailwind CSS**, and modern charting libraries, it transforms complex data into clear, compelling visual stories.
 
 Try out the demo here: [https://ezdataview.vercel.app](https://ezdataview.vercel.app).
 
@@ -12,29 +12,30 @@ Please check out the documentation below to get started.
 
 ## Features
 
-- **Next.js** app router with **TypeScript**
-- **Tailwind CSS** v3 for flexible styling customization
-- Smooth transitions powered by **Framer Motion**
+- **Next.js** app router with **TypeScript** for type safety
+- **Tailwind CSS** v3 for responsive and customizable UI
+- Interactive charts powered by modern visualization libraries
+- **Clerk Authentication** for secure user management
+- Smooth animations with **Framer Motion**
 - Built-in **font optimization** with [next/font](https://nextjs.org/docs/app/api-reference/components/font)
 - Automatic **image optimization** via [next/image](https://nextjs.org/docs/app/building-your-application/optimizing/images)
-- Access to **31+ icon packs** via [React Icons](https://react-icons.github.io/react-icons/)
-- Near-perfect **Lighthouse score**
-- Modular, responsive, and **scalable components**
-- **Free lifetime updates**
+- Comprehensive icon selection via [React Icons](https://react-icons.github.io/react-icons/)
+- Optimized for performance with near-perfect **Lighthouse score**
+- Modular architecture for easy customization and extension
+- Responsive design that works on all devices
 
 ---
 
-## Sections
+## Visualization Types
 
-- Hero
-- Partners or Clients Logos
-- Features
-- Pricing
-- Testimonials
-- FAQ
-- Statistics
-- CTA
-- Footer
+- Line Charts
+- Bar Charts
+- Pie Charts
+- Area Charts
+- Scatter Plots
+- Heatmaps
+- Candlestick Charts
+- And more!
 
 ---
 
@@ -51,18 +52,20 @@ Before starting, make sure you have the following installed:
 ### Steps
 
 1. **Install dependencies**: Run `npm install`
-2. **Run the development server**: `npm run dev`
-3. **View your project**: Open [localhost:3000](http://localhost:3000)
+2. **Set up environment variables**: Copy `.env.example` to `.env.local` and fill in your Clerk API keys
+3. **Run the development server**: `npm run dev`
+4. **View your project**: Open [localhost:3000](http://localhost:3000)
 
 ---
 
 ## Customization
 
 1. **Edit colors**: Update `globals.css` for primary, secondary, background, and accent colors.
-2. **Update site details**: Customize `siteDetails.ts` in `/src/data` to reflect your brand and site info.
-3. **Modify content**: Files in `/src/data` handle data for navigation, features, pricing, testimonials, and more.
-4. **Replace favicon**: Add your icon to `/src/app/favicon.ico`.
-5. **Add images**: Update `public/images` for Open Graph metadata (e.g., `og-image.jpg`, `twitter-image.jpg`).
+2. **Update site details**: Customize `siteDetails.ts` in `/src/modules/Landing/data` to reflect your brand and site info.
+3. **Add new chart types**: Extend the visualization options in the `resencharts-ui` component.
+4. **Modify protected routes**: Update middleware.ts to change authentication requirements.
+5. **Replace favicon**: Add your icon to `/src/app/favicon.ico`.
+6. **Add images**: Update `public/images` for logos and Open Graph metadata.
 
 ---
 
@@ -74,27 +77,28 @@ The fastest way to deploy EZdataView is on [Vercel](https://vercel.com/). Simply
 
 ## Contributing
 
-EZdataView is an open-source project, and we welcome contributions from the community! If you have ideas for new components, designs, layouts, or optimizations, please join us in making EZdataView even better.
+EZdataView is an open-source project, and we welcome contributions from the community! If you have ideas for new visualization types, UI improvements, or performance optimizations, please join us in making EZdataView even better.
 
 ### How to Contribute
 
 1. **Fork the Repository**: Clone it locally.
-2. **Create a New Branch**: For example, `feature/new-section` or `fix/style-issue`.
+2. **Create a New Branch**: For example, `feature/new-chart-type` or `fix/visualization-bug`.
 3. **Develop and Test**: Make sure your changes work and don't break existing functionality.
 4. **Submit a Pull Request**: Open a pull request with a clear description of your changes, and we'll review it.
 
 ### Ideas for Contributions
 
-- New component sections (team introductions, comparison table, case studies, etc.)
-- Additional page variants (e.g., agency, eCommerce, portfolio layouts)
-- Additional themes
-- Documentation updates, tutorials, or guides
+- New chart types and visualization options
+- Data import/export features
+- Enhanced customization options for charts
+- Performance optimizations
+- Documentation improvements
 
 ---
 
 ## Community and Support
 
-Join our community discussions on GitHub to share ideas, ask questions, or suggest improvements. Let’s build something amazing together!
+Join our community discussions on GitHub to share ideas, ask questions, or suggest improvements. Let's build something amazing together!
 
 ---
 

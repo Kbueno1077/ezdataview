@@ -9,14 +9,15 @@ const ExampleResultButton = ({ dark }: { dark?: boolean }) => {
       <button
         type="button"
         className={clsx(
-          "flex items-center cursor-pointer justify-center min-w-[205px] mt-3 px-6 h-14 rounded-full w-full sm:w-fit",
+          "group flex items-center cursor-pointer justify-center min-w-[205px] mt-3 px-6 h-14 rounded-full w-full sm:w-fit",
+          "transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg",
           {
-            "text-white bg-foreground": dark,
-            "text-foreground bg-white": !dark,
+            "text-white bg-foreground hover:bg-foreground/90": dark,
+            "text-foreground bg-white hover:bg-gray-50": !dark,
           }
         )}
       >
-        <div className="mr-3">
+        <div className="mr-3 transition-transform duration-300 group-hover:rotate-12">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="30"

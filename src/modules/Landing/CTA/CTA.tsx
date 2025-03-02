@@ -1,7 +1,7 @@
 import { ctaDetails } from "@/modules/Landing/data/cta";
 
-import ExampleResultButton from "./AppStoreButton";
-import ExampleBuildButton from "./PlayStoreButton";
+import ExampleResultButton from "./ExampleResultButton";
+import ExampleBuildButton from "./ExampleBuildButton";
 
 const CTA: React.FC = () => {
   return (

@@ -2,9 +2,9 @@ export const siteDetails = {
   siteName: "EZdataView",
   siteUrl: "https://ezdataview.vercel.app/",
   metadata: {
-    title: "EZdataView - Next.js and Tailwind CSS Landing Page Template",
+    title: "EZdataView - Interactive Data Visualization Platform",
     description:
-      "EZdataView empowers businesses with cutting-edge technology solutions to drive success and efficiency.",
+      "EZdataView helps you create, customize, and share interactive charts and data visualizations with ease.",
   },
   language: "en-us",
   locale: "en-US",
