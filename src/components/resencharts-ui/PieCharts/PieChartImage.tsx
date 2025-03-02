@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { pieChartItem } from "../utils/types";
+import Image from "next/image";
 
 export function PieChartImage({
   data,
@@ -51,7 +52,7 @@ export function PieChartImage({
 
   return (
     <div className="p-6">
-      <div className="relative max-w-[16rem] mx-auto">
+      <div className="relative max-w-[50%] mx-auto">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
           className={`overflow-visible ${className}`}
@@ -137,10 +138,23 @@ export function PieChartImage({
                 </div>
                 {angle >= MIN_ANGLE && (
                   <div
-                    className="absolute -translate-x-1/2 -translate-y-1/2 size-10"
-                    style={{ left: logoLeft, top: logoTop }}
+                    className="absolute -translate-x-1/2 -translate-y-1/2"
+                    style={{
+                      left: logoLeft,
+                      top: logoTop,
+                      width: "15%",
+                      height: "15%",
+                    }}
                   >
-                    <img src={d.data.logo} alt={d.data.name} />
+                    {d.data.logo && (
+                      <Image
+                        src={d.data.logo}
+                        alt={d.data.name}
+                        width={440}
+                        height={440}
+                        className="w-full h-full object-contain"
+                      />
+                    )}
                   </div>
                 )}
               </div>

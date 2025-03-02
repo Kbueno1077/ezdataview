@@ -39,6 +39,11 @@ export const pieChartData: pieChartItem[] = [
   },
 ];
 
+export const filledDonutChartData = [
+  { name: "Filled", value: 31 },
+  { name: "Empty", value: 70 },
+];
+
 export const donutChartData: DonutChartItem[] = [
   { name: "NVDA", value: 25 },
   { name: "ETH", value: 18 },

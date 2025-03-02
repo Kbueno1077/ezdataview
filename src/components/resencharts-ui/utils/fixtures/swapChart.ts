@@ -13,7 +13,12 @@ import {
   lineChartData,
   lineChartMultipleData,
 } from "./LineChart";
-import { donutChartData, pieChartData, pieChartImageData } from "./PieChart";
+import {
+  donutChartData,
+  filledDonutChartData,
+  pieChartData,
+  pieChartImageData,
+} from "./PieChart";
 
 export const data = [
   {
@@ -122,12 +127,12 @@ export const data = [
     id: "16",
     name: "Fillable Chart ",
     type: "fillable",
-    data: pieChartData,
+    data: filledDonutChartData,
   },
   {
     id: "17",
     name: "Inner Donut Chart ",
     type: "fillable-donut",
-    data: pieChartData,
+    data: filledDonutChartData,
   },
 ];

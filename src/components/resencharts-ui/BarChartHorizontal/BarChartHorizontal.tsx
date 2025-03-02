@@ -30,9 +30,10 @@ export function BarChartHorizontal({
     .range([0, 100]);
 
   const longestWord = max(data.map((d) => d.key.length)) || 1;
+
   return (
     <div
-      className={`relative w-full h-72 ${className}`}
+      className={`relative max-w-[16rem] h-72 ${className}`}
       style={
         {
           "--marginTop": "0px",

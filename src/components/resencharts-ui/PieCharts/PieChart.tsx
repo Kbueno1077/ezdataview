@@ -51,7 +51,7 @@ export function PieChart({
 
   return (
     <div className="p-4">
-      <div className="relative max-w-[16rem] mx-auto">
+      <div className="relative mx-auto max-w-[50%]">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
           className={`overflow-visible ${className}`}
@@ -154,7 +154,7 @@ export function PieChart({
                   {d.data.value}
                 </div>
                 <div
-                  className="absolute max-w-[80px] text-white truncate text-center text-sm font-medium"
+                  className="absolute text-white truncate text-center font-medium w-full text-sm"
                   style={{
                     left: nameLeft,
                     top: nameTop,

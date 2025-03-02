@@ -1,7 +1,7 @@
 "use client";
 
 import { NativeCharts } from "@/components/NativeModal";
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 import { BsGrid3X3GapFill, BsListUl, BsGrid } from "react-icons/bs";
 import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
 

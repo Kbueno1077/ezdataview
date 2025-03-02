@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
-import { DonutChartItem } from "../utils/fixtures/PieChart";
+import { DonutChartItem } from "../utils/types";
 
 export function DonutChart({
   data,
@@ -80,7 +80,7 @@ export function DonutChart({
 
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`max-w-[16rem] mx-auto overflow-visible ${className}`}
+        className={`max-w-[50%] mx-auto overflow-visible ${className}`}
       >
         {/* Define clip paths and colors for each slice */}
         <defs>

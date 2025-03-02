@@ -73,6 +73,7 @@ export type pieChartItem = {
   colorFrom: string;
   colorTo: string;
   color?: string;
+  logo?: string;
 };
 
 export type DonutChartItem = { name: string; value: number };
