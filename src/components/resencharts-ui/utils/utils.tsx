@@ -48,7 +48,7 @@ export const getChartTypeByName = (
         />
       );
     }
-    case "horizontal-bar-multiple": {
+    case "horizontal-bar-multi": {
       return (
         <BarChartHorizontalMulti
           data={data}
@@ -93,7 +93,7 @@ export const getChartTypeByName = (
         />
       );
     }
-    case "line-multiple": {
+    case "line-multi": {
       return (
         <LineChartMultiple
           data={data}

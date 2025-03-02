@@ -85,7 +85,6 @@ h6 {
   right: 0;
   bottom: 0;
   margin: 20px 10px 20px;
-
   width: calc(100% - 20px);
   background: var(--background);
   border-radius: 10px;

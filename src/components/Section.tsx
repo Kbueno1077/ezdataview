@@ -1,4 +1,5 @@
 "use client";
+
 import SectionTitle from "./SectionTitle";
 import { motion } from "motion/react";
 import { ReactNode } from "react";

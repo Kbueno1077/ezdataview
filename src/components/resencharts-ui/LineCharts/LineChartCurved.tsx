@@ -10,7 +10,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { LineChartDataPoint } from "../utils/fixtures/LineChart";
 
 export function LineChartCurved({

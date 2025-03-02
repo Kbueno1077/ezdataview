@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip";
+} from "../Tooltip/Tooltip";
 import { GradientBarData } from "../utils/types";
 
 export function BarChartHorizontalGradient({

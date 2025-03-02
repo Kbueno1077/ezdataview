@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
 const PX_BETWEEN_BARS = 0.2;

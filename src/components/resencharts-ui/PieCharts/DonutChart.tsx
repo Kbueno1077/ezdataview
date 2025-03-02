@@ -3,7 +3,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip";
+} from "../Tooltip/Tooltip";
 import { DonutChartItem } from "../utils/fixtures/PieChart";
 
 export function DonutChart({

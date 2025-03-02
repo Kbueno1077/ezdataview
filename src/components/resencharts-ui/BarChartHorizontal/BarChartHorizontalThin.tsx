@@ -4,7 +4,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 
 export function BarChartHorizontalThin({
   data,

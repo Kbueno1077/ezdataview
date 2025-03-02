@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
-import { Source_Sans_3, Manrope } from "next/font/google";
+import { Manrope, Source_Sans_3 } from "next/font/google";
 
 import { siteDetails } from "@/modules/Landing/data/siteDetails";
 
-import "./globals.css";
-import Header from "@/modules/Landing/Header";
-import Footer from "@/modules/Landing/Footer";
+import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
+import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const sourceSans = Source_Sans_3({ subsets: ["latin"] });

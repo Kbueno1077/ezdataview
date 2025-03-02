@@ -10,7 +10,7 @@ import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../utils/Tooltip/Tooltip";
+} from "../Tooltip/Tooltip";
 import { LineDataSeries } from "../utils/types";
 
 export function LineChartMultiple({
