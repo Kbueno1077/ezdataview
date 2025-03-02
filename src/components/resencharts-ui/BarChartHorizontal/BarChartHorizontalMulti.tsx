@@ -115,16 +115,14 @@ export function BarChartHorizontalMulti({
                   key={index}
                   index={index}
                   withAnimation={withAnimation}
+                  className="absolute"
+                  style={{
+                    top: `${yScale(d.key)}%`,
+                    width: `100%`,
+                    height: `${yScale.bandwidth()}%`,
+                  }}
                 >
-                  <div
-                    key={index}
-                    className="absolute"
-                    style={{
-                      top: `${yScale(d.key)}%`,
-                      width: `100%`,
-                      height: `${yScale.bandwidth()}%`,
-                    }}
-                  >
+                  <div>
                     {d.values.map((value, barIndex) => {
                       const barHeight =
                         (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
@@ -156,15 +154,14 @@ export function BarChartHorizontalMulti({
                     key={index}
                     index={index}
                     withAnimation={withAnimation}
+                    className="absolute"
+                    style={{
+                      top: `${yScale(d.key)}%`,
+                      width: `100%`,
+                      height: `${yScale.bandwidth()}%`,
+                    }}
                   >
-                    <div
-                      className="absolute"
-                      style={{
-                        top: `${yScale(d.key)}%`,
-                        width: `100%`,
-                        height: `${yScale.bandwidth()}%`,
-                      }}
-                    >
+                    <div>
                       {d.values.map((value, barIndex) => {
                         const barHeight =
                           (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;

@@ -2,13 +2,20 @@ import { max, scaleBand, scaleLinear } from "d3";
 import { CSSProperties } from "react";
 import { AnimatedVerticalBar } from "../Animated/AnimatedVerticalBar";
 import { VerticalBarData } from "../utils/types";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../Tooltip/Tooltip";
 
 export function BarChartVertical({
   data,
+  withTooltip = true,
   withAnimation = false,
   className,
 }: {
   data: VerticalBarData[];
+  withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
 }) {
@@ -137,23 +144,50 @@ export function BarChartVertical({
           const barWidth = xScale.bandwidth();
           const barHeight = yScale(0) - yScale(d.value);
 
-          return (
-            <AnimatedVerticalBar
-              key={index}
-              index={index}
-              withAnimation={withAnimation}
-            >
-              <div
+          if (!withTooltip) {
+            return (
+              <AnimatedVerticalBar
                 key={index}
+                index={index}
+                withAnimation={withAnimation}
+                className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
                 style={{
                   width: `${barWidth}%`,
                   height: `${barHeight}%`,
                   borderRadius: "6px 6px 0 0",
                   marginLeft: `${xScale(d.key)}%`,
                 }}
-                className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
               />
-            </AnimatedVerticalBar>
+            );
+          }
+
+          return (
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <AnimatedVerticalBar
+                  key={index}
+                  index={index}
+                  withAnimation={withAnimation}
+                  className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
+                  style={{
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "6px 6px 0 0",
+                    marginLeft: `${xScale(d.key)}%`,
+                  }}
+                />
+              </TooltipTrigger>
+
+              <TooltipContent>
+                <div className="flex gap-2.5 items-center">
+                  <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
+                  <div>
+                    <div>{d.key}</div>
+                    <div className="text-gray-500 text-sm/5">{d.value}%</div>
+                  </div>
+                </div>
+              </TooltipContent>
+            </ClientTooltip>
           );
         })}
       </div>

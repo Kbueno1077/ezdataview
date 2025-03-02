@@ -23,6 +23,7 @@ export function BarChartHorizontalSVG({
   if (!data) {
     return null;
   }
+
   // Scales
   const yScale = scaleBand()
     .domain(data.map((d) => d.key))
@@ -52,7 +53,7 @@ export function BarChartHorizontalSVG({
           translate-y-[var(--marginTop)]
           left-[var(--marginLeft)]
           right-[var(--marginRight)]
-          overflow-visible z-20"
+          overflow-visible"
       >
         {data.map((entry, i) => {
           if (xScale(entry.value) == 0) return null;
@@ -63,7 +64,7 @@ export function BarChartHorizontalSVG({
                 top: `${yScale(entry.key)! + yScale.bandwidth() / 2}%`,
                 left: `calc(${xScale(entry.value)}% + 5px)`,
               }}
-              className="absolute text-xs text-gray-400 font-medium -translate-y-1/2 pointer-events-none pr-1"
+              className="absolute text-xs text-gray-400 font-medium -translate-y-1/2 pr-1"
             >
               {entry.value}
             </span>
@@ -136,10 +137,9 @@ export function BarChartHorizontalSVG({
             <ClientTooltip key={index}>
               <TooltipTrigger>
                 <AnimatedBar
-                  key={index}
                   index={index}
                   withAnimation={withAnimation}
-                  className={`absolute ${d.color}`}
+                  className={`inset-0 absolute ${d.color}`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,

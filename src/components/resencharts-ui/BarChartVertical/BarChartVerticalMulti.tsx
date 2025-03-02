@@ -122,9 +122,45 @@ export function BarChartVerticalMulti({
                   key={index}
                   index={index}
                   withAnimation={withAnimation}
+                  className="absolute top-0"
+                  style={{
+                    left: `${xScale(d.key)}%`,
+                    width: `${xScale.bandwidth()}%`,
+                    height: "100%",
+                  }}
                 >
-                  <div
+                  {d.values.map((value, barIndex) => {
+                    const barHeight = 100 - yScale(value);
+                    const barWidth =
+                      (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
+                    const barXPosition =
+                      barIndex * (barWidth + PX_BETWEEN_BARS);
+
+                    return (
+                      <div
+                        key={barIndex}
+                        className="absolute bottom-0 rounded-t"
+                        style={{
+                          left: `${barXPosition}%`,
+                          width: `${barWidth}%`,
+                          height: `${barHeight}%`,
+                          backgroundColor: colors[barIndex % colors.length],
+                          border: `1px solid #a07dff22`,
+                        }}
+                      />
+                    );
+                  })}
+                </AnimatedVerticalBar>
+              );
+            }
+
+            return (
+              <ClientTooltip key={index}>
+                <TooltipTrigger>
+                  <AnimatedVerticalBar
                     key={index}
+                    index={index}
+                    withAnimation={withAnimation}
                     className="absolute top-0"
                     style={{
                       left: `${xScale(d.key)}%`,
@@ -153,49 +189,6 @@ export function BarChartVerticalMulti({
                         />
                       );
                     })}
-                  </div>
-                </AnimatedVerticalBar>
-              );
-            }
-
-            return (
-              <ClientTooltip key={index}>
-                <TooltipTrigger>
-                  <AnimatedVerticalBar
-                    key={index}
-                    index={index}
-                    withAnimation={withAnimation}
-                  >
-                    <div
-                      className="absolute top-0"
-                      style={{
-                        left: `${xScale(d.key)}%`,
-                        width: `${xScale.bandwidth()}%`,
-                        height: "100%",
-                      }}
-                    >
-                      {d.values.map((value, barIndex) => {
-                        const barHeight = 100 - yScale(value);
-                        const barWidth =
-                          (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
-                        const barXPosition =
-                          barIndex * (barWidth + PX_BETWEEN_BARS);
-
-                        return (
-                          <div
-                            key={barIndex}
-                            className="absolute bottom-0 rounded-t"
-                            style={{
-                              left: `${barXPosition}%`,
-                              width: `${barWidth}%`,
-                              height: `${barHeight}%`,
-                              backgroundColor: colors[barIndex % colors.length],
-                              border: `1px solid #a07dff22`,
-                            }}
-                          />
-                        );
-                      })}
-                    </div>
                   </AnimatedVerticalBar>
                 </TooltipTrigger>
                 <TooltipContent>
