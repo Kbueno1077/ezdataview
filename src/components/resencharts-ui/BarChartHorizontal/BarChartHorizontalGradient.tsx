@@ -22,6 +22,7 @@ export function BarChartHorizontalGradient({
   if (!data) {
     return null;
   }
+
   // Scales
   const yScale = scaleBand()
     .domain(data.map((d) => d.key))
@@ -56,60 +57,12 @@ export function BarChartHorizontalGradient({
           overflow-visible
         "
       >
-        {/* Bars with Rounded Right Corners */}
-        {data.map((d, index) => {
-          const barWidth = xScale(d.value);
-          const barHeight = yScale.bandwidth();
-
-          if (!withTooltip) {
-            return (
-              <AnimatedBar
-                key={index}
-                style={{
-                  position: "absolute",
-                  left: "0",
-                  top: `${yScale(d.key)}%`,
-                  width: `${barWidth}%`,
-                  height: `${barHeight}%`,
-                  borderRadius: "0 6px 6px 0", // Rounded right corners
-                }}
-                className={`bg-gradient-to-b ${d.color}`}
-                index={index}
-                active={active}
-              />
-            );
-          }
-
-          return (
-            <ClientTooltip key={index}>
-              <TooltipTrigger>
-                <AnimatedBar
-                  key={index}
-                  index={index}
-                  active={active}
-                  className={`bg-gradient-to-b ${d.color}`}
-                  style={{
-                    left: "0",
-                    top: `${yScale(d.key)}%`,
-                    width: `${barWidth}%`,
-                    height: `${barHeight}%`,
-                    borderRadius: "0 6px 6px 0", // Rounded right corners
-                  }}
-                />
-              </TooltipTrigger>
-              <TooltipContent>
-                <div>{d.key}</div>
-                <div className="text-gray-500 text-sm">{d.value}</div>
-              </TooltipContent>
-            </ClientTooltip>
-          );
-        })}
+        {/* Grid lines */}
         <svg
-          className="h-full w-full"
+          className="absolute h-full w-full z-0"
           viewBox="0 0 100 100"
           preserveAspectRatio="none"
         >
-          {/* Grid lines */}
           {xScale
             .ticks(8)
             .map(xScale.tickFormat(8, "d"))
@@ -130,6 +83,58 @@ export function BarChartHorizontalGradient({
               </g>
             ))}
         </svg>
+
+        {/* Bars with Rounded Right Corners - now after grid lines with higher z-index */}
+        {data.map((d, index) => {
+          const barWidth = xScale(d.value);
+          const barHeight = yScale.bandwidth();
+
+          if (!withTooltip) {
+            return (
+              <AnimatedBar
+                key={index}
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: `${yScale(d.key)}%`,
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                  zIndex: 1,
+                }}
+                className={`bg-gradient-to-b ${d.color}`}
+                index={index}
+                active={active}
+              />
+            );
+          }
+
+          return (
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <AnimatedBar
+                  key={index}
+                  index={index}
+                  active={active}
+                  className={`bg-gradient-to-b ${d.color} absolute`}
+                  style={{
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0", // Rounded right corners
+                    zIndex: 1,
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>{d.key}</div>
+                <div className="text-gray-500 text-sm">{d.value}</div>
+              </TooltipContent>
+            </ClientTooltip>
+          );
+        })}
+
         {/* X Axis (Values) */}
         {xScale.ticks(4).map((value, i) => (
           <div
@@ -147,7 +152,7 @@ export function BarChartHorizontalGradient({
 
       {/* Y Axis (Letters) */}
       <div
-        className="
+        className="absolute
            h-[calc(100%-var(--marginTop)-var(--marginBottom))]
            w-[var(--marginLeft)]
            translate-y-[var(--marginTop)]

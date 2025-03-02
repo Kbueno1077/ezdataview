@@ -6,7 +6,6 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { AnimatedBar } from "../Animated/AnimatedBar";
-import { motion } from "motion/react";
 
 export function BarChartHorizontal({
   data,
@@ -63,48 +62,50 @@ export function BarChartHorizontal({
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
-          if (withTooltip) {
+          if (!withTooltip) {
             return (
-              <ClientTooltip key={index}>
-                <TooltipTrigger>
-                  <AnimatedBar
-                    index={index}
-                    active={active}
-                    className="inset-0 absolute bg-purple-300 dark:bg-purple-400"
-                    style={{
-                      left: "0",
-                      top: `${yScale(d.key)}%`,
-                      width: `${barWidth}%`,
-                      height: `${barHeight}%`,
-                      borderRadius: "0 6px 6px 0",
-                    }}
-                  />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div className="flex gap-2.5 items-center">
-                    <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
-                    <div>
-                      <div>{d.key}</div>
-                      <div className="text-gray-500 text-sm/5">{d.value}%</div>
-                    </div>
-                  </div>
-                </TooltipContent>
-              </ClientTooltip>
+              <AnimatedBar
+                key={index}
+                index={index}
+                active={active}
+                style={{
+                  left: "0",
+                  top: `${yScale(d.key)}%`,
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                }}
+                className={`absolute bg-purple-300 dark:bg-purple-400`}
+              />
             );
           }
 
           return (
-            <div
-              key={index}
-              style={{
-                left: "0",
-                top: `${yScale(d.key)}%`,
-                width: `${barWidth}%`,
-                height: `${barHeight}%`,
-                borderRadius: "0 6px 6px 0", // Rounded right corners
-              }}
-              className={`absolute bg-purple-300 dark:bg-purple-400`}
-            />
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <AnimatedBar
+                  index={index}
+                  active={active}
+                  className="inset-0 absolute bg-purple-300 dark:bg-purple-400"
+                  style={{
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0",
+                  }}
+                />
+              </TooltipTrigger>
+              <TooltipContent>
+                <div className="flex gap-2.5 items-center">
+                  <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
+                  <div>
+                    <div>{d.key}</div>
+                    <div className="text-gray-500 text-sm/5">{d.value}%</div>
+                  </div>
+                </div>
+              </TooltipContent>
+            </ClientTooltip>
           );
         })}
 

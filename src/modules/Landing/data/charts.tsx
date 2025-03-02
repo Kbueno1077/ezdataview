@@ -1,7 +1,4 @@
-import { BarChartHorizontal } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontal";
-import { BarChartHorizontalGradient } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalGradient";
 import { BarChartHorizontalSVG } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalSVG";
-import { BarChartHorizontalThin } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalThin";
 import { BarChartVertical } from "@/components/resencharts-ui/BarChartVertical/BarChartVertical";
 import { BreakdownChart } from "@/components/resencharts-ui/BreakdownChart/BreakdownChart";
 import { LineChart } from "@/components/resencharts-ui/LineCharts/LineChart";
@@ -35,7 +32,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Interactive tooltips for detailed information",
       "Responsive design that adapts to any screen size",
     ],
-    chartType: <BarChartHorizontalGradient data={dataGradient} />,
+    chartType: <BarChartHorizontalSVG data={dataGradient} />,
   },
   {
     title: "Vertical Bar Charts",

@@ -39,12 +39,36 @@ export const dataSVG: SVGBarData[] = [
 ];
 
 export const dataGradient: GradientBarData[] = [
-  { key: "Technology", value: 38.1, color: "from-pink-300 to-pink-400" },
-  { key: "Banking", value: 29.6, color: "from-purple-300 to-purple-400" },
-  { key: "Energy", value: 23.1, color: "from-indigo-300 to-indigo-400" },
-  { key: "Retail", value: 21.3, color: "from-sky-300 to-sky-400" },
-  { key: "Healthcare", value: 17.9, color: "from-orange-200 to-orange-300" },
-  { key: "Utilities", value: 5.8, color: "from-lime-300 to-lime-400" },
+  {
+    key: "Technology",
+    value: 38.1,
+    color: "bg-gradient-to-r from-pink-300 to-pink-400",
+  },
+  {
+    key: "Banking",
+    value: 29.6,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Energy",
+    value: 23.1,
+    color: "bg-gradient-to-r from-indigo-300 to-indigo-400",
+  },
+  {
+    key: "Retail",
+    value: 21.3,
+    color: "bg-gradient-to-r from-sky-300 to-sky-400",
+  },
+  {
+    key: "Healthcare",
+    value: 17.9,
+    color: "bg-gradient-to-r from-orange-200 to-orange-300",
+  },
+  {
+    key: "Utilities",
+    value: 5.8,
+    color: "bg-gradient-to-r from-lime-300 to-lime-400",
+  },
 ].toSorted((a, b) => b.value - a.value);
 
 export const dataThin: HorizontalBarData[] = [
