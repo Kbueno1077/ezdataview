@@ -11,19 +11,15 @@ export const footerDetails: {
   quickLinks: [
     {
       text: "Features",
-      url: "#features",
+      url: "/#features",
     },
     {
       text: "Charts",
-      url: "#charts",
+      url: "/#charts",
     },
     {
       text: "Pricing",
-      url: "#pricing",
-    },
-    {
-      text: "Testimonials",
-      url: "#testimonials",
+      url: "/#pricing",
     },
   ],
   email: "kbueno1077@gmail.com",

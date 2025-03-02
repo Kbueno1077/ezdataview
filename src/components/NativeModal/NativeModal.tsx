@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import styles from "./NativeModal.module.css";
 import { X } from "lucide-react";
+import Portal from "./Portal";
 
 interface NativeModalProps {
   onClose: () => void;
@@ -79,7 +80,7 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
   // Don't render anything if the modal is fully exited
   if (animationState === "exited") return null;
 
-  return (
+  const modalContent = (
     <div className={`${styles.modalOverlay} ${styles[animationState]}`}>
       <div
         className={`${styles.modal} ${styles[animationState]} ${
@@ -97,6 +98,8 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
       </div>
     </div>
   );
+
+  return <Portal>{modalContent}</Portal>;
 }
 
 export default NativeModal;

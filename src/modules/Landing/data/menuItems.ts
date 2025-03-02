@@ -3,15 +3,15 @@ import { IMenuItem } from "@/modules/landing/types";
 export const menuItems: IMenuItem[] = [
   {
     text: "Features",
-    url: "#features",
+    url: "/#features",
   },
 
   {
     text: "Charts",
-    url: "#charts",
+    url: "/#charts",
   },
   {
     text: "Pricing",
-    url: "#pricing",
+    url: "/#pricing",
   },
 ];

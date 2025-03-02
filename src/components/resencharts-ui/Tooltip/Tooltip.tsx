@@ -120,11 +120,17 @@ const CONTENT_NAME = "TooltipContent";
 const TooltipContent = React.forwardRef<
   HTMLDivElement,
   { children: React.ReactNode }
->((props) => {
+>((props, forwardedRef) => {
   const { children } = props;
   const context = useTooltipContext(CONTENT_NAME);
   const runningOnClient = typeof document !== "undefined";
   const tooltipRef = React.useRef<HTMLDivElement>(null);
+
+  // Forward the ref
+  React.useImperativeHandle(
+    forwardedRef,
+    () => tooltipRef.current as HTMLDivElement
+  );
 
   // Calculate position based on viewport
   const getTooltipPosition = () => {
@@ -152,6 +158,7 @@ const TooltipContent = React.forwardRef<
   return createPortal(
     isMobile ? (
       <div
+        ref={tooltipRef}
         className="fixed h-fit z-[9999] w-fit rounded-lg bg-white dark:bg-zinc-900 border border-zinc-200 dark:border-zinc-800 p-3"
         style={{
           top: context.tooltip.y,
