@@ -136,6 +136,7 @@ export function BarChartHorizontalSVG({
             <ClientTooltip key={index}>
               <TooltipTrigger>
                 <AnimatedBar
+                  key={index}
                   index={index}
                   withAnimation={withAnimation}
                   className={`absolute ${d.color}`}

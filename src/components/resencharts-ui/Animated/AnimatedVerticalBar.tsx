@@ -19,7 +19,7 @@ export function AnimatedVerticalBar({
     <motion.div
       initial={{ transform: "translateY(150%)" }}
       animate={{ transform: "translateY(0)" }}
-      className="absolute inset-0"
+      className="absolute inset-0 "
       transition={{
         duration: 0.5,
         ease: "easeOut",
