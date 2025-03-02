@@ -63,20 +63,20 @@ export function BarChartHorizontalGradient({
 
           if (!withTooltip) {
             return (
-              <AnimatedBar key={index} index={index} active={active}>
-                <div
-                  key={index}
-                  style={{
-                    position: "absolute",
-                    left: "0",
-                    top: `${yScale(d.key)}%`,
-                    width: `${barWidth}%`,
-                    height: `${barHeight}%`,
-                    borderRadius: "0 6px 6px 0", // Rounded right corners
-                  }}
-                  className={`bg-gradient-to-b ${d.color}`}
-                />
-              </AnimatedBar>
+              <AnimatedBar
+                key={index}
+                style={{
+                  position: "absolute",
+                  left: "0",
+                  top: `${yScale(d.key)}%`,
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                }}
+                className={`bg-gradient-to-b ${d.color}`}
+                index={index}
+                active={active}
+              />
             );
           }
 

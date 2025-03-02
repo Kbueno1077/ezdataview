@@ -21,7 +21,7 @@ const ChartGrid: React.FC<ChartGridProps> = React.memo(({ data, viewMode }) => {
       className={`${layoutClasses} transition-all duration-300 ease-in-out`}
     >
       {data.map((chart) => (
-        <ChartItem key={chart.id} chart={chart} />
+        <ChartItem key={chart.id} chart={chart} viewMode={viewMode} />
       ))}
     </div>
   );

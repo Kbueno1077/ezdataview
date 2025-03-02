@@ -1,9 +1,9 @@
 "use client";
 
 import React from "react";
-import { NativeCharts } from "@/components/NativeModal";
 import Pagination from "./Pagination";
 import { Chart } from "../types";
+import ChartItem from "./ChartItem";
 
 interface DashboardLayoutProps {
   data: Chart[];
@@ -22,31 +22,17 @@ const DashboardLayout: React.FC<DashboardLayoutProps> = React.memo(
         {/* Top row - 2 wide charts (KPIs) */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           {data.slice(0, 2).map((chart) => (
-            <div
-              key={chart.id}
-              className="transition-all duration-300 ease-in-out transform hover:scale-[1.01]"
-            >
-              <NativeCharts title={chart.name} chart={chart} />
-            </div>
+            <ChartItem key={chart.id} chart={chart} viewMode="dashboard" />
           ))}
         </div>
 
         {/* Middle - 1 featured chart (spans full width) */}
-        {data[2] && (
-          <div className="transition-all duration-300 ease-in-out transform hover:scale-[1.01]">
-            <NativeCharts title={data[2].name} chart={data[2]} />
-          </div>
-        )}
+        {data[2] && <ChartItem chart={data[2]} viewMode="dashboard" />}
 
         {/* Bottom row - 3 smaller charts */}
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
           {data.slice(3, 6).map((chart) => (
-            <div
-              key={chart.id}
-              className="transition-all duration-300 ease-in-out transform hover:scale-[1.01]"
-            >
-              <NativeCharts title={chart.name} chart={chart} />
-            </div>
+            <ChartItem key={chart.id} chart={chart} viewMode="dashboard" />
           ))}
         </div>
 
