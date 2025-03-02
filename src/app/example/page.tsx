@@ -1,5 +1,5 @@
 import Container from "@/components/Container";
-import { data } from "@/components/resencharts-ui/utils/fixtures/swapChart";
+import { data } from "@/components/resencharts-ui/utils/fixtures/exampleChartsData";
 import Showcase from "@/modules/showcase/Showcase";
 
 const ExamplePage: React.FC = () => {

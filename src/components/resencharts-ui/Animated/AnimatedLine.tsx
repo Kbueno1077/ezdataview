@@ -4,14 +4,14 @@ import { motion } from "motion/react";
 
 export function AnimatedLine({
   children,
-  active = false,
+  withAnimation = false,
 }: {
   children: React.ReactNode;
-  active?: boolean;
+  withAnimation?: boolean;
 }) {
   const strokeDashValue = 1000; // For really long lines, you might need to increase this value
 
-  if (!active) {
+  if (!withAnimation) {
     return <div className="absolute inset-0">{children}</div>;
   }
 

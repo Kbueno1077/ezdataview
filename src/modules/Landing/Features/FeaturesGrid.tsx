@@ -1,14 +1,15 @@
 import type React from "react";
 
+import { Moon, MousePointer, Palette, Shield, Zap } from "lucide-react";
 import FeatureCard from "./FeatureCard";
 
 interface FeatureGridProps {
   className?: string;
 }
-import { Palette, Moon, Shield, MousePointer, Zap } from "lucide-react";
 
 const features = [
   {
+    id: 1,
     title: "Easy to Use",
     description:
       "Intuitive interface with drag-and-drop functionality for creating charts in minutes.",
@@ -16,6 +17,7 @@ const features = [
     gradient: "linear-gradient(135deg, #FF9966, #FF5E62)",
   },
   {
+    id: 2,
     title: "Customizable",
     description:
       "Extensive styling options to match your brand with custom colors, fonts, and layouts.",
@@ -23,6 +25,7 @@ const features = [
     gradient: "linear-gradient(135deg, #56CCF2, #2F80ED)",
   },
   {
+    id: 3,
     title: "Dark Mode Support",
     description:
       "Seamless switching between light and dark themes for comfortable viewing in any environment.",
@@ -30,6 +33,7 @@ const features = [
     gradient: "linear-gradient(135deg, #A770EF, #CF8BF3, #FDB99B)",
   },
   {
+    id: 4,
     title: "Data Security",
     description:
       "Enterprise-grade encryption and compliance with data protection regulations.",
@@ -37,6 +41,7 @@ const features = [
     gradient: "linear-gradient(135deg, #11998e, #38ef7d)",
   },
   {
+    id: 5,
     title: "Lightning Fast",
     description:
       "High-performance rendering engine delivers smooth, responsive charts even with large datasets.",
@@ -46,7 +51,6 @@ const features = [
 ];
 
 const FeatureGrid: React.FC<FeatureGridProps> = ({ className = "" }) => {
-  // Define the grid layout pattern
   const gridPattern = [
     { size: "large", span: "md:col-span-2 md:row-span-2" },
     { size: "small", span: "md:col-span-1 md:row-span-1" },
@@ -66,7 +70,7 @@ const FeatureGrid: React.FC<FeatureGridProps> = ({ className = "" }) => {
 
         return (
           <FeatureCard
-            key={feature.title || index}
+            key={feature.id}
             feature={feature}
             size={size as "small" | "wide" | "large"}
             className={`${span}`}

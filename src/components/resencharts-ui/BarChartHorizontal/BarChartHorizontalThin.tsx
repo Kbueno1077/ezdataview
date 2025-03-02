@@ -10,12 +10,12 @@ import { AnimatedBar } from "../Animated/AnimatedBar";
 export function BarChartHorizontalThin({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: { key: string; value: number }[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -87,8 +87,9 @@ export function BarChartHorizontalThin({
           return (
             <ClientTooltip key={index}>
               <TooltipTrigger>
-                <div
+                <AnimatedBar
                   key={index}
+                  withAnimation={withAnimation}
                   style={{
                     position: "absolute",
                     left: "0",
@@ -124,7 +125,11 @@ export function BarChartHorizontalThin({
 
           return (
             <React.Fragment key={index}>
-              <AnimatedBar key={index} index={index} active={active}>
+              <AnimatedBar
+                key={index}
+                index={index}
+                withAnimation={withAnimation}
+              >
                 <div
                   style={{
                     position: "absolute",

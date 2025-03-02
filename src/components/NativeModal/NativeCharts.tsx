@@ -20,7 +20,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
 
   const previewChartNode = getChartTypeByName(chart.data, chart.type, {
     withTooltip: true,
-    active: true,
+    withAnimation: true,
     className: "",
   });
 

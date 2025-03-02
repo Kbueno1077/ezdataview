@@ -5,13 +5,13 @@ import { motion } from "motion/react";
 export function AnimatedVerticalBar({
   index = 0,
   children,
-  active = true,
+  withAnimation = true,
 }: {
   index?: number;
   children: React.ReactNode;
-  active?: boolean;
+  withAnimation?: boolean;
 }) {
-  if (!active) {
+  if (!withAnimation) {
     return <div className="absolute inset-0">{children}</div>;
   }
 

@@ -10,12 +10,12 @@ import { AnimatedBar } from "../Animated/AnimatedBar";
 export function BarChartHorizontal({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: { key: string; value: number }[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -67,7 +67,7 @@ export function BarChartHorizontal({
               <AnimatedBar
                 key={index}
                 index={index}
-                active={active}
+                withAnimation={withAnimation}
                 style={{
                   left: "0",
                   top: `${yScale(d.key)}%`,
@@ -85,7 +85,7 @@ export function BarChartHorizontal({
               <TooltipTrigger>
                 <AnimatedBar
                   index={index}
-                  active={active}
+                  withAnimation={withAnimation}
                   className="inset-0 absolute bg-purple-300 dark:bg-purple-400"
                   style={{
                     left: "0",

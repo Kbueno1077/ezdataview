@@ -24,15 +24,19 @@ export const getChartTypeByName = (
   options?: {
     withTooltip?: boolean;
     className?: string;
-    active?: boolean;
+    withAnimation?: boolean;
   }
 ): JSX.Element | null => {
-  const { withTooltip = true, className, active } = options || {};
+  const { withTooltip = true, className, withAnimation } = options || {};
 
   switch (chartType) {
     case "horizontal-bar": {
       return (
-        <BarChartHorizontal data={data} className={className} active={active} />
+        <BarChartHorizontal
+          data={data}
+          className={className}
+          withAnimation={withAnimation}
+        />
       );
     }
 
@@ -42,7 +46,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
-          active={active}
+          withAnimation={withAnimation}
         />
       );
     }
@@ -53,7 +57,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
-          active={active}
+          withAnimation={withAnimation}
         />
       );
     }
@@ -63,7 +67,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
-          active={active}
+          withAnimation={withAnimation}
         />
       );
     }
@@ -73,13 +77,17 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
-          active={active}
+          withAnimation={withAnimation}
         />
       );
     }
     case "vertical-bar": {
       return (
-        <BarChartVertical data={data} className={className} active={active} />
+        <BarChartVertical
+          data={data}
+          className={className}
+          withAnimation={withAnimation}
+        />
       );
     }
     case "vertical-bar-multi": {
@@ -88,7 +96,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
-          active={active}
+          withAnimation={withAnimation}
         />
       );
     }

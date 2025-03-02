@@ -5,11 +5,11 @@ import { VerticalBarData } from "../utils/types";
 
 export function BarChartVertical({
   data,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: VerticalBarData[];
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -138,7 +138,11 @@ export function BarChartVertical({
           const barHeight = yScale(0) - yScale(d.value);
 
           return (
-            <AnimatedVerticalBar key={index} index={index} active={active}>
+            <AnimatedVerticalBar
+              key={index}
+              index={index}
+              withAnimation={withAnimation}
+            >
               <div
                 key={index}
                 style={{

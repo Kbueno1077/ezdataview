@@ -11,12 +11,12 @@ import { AnimatedBar } from "../Animated/AnimatedBar";
 export function BarChartHorizontalGradient({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: GradientBarData[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -93,6 +93,9 @@ export function BarChartHorizontalGradient({
             return (
               <AnimatedBar
                 key={index}
+                withAnimation={withAnimation}
+                className={`bg-gradient-to-b ${d.color}`}
+                index={index}
                 style={{
                   position: "absolute",
                   left: "0",
@@ -102,9 +105,6 @@ export function BarChartHorizontalGradient({
                   borderRadius: "0 6px 6px 0", // Rounded right corners
                   zIndex: 1,
                 }}
-                className={`bg-gradient-to-b ${d.color}`}
-                index={index}
-                active={active}
               />
             );
           }
@@ -115,7 +115,7 @@ export function BarChartHorizontalGradient({
                 <AnimatedBar
                   key={index}
                   index={index}
-                  active={active}
+                  withAnimation={withAnimation}
                   className={`bg-gradient-to-b ${d.color} absolute`}
                   style={{
                     left: "0",

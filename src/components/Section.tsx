@@ -1,7 +1,4 @@
-"use client";
-
 import SectionTitle from "./SectionTitle";
-import { motion } from "motion/react";
 import { ReactNode } from "react";
 
 interface Props {
@@ -20,13 +17,7 @@ const Section: React.FC<React.PropsWithChildren<Props>> = ({
 }: React.PropsWithChildren<Props>) => {
   return (
     <section id={id} className="py-10 lg:py-20">
-      <motion.div
-        initial={{ opacity: 0, y: 20 }}
-        whileInView={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.6 }}
-        viewport={{ once: true }}
-        className="mb-12"
-      >
+      <div className="mb-12">
         <SectionTitle>
           <h2 className="text-center mb-4 text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
             {icon && <span className="inline-block mr-2">{icon}</span>}
@@ -38,7 +29,7 @@ const Section: React.FC<React.PropsWithChildren<Props>> = ({
         </p>
         <div className="flex justify-center">
           <div
-            className="h-1 w-20 bg-gradient-to-r from-primary to-secondary rounded-full"
+            className="h-1 w-20 rounded-full"
             style={{
               background: [
                 "linear-gradient(135deg, #FF9966, #FF5E62)",
@@ -50,7 +41,7 @@ const Section: React.FC<React.PropsWithChildren<Props>> = ({
             }}
           ></div>
         </div>
-      </motion.div>
+      </div>
       {children}
     </section>
   );

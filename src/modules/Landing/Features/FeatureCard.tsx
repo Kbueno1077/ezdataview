@@ -4,6 +4,7 @@ import type React from "react";
 import { motion } from "motion/react";
 import Image from "next/image";
 import type { IFeature } from "@/modules/landing/types";
+import { useMemo } from "react";
 
 interface Props {
   feature: IFeature;
@@ -29,19 +30,25 @@ const containerVariants = {
   },
 };
 
+const DEFAULT_GRADIENT =
+  "linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8))";
+
 const FeatureCard: React.FC<Props> = ({ feature, size, className }) => {
   const { title, description, icon, gradient } = feature;
+
+  const cardStyle = useMemo(
+    () => ({
+      background: gradient || DEFAULT_GRADIENT,
+      boxShadow: "0 4px 20px rgba(0, 0, 0, 0.12)",
+      backdropFilter: "blur(12px)",
+    }),
+    [gradient]
+  );
 
   return (
     <motion.div
       className={`rounded-xl p-6 shadow-md backdrop-blur-sm bg-opacity-75 text-white hover:shadow-lg transition-all duration-300 flex flex-col ${className}`}
-      style={{
-        background:
-          gradient ||
-          "linear-gradient(135deg, rgba(59, 130, 246, 0.8), rgba(147, 51, 234, 0.8))",
-        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.12)",
-        backdropFilter: "blur(12px)",
-      }}
+      style={cardStyle}
       initial="offscreen"
       whileInView="onscreen"
       viewport={{ once: true }}

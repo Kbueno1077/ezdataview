@@ -35,7 +35,7 @@
   height: 90vh;
   max-width: 1200px;
   max-height: 90vh;
-  overflow-y: auto;
+  overflow-y: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   transform-origin: center;
   transform: scale(0.5);
@@ -101,7 +101,6 @@
 
 .modalContent {
   flex: 1;
-  overflow-y: auto;
   display: flex;
   flex-direction: column;
   justify-content: center;

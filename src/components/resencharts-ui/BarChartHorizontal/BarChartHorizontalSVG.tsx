@@ -12,12 +12,12 @@ import { companyLogos } from "@/modules/landing/utils";
 export function BarChartHorizontalSVG({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: SVGBarData[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -119,7 +119,7 @@ export function BarChartHorizontalSVG({
               <AnimatedBar
                 key={index}
                 index={index}
-                active={active}
+                withAnimation={withAnimation}
                 className={`absolute ${d.color}`}
                 style={{
                   left: "0",
@@ -137,7 +137,7 @@ export function BarChartHorizontalSVG({
               <TooltipTrigger>
                 <AnimatedBar
                   index={index}
-                  active={active}
+                  withAnimation={withAnimation}
                   className={`absolute ${d.color}`}
                   style={{
                     left: "0",

@@ -5,18 +5,18 @@ import React from "react";
 
 export function AnimatedBar({
   index = 0,
-  active = true,
+  withAnimation = true,
   className,
   style,
   children,
 }: {
   index?: number;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
   style?: React.CSSProperties;
   children?: React.ReactNode;
 }) {
-  if (!active) {
+  if (!withAnimation) {
     if (children) {
       return (
         <div className={`${className}`} style={style}>

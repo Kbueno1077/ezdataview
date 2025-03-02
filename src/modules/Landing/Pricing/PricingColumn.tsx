@@ -1,6 +1,6 @@
+import { IPricing } from "@/modules/landing/types";
 import clsx from "clsx";
 import { CheckCircle } from "lucide-react";
-import { IPricing } from "@/modules/landing/types";
 
 interface Props {
   tier: IPricing;

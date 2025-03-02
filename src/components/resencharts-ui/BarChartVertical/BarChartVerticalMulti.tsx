@@ -12,12 +12,12 @@ const PX_BETWEEN_BARS = 5;
 export function BarChartVerticalMulti({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: { key: string; values: number[] }[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -118,7 +118,11 @@ export function BarChartVerticalMulti({
           {data.map((d, index) => {
             if (!withTooltip) {
               return (
-                <AnimatedVerticalBar key={index} index={index} active={active}>
+                <AnimatedVerticalBar
+                  key={index}
+                  index={index}
+                  withAnimation={withAnimation}
+                >
                   <div
                     key={index}
                     className="absolute top-0"
@@ -160,7 +164,7 @@ export function BarChartVerticalMulti({
                   <AnimatedVerticalBar
                     key={index}
                     index={index}
-                    active={active}
+                    withAnimation={withAnimation}
                   >
                     <div
                       className="absolute top-0"

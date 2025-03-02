@@ -131,3 +131,19 @@ h6 {
     padding: 10px 0 0;
   }
 }
+
+@keyframes slide-up {
+  to {
+    transform: translateY(0);
+  }
+}
+
+@keyframes overflow-visible {
+  0%,
+  99% {
+    overflow: hidden;
+  }
+  100% {
+    overflow: visible;
+  }
+}

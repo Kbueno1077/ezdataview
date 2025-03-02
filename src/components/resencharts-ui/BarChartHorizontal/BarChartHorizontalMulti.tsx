@@ -13,12 +13,12 @@ const PX_BETWEEN_BARS = 0.2;
 export function BarChartHorizontalMulti({
   data,
   withTooltip = true,
-  active = false,
+  withAnimation = false,
   className,
 }: {
   data: { key: string; values: number[]; flag: string }[];
   withTooltip?: boolean;
-  active?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -111,7 +111,11 @@ export function BarChartHorizontalMulti({
           {data.map((d, index) => {
             if (!withTooltip) {
               return (
-                <AnimatedBar key={index} index={index} active={active}>
+                <AnimatedBar
+                  key={index}
+                  index={index}
+                  withAnimation={withAnimation}
+                >
                   <div
                     key={index}
                     className="absolute"
@@ -148,7 +152,11 @@ export function BarChartHorizontalMulti({
             return (
               <ClientTooltip key={index}>
                 <TooltipTrigger>
-                  <AnimatedBar key={index} index={index} active={active}>
+                  <AnimatedBar
+                    key={index}
+                    index={index}
+                    withAnimation={withAnimation}
+                  >
                     <div
                       className="absolute"
                       style={{
