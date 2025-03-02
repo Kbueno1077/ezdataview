@@ -2,7 +2,7 @@
 
 import clsx from "clsx";
 import { motion } from "motion/react";
-import { FiCheck } from "react-icons/fi";
+import { Check } from "lucide-react";
 
 import SectionTitle from "@/components/SectionTitle";
 import { IChartShowcase } from "@/modules/landing/types";
@@ -90,7 +90,7 @@ const ChartShowcaseSection: React.FC<Props> = ({
                     variants={childVariants}
                   >
                     <span className="text-primary mt-1">
-                      <FiCheck size={18} />
+                      <Check size={18} />
                     </span>
                     <span>{feature}</span>
                   </motion.li>

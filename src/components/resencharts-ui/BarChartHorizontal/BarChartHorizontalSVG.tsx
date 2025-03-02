@@ -6,14 +6,17 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { SVGBarData } from "../utils/types";
+import { AnimatedBar } from "../Animated/AnimatedBar";
 
 export function BarChartHorizontalSVG({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: SVGBarData[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -112,24 +115,7 @@ export function BarChartHorizontalSVG({
 
           if (!withTooltip) {
             return (
-              <div
-                key={index}
-                style={{
-                  position: "absolute",
-                  left: "0",
-                  top: `${yScale(d.key)}%`,
-                  width: `${barWidth}%`,
-                  height: `${barHeight}%`,
-                  borderRadius: "0 6px 6px 0", // Rounded right corners
-                }}
-                className={`${d.color}`}
-              />
-            );
-          }
-
-          return (
-            <ClientTooltip key={index}>
-              <TooltipTrigger>
+              <AnimatedBar key={index} index={index} active={active}>
                 <div
                   key={index}
                   style={{
@@ -141,6 +127,27 @@ export function BarChartHorizontalSVG({
                     borderRadius: "0 6px 6px 0", // Rounded right corners
                   }}
                   className={`${d.color}`}
+                />
+              </AnimatedBar>
+            );
+          }
+
+          return (
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <AnimatedBar
+                  key={index}
+                  index={index}
+                  active={active}
+                  className={`${d.color}`}
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0", // Rounded right corners
+                  }}
                 />
               </TooltipTrigger>
               <TooltipContent>

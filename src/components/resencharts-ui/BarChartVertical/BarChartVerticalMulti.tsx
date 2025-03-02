@@ -5,16 +5,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+import { AnimatedVerticalBar } from "../Animated/AnimatedVerticalBar";
 
 const PX_BETWEEN_BARS = 5;
 
 export function BarChartVerticalMulti({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: { key: string; values: number[] }[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -115,44 +118,9 @@ export function BarChartVerticalMulti({
           {data.map((d, index) => {
             if (!withTooltip) {
               return (
-                <div
-                  key={index}
-                  className="absolute top-0"
-                  style={{
-                    left: `${xScale(d.key)}%`,
-                    width: `${xScale.bandwidth()}%`,
-                    height: "100%",
-                  }}
-                >
-                  {d.values.map((value, barIndex) => {
-                    const barHeight = 100 - yScale(value);
-                    const barWidth =
-                      (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
-                    const barXPosition =
-                      barIndex * (barWidth + PX_BETWEEN_BARS);
-
-                    return (
-                      <div
-                        key={barIndex}
-                        className="absolute bottom-0 rounded-t"
-                        style={{
-                          left: `${barXPosition}%`,
-                          width: `${barWidth}%`,
-                          height: `${barHeight}%`,
-                          backgroundColor: colors[barIndex % colors.length],
-                          border: `1px solid #a07dff22`,
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            }
-
-            return (
-              <ClientTooltip key={index}>
-                <TooltipTrigger>
+                <AnimatedVerticalBar key={index} index={index} active={active}>
                   <div
+                    key={index}
                     className="absolute top-0"
                     style={{
                       left: `${xScale(d.key)}%`,
@@ -182,6 +150,49 @@ export function BarChartVerticalMulti({
                       );
                     })}
                   </div>
+                </AnimatedVerticalBar>
+              );
+            }
+
+            return (
+              <ClientTooltip key={index}>
+                <TooltipTrigger>
+                  <AnimatedVerticalBar
+                    key={index}
+                    index={index}
+                    active={active}
+                  >
+                    <div
+                      className="absolute top-0"
+                      style={{
+                        left: `${xScale(d.key)}%`,
+                        width: `${xScale.bandwidth()}%`,
+                        height: "100%",
+                      }}
+                    >
+                      {d.values.map((value, barIndex) => {
+                        const barHeight = 100 - yScale(value);
+                        const barWidth =
+                          (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
+                        const barXPosition =
+                          barIndex * (barWidth + PX_BETWEEN_BARS);
+
+                        return (
+                          <div
+                            key={barIndex}
+                            className="absolute bottom-0 rounded-t"
+                            style={{
+                              left: `${barXPosition}%`,
+                              width: `${barWidth}%`,
+                              height: `${barHeight}%`,
+                              backgroundColor: colors[barIndex % colors.length],
+                              border: `1px solid #a07dff22`,
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </AnimatedVerticalBar>
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm text-gray-400 border-b border-gray-200 dark:border-gray-800 pb-1 mb-1.5">

@@ -5,14 +5,17 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+import { AnimatedBar } from "../Animated/AnimatedBar";
 
 export function BarChartHorizontalThin({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: { key: string; value: number }[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -118,31 +121,34 @@ export function BarChartHorizontalThin({
               : barWidth > 10
               ? "bg-indigo-300 dark:bg-indigo-500"
               : "bg-sky-300 dark:bg-sky-500";
+
           return (
             <React.Fragment key={index}>
-              <div
-                style={{
-                  position: "absolute",
-                  left: "0",
-                  top: `${yScale(d.key)}%`,
-                  width: `${barWidth}%`,
-                  height: `${barHeight}%`,
-                }}
-                className={`${barColor}`}
-              />
-              {/* Tip of the bar */}
-              <div
-                style={{
-                  position: "absolute",
-                  left: `${barWidth}%`,
-                  top: `${yScale(d.key)! + barHeight / 2}%`,
-                  transform: "translate(-100%, -50%)",
-                  width: "9px",
-                  height: "9px",
-                  borderRadius: "2px",
-                }}
-                className={`${barColor}`}
-              />
+              <AnimatedBar key={index} index={index} active={active}>
+                <div
+                  style={{
+                    position: "absolute",
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                  }}
+                  className={`${barColor}`}
+                />
+                {/* Tip of the bar */}
+                <div
+                  style={{
+                    position: "absolute",
+                    left: `${barWidth}%`,
+                    top: `${yScale(d.key)! + barHeight / 2}%`,
+                    transform: "translate(-100%, -50%)",
+                    width: "9px",
+                    height: "9px",
+                    borderRadius: "2px",
+                  }}
+                  className={`${barColor}`}
+                />
+              </AnimatedBar>
             </React.Fragment>
           );
         })}

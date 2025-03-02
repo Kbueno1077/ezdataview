@@ -5,6 +5,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+import { AnimatedBar } from "../Animated/AnimatedBar";
 
 const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
 const PX_BETWEEN_BARS = 0.2;
@@ -12,10 +13,12 @@ const PX_BETWEEN_BARS = 0.2;
 export function BarChartHorizontalMulti({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: { key: string; values: number[]; flag: string }[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -108,41 +111,7 @@ export function BarChartHorizontalMulti({
           {data.map((d, index) => {
             if (!withTooltip) {
               return (
-                <div
-                  key={index}
-                  className="absolute"
-                  style={{
-                    top: `${yScale(d.key)}%`,
-                    width: `100%`,
-                    height: `${yScale.bandwidth()}%`,
-                  }}
-                >
-                  {d.values.map((value, barIndex) => {
-                    const barHeight =
-                      (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
-                    const barYPosition =
-                      barIndex * (barHeight + PX_BETWEEN_BARS);
-                    return (
-                      <div
-                        key={barIndex}
-                        className="absolute left-0 rounded-r"
-                        style={{
-                          top: `${barYPosition}%`,
-                          width: `${xScale(value)}%`,
-                          height: `${barHeight}%`,
-                          backgroundColor:
-                            barColors[barIndex % barColors.length],
-                        }}
-                      />
-                    );
-                  })}
-                </div>
-              );
-            }
-
-            return (
-              <ClientTooltip key={index}>
-                <TooltipTrigger>
+                <AnimatedBar key={index} index={index} active={active}>
                   <div
                     key={index}
                     className="absolute"
@@ -172,6 +141,43 @@ export function BarChartHorizontalMulti({
                       );
                     })}
                   </div>
+                </AnimatedBar>
+              );
+            }
+
+            return (
+              <ClientTooltip key={index}>
+                <TooltipTrigger>
+                  <AnimatedBar key={index} index={index} active={active}>
+                    <div
+                      className="absolute"
+                      style={{
+                        top: `${yScale(d.key)}%`,
+                        width: `100%`,
+                        height: `${yScale.bandwidth()}%`,
+                      }}
+                    >
+                      {d.values.map((value, barIndex) => {
+                        const barHeight =
+                          (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
+                        const barYPosition =
+                          barIndex * (barHeight + PX_BETWEEN_BARS);
+                        return (
+                          <div
+                            key={barIndex}
+                            className="absolute left-0 rounded-r"
+                            style={{
+                              top: `${barYPosition}%`,
+                              width: `${xScale(value)}%`,
+                              height: `${barHeight}%`,
+                              backgroundColor:
+                                barColors[barIndex % barColors.length],
+                            }}
+                          />
+                        );
+                      })}
+                    </div>
+                  </AnimatedBar>
                 </TooltipTrigger>
                 <TooltipContent>
                   <div className="text-sm text-gray-400">{d.key}</div>

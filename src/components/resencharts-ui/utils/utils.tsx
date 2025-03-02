@@ -21,12 +21,19 @@ import { PieChartImage } from "../PieCharts/PieChartImage";
 export const getChartTypeByName = (
   data: any,
   chartType: string,
-  withTooltip: boolean = true,
-  className?: string
+  options?: {
+    withTooltip?: boolean;
+    className?: string;
+    active?: boolean;
+  }
 ): JSX.Element | null => {
+  const { withTooltip = true, className, active } = options || {};
+
   switch (chartType) {
     case "horizontal-bar": {
-      return <BarChartHorizontal data={data} className={className} />;
+      return (
+        <BarChartHorizontal data={data} className={className} active={active} />
+      );
     }
 
     case "horizontal-bar-gradient": {
@@ -35,6 +42,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          active={active}
         />
       );
     }
@@ -45,6 +53,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          active={active}
         />
       );
     }
@@ -54,6 +63,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          active={active}
         />
       );
     }
@@ -63,11 +73,14 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          active={active}
         />
       );
     }
     case "vertical-bar": {
-      return <BarChartVertical data={data} className={className} />;
+      return (
+        <BarChartVertical data={data} className={className} active={active} />
+      );
     }
     case "vertical-bar-multi": {
       return (
@@ -75,6 +88,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          active={active}
         />
       );
     }

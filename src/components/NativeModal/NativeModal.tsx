@@ -2,7 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./NativeModal.module.css";
-import { IoClose } from "react-icons/io5";
+import { X } from "lucide-react";
 
 interface NativeModalProps {
   onClose: () => void;
@@ -90,7 +90,7 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>{title}</h2>
           <button className={styles.modalClose} onClick={onClose}>
-            <IoClose size={24} />
+            <X size={24} />
           </button>
         </div>
         <div className={styles.modalContent}>{children}</div>

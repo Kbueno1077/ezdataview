@@ -5,14 +5,18 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
+import { AnimatedBar } from "../Animated/AnimatedBar";
+import { motion } from "motion/react";
 
 export function BarChartHorizontal({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: { key: string; value: number }[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -33,7 +37,7 @@ export function BarChartHorizontal({
 
   return (
     <div
-      className={`relative max-w-[16rem] h-72 ${className}`}
+      className={`relative w-full h-72 ${className}`}
       style={
         {
           "--marginTop": "0px",
@@ -63,16 +67,17 @@ export function BarChartHorizontal({
             return (
               <ClientTooltip key={index}>
                 <TooltipTrigger>
-                  <div
-                    key={index}
+                  <AnimatedBar
+                    index={index}
+                    active={active}
+                    className="inset-0 absolute bg-purple-300 dark:bg-purple-400"
                     style={{
                       left: "0",
                       top: `${yScale(d.key)}%`,
                       width: `${barWidth}%`,
                       height: `${barHeight}%`,
-                      borderRadius: "0 6px 6px 0", // Rounded right corners
+                      borderRadius: "0 6px 6px 0",
                     }}
-                    className={`absolute bg-purple-300 dark:bg-purple-400`}
                   />
                 </TooltipTrigger>
                 <TooltipContent>

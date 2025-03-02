@@ -5,7 +5,7 @@ import {
   DisclosureButton,
   DisclosurePanel,
 } from "@headlessui/react";
-import { BiMinus, BiPlus } from "react-icons/bi";
+import { Minus, Plus } from "lucide-react";
 
 import SectionTitle from "@/components/SectionTitle";
 import { IFAQ } from "@/modules/landing/types";
@@ -83,9 +83,9 @@ const FAQ: React.FC = () => {
                           {faq.question}
                         </span>
                         {open ? (
-                          <BiMinus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
+                          <Minus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
                         ) : (
-                          <BiPlus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
+                          <Plus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
                         )}
                       </DisclosureButton>
                       <DisclosurePanel className="px-6 pb-6 pt-2 text-foreground-accent/90 text-lg leading-relaxed">

@@ -19,7 +19,7 @@ Please check out the documentation below to get started.
 - Smooth animations with **Framer Motion**
 - Built-in **font optimization** with [next/font](https://nextjs.org/docs/app/api-reference/components/font)
 - Automatic **image optimization** via [next/image](https://nextjs.org/docs/app/building-your-application/optimizing/images)
-- Comprehensive icon selection via [React Icons](https://react-icons.github.io/react-icons/)
+
 - Optimized for performance with near-perfect **Lighthouse score**
 - Modular architecture for easy customization and extension
 - Responsive design that works on all devices

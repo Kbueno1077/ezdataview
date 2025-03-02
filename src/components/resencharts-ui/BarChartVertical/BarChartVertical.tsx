@@ -1,12 +1,15 @@
-import React, { CSSProperties } from "react";
-import { scaleBand, scaleLinear, max } from "d3";
-import { VerticalBarData } from "../utils/fixtures/BarCharts";
+import { max, scaleBand, scaleLinear } from "d3";
+import { CSSProperties } from "react";
+import { AnimatedVerticalBar } from "../Animated/AnimatedVerticalBar";
+import { VerticalBarData } from "../utils/types";
 
 export function BarChartVertical({
   data,
+  active = false,
   className,
 }: {
   data: VerticalBarData[];
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -135,16 +138,18 @@ export function BarChartVertical({
           const barHeight = yScale(0) - yScale(d.value);
 
           return (
-            <div
-              key={index}
-              style={{
-                width: `${barWidth}%`,
-                height: `${barHeight}%`,
-                borderRadius: "6px 6px 0 0",
-                marginLeft: `${xScale(d.key)}%`,
-              }}
-              className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
-            />
+            <AnimatedVerticalBar key={index} index={index} active={active}>
+              <div
+                key={index}
+                style={{
+                  width: `${barWidth}%`,
+                  height: `${barHeight}%`,
+                  borderRadius: "6px 6px 0 0",
+                  marginLeft: `${xScale(d.key)}%`,
+                }}
+                className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
+              />
+            </AnimatedVerticalBar>
           );
         })}
       </div>

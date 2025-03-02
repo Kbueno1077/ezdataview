@@ -5,48 +5,42 @@ import FeatureCard from "./FeatureCard";
 interface FeatureGridProps {
   className?: string;
 }
-import {
-  LuPalette,
-  LuMoon,
-  LuShield,
-  LuMousePointer,
-  LuZap,
-} from "react-icons/lu";
+import { Palette, Moon, Shield, MousePointer, Zap } from "lucide-react";
 
 const features = [
   {
     title: "Easy to Use",
     description:
       "Intuitive interface with drag-and-drop functionality for creating charts in minutes.",
-    icon: <LuMousePointer className="text-white" />,
+    icon: <MousePointer className="text-white" />,
     gradient: "linear-gradient(135deg, #FF9966, #FF5E62)",
   },
   {
     title: "Customizable",
     description:
       "Extensive styling options to match your brand with custom colors, fonts, and layouts.",
-    icon: <LuPalette className="text-white" />,
+    icon: <Palette className="text-white" />,
     gradient: "linear-gradient(135deg, #56CCF2, #2F80ED)",
   },
   {
     title: "Dark Mode Support",
     description:
       "Seamless switching between light and dark themes for comfortable viewing in any environment.",
-    icon: <LuMoon className="text-white" />,
+    icon: <Moon className="text-white" />,
     gradient: "linear-gradient(135deg, #A770EF, #CF8BF3, #FDB99B)",
   },
   {
     title: "Data Security",
     description:
       "Enterprise-grade encryption and compliance with data protection regulations.",
-    icon: <LuShield className="text-white" />,
+    icon: <Shield className="text-white" />,
     gradient: "linear-gradient(135deg, #11998e, #38ef7d)",
   },
   {
     title: "Lightning Fast",
     description:
       "High-performance rendering engine delivers smooth, responsive charts even with large datasets.",
-    icon: <LuZap className="text-white" />,
+    icon: <Zap className="text-white" />,
     gradient: "linear-gradient(135deg, #4776E6, #8E54E9)",
   },
 ];

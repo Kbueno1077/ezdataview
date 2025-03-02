@@ -2,8 +2,13 @@
 
 import { NativeCharts } from "@/components/NativeModal";
 import React, { useState } from "react";
-import { BsGrid3X3GapFill, BsListUl, BsGrid } from "react-icons/bs";
-import { FaChevronLeft, FaChevronRight } from "react-icons/fa";
+import {
+  LayoutGrid,
+  List,
+  Grid,
+  ChevronLeft,
+  ChevronRight,
+} from "lucide-react";
 
 interface Chart {
   id: string;
@@ -82,7 +87,7 @@ function Showcase({
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-gray-600 hover:bg-gray-50"
                 aria-label="Previous page"
               >
-                <FaChevronLeft className="text-gray-500" size={12} />
+                <ChevronLeft className="text-gray-500" size={12} />
               </button>
 
               {totalPages <= 5 ? (
@@ -197,7 +202,7 @@ function Showcase({
                 className="w-8 h-8 rounded-full flex items-center justify-center transition-all cursor-pointer disabled:opacity-30 disabled:cursor-not-allowed text-gray-600 hover:bg-gray-50"
                 aria-label="Next page"
               >
-                <FaChevronRight className="text-gray-500" size={12} />
+                <ChevronRight className="text-gray-500" size={12} />
               </button>
             </div>
           </div>
@@ -224,7 +229,7 @@ function Showcase({
             aria-pressed={viewMode === "list"}
             title="Switch to list view"
           >
-            <BsListUl size={20} />
+            <List size={20} />
           </button>
           <button
             onClick={() => setViewMode("grid")}
@@ -237,7 +242,7 @@ function Showcase({
             aria-pressed={viewMode === "grid"}
             title="Switch to grid view"
           >
-            <BsGrid size={20} />
+            <Grid size={20} />
           </button>
           <button
             onClick={() => setViewMode("dashboard")}
@@ -250,7 +255,7 @@ function Showcase({
             aria-pressed={viewMode === "dashboard"}
             title="Switch to dashboard view"
           >
-            <BsGrid3X3GapFill size={20} />
+            <LayoutGrid size={20} />
           </button>
         </div>
       </div>

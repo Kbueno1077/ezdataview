@@ -1,7 +1,7 @@
 "use client";
 
 import { useRef, useState } from "react";
-import { FaExternalLinkAlt } from "react-icons/fa";
+import { ExternalLink } from "lucide-react";
 import { getChartTypeByName } from "../resencharts-ui/utils/utils";
 import styles from "./NativeCharts.module.css";
 import NativeModal from "./NativeModal";
@@ -18,7 +18,11 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   const chartRef = useRef<HTMLDivElement>(null);
   const modalChartRef = useRef<HTMLDivElement>(null);
 
-  const previewChartNode = getChartTypeByName(chart.data, chart.type, true);
+  const previewChartNode = getChartTypeByName(chart.data, chart.type, {
+    withTooltip: true,
+    active: true,
+    className: "",
+  });
 
   const handleChartClick = () => {
     setShowModal(true);
@@ -45,7 +49,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
       >
         <div className="py-3 px-4 font-semibold text-base bg-background border-b border-gray-200 flex items-center justify-between">
           {title}
-          <FaExternalLinkAlt
+          <ExternalLink
             size={10}
             className="ml-2 text-xs text-gray-600  transition-opacity duration-200 ease-in-out"
             style={{ opacity: isHovered ? 1 : 0 }}

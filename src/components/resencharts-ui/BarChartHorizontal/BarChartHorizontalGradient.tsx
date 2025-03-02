@@ -6,14 +6,17 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { GradientBarData } from "../utils/types";
+import { AnimatedBar } from "../Animated/AnimatedBar";
 
 export function BarChartHorizontalGradient({
   data,
   withTooltip = true,
+  active = false,
   className,
 }: {
   data: GradientBarData[];
   withTooltip?: boolean;
+  active?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -60,24 +63,7 @@ export function BarChartHorizontalGradient({
 
           if (!withTooltip) {
             return (
-              <div
-                key={index}
-                style={{
-                  position: "absolute",
-                  left: "0",
-                  top: `${yScale(d.key)}%`,
-                  width: `${barWidth}%`,
-                  height: `${barHeight}%`,
-                  borderRadius: "0 6px 6px 0", // Rounded right corners
-                }}
-                className={`bg-gradient-to-b ${d.color}`}
-              />
-            );
-          }
-
-          return (
-            <ClientTooltip key={index}>
-              <TooltipTrigger>
+              <AnimatedBar key={index} index={index} active={active}>
                 <div
                   key={index}
                   style={{
@@ -89,6 +75,26 @@ export function BarChartHorizontalGradient({
                     borderRadius: "0 6px 6px 0", // Rounded right corners
                   }}
                   className={`bg-gradient-to-b ${d.color}`}
+                />
+              </AnimatedBar>
+            );
+          }
+
+          return (
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <AnimatedBar
+                  key={index}
+                  index={index}
+                  active={active}
+                  className={`bg-gradient-to-b ${d.color}`}
+                  style={{
+                    left: "0",
+                    top: `${yScale(d.key)}%`,
+                    width: `${barWidth}%`,
+                    height: `${barHeight}%`,
+                    borderRadius: "0 6px 6px 0", // Rounded right corners
+                  }}
                 />
               </TooltipTrigger>
               <TooltipContent>
