@@ -27,24 +27,46 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
   }, [isOpen]);
 
   useEffect(() => {
+    const animationTimers: NodeJS.Timeout[] = [];
+
     if (isOpen) {
-      setIsFullyExpanded(false); // Reset fully expanded state
-      setAnimationState("entering");
-      const timer = setTimeout(() => setAnimationState("entered"), 10);
+      // Reset fully expanded state
+      setIsFullyExpanded(false);
 
-      // Set fully expanded state after animation completes
-      const expandTimer = setTimeout(() => setIsFullyExpanded(true), 500);
+      // Use requestAnimationFrame for more reliable animation timing
+      requestAnimationFrame(() => {
+        setAnimationState("entering");
 
-      return () => {
-        clearTimeout(timer);
-        clearTimeout(expandTimer);
-      };
+        // Use requestAnimationFrame for the next state to ensure browser has processed the first change
+        requestAnimationFrame(() => {
+          // Small delay to ensure CSS transitions work properly
+          const enteredTimer = setTimeout(
+            () => setAnimationState("entered"),
+            20
+          );
+          animationTimers.push(enteredTimer);
+
+          // Set fully expanded state after animation completes with a slightly longer timeout
+          const expandTimer = setTimeout(() => setIsFullyExpanded(true), 550);
+          animationTimers.push(expandTimer);
+        });
+      });
     } else {
-      setIsFullyExpanded(false); // Remove fully expanded state first
+      // Remove fully expanded state first
+      setIsFullyExpanded(false);
+
+      // Immediately start exiting animation
       setAnimationState("exiting");
-      const timer = setTimeout(() => setAnimationState("exited"), 500);
-      return () => clearTimeout(timer);
+
+      // Set to exited after animation completes
+      const exitTimer = setTimeout(() => setAnimationState("exited"), 100);
+      animationTimers.push(exitTimer);
     }
+
+    // Cleanup function to clear all timers
+    return () => {
+      animationTimers.forEach((timer) => clearTimeout(timer));
+    };
   }, [isOpen]);
 
   useEffect(() => {
@@ -95,6 +117,8 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
           </button>
         </div>
         <div className={styles.modalContent}>{children}</div>
+
+        <div className={styles.modalFooter}></div>
       </div>
     </div>
   );

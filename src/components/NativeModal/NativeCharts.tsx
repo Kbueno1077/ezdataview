@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
 import { getChartTypeByName } from "../resencharts-ui/utils/utils";
 import styles from "./NativeCharts.module.css";
@@ -15,8 +15,29 @@ interface Chart {
 function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
+  const [headerGradient, setHeaderGradient] = useState("");
   const chartRef = useRef<HTMLDivElement>(null);
   const modalChartRef = useRef<HTMLDivElement>(null);
+
+  // Generate random gradient colors on component mount
+  useEffect(() => {
+    const colors = [
+      "#f9fafb", // Light gray
+      "#f0f9ff", // Light blue
+      "#f0fdf4", // Light green
+      "#fef2f2", // Light red
+      "#fffbeb", // Light yellow
+      "#f5f3ff", // Light purple
+      "#fdf2f8", // Light pink
+    ];
+
+    const startColor = colors[Math.floor(Math.random() * colors.length)];
+    const endColor = "rgba(249, 250, 251, 0)";
+
+    setHeaderGradient(
+      `linear-gradient(to bottom, ${startColor} 0%, ${endColor} 100%)`
+    );
+  }, []);
 
   const previewChartNode = getChartTypeByName(chart.data, chart.type, {
     withTooltip: true,
@@ -47,11 +68,16 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
         onMouseLeave={() => setIsHovered(false)}
         ref={chartRef}
       >
-        <div className="py-3 px-4 font-semibold text-base bg-background border-b border-gray-200 flex items-center justify-between">
+        <div
+          className="py-3 px-4 font-semibold text-base flex items-center justify-between"
+          style={{
+            background: headerGradient,
+          }}
+        >
           {title}
           <ExternalLink
             size={10}
-            className="ml-2 text-xs text-gray-600  transition-opacity duration-200 ease-in-out"
+            className="ml-2 text-xs text-gray-600 transition-opacity duration-200 ease-in-out"
             style={{ opacity: isHovered ? 1 : 0 }}
           />
         </div>

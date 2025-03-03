@@ -1,9 +1,8 @@
 .chartButton {
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 6px;
   overflow: hidden;
   background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
   transition: all 0.2s ease;
   position: relative;
   display: flex;
