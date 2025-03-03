@@ -3,11 +3,13 @@
 import {
   GradientBarData,
   HorizontalBarData,
+  ImageBarData,
   MultiBarData,
   SVGBarData,
   VerticalBarData,
   VerticalMultiBarData,
 } from "../types";
+import { companyLogos } from "@/modules/landing/utils";
 
 export const dataHorizontal: HorizontalBarData[] = [
   { key: "Technology", value: 38.1 },
@@ -19,22 +21,90 @@ export const dataHorizontal: HorizontalBarData[] = [
 ].sort((a, b) => b.value - a.value);
 
 export const dataMulti: MultiBarData[] = [
-  { key: "European Union", values: [15, 25, 33], flag: "eu" },
-  { key: "United States", values: [13, 24, 31], flag: "us" },
-  { key: "Japan", values: [7, 18, 24], flag: "jp" },
-  { key: "Philippines", values: [4, 11, 19], flag: "ph" },
+  {
+    key: "European Union",
+    values: [15, 25, 33],
+    image: "https://hatscripts.github.io/circle-flags/flags/eu.svg",
+  },
+  {
+    key: "United States",
+    values: [13, 24, 31],
+    image: "https://hatscripts.github.io/circle-flags/flags/us.svg",
+  },
+  {
+    key: "Japan",
+    values: [7, 18, 24],
+    image: "https://hatscripts.github.io/circle-flags/flags/jp.svg",
+  },
+  {
+    key: "Philippines",
+    values: [4, 11, 19],
+    image: "https://hatscripts.github.io/circle-flags/flags/ph.svg",
+  },
+];
+export const dataSVG: SVGBarData[] = [
+  {
+    key: "Apple Inc",
+    value: 58.3,
+    color: "bg-pink-300 dark:bg-pink-400",
+    image: companyLogos[0],
+  },
+  {
+    key: "Microsoft",
+    value: 42.7,
+    color: "bg-purple-300 dark:bg-purple-400",
+    image: companyLogos[1],
+  },
+  {
+    key: "Amazon",
+    value: 31.5,
+    color: "bg-indigo-300 dark:bg-indigo-400",
+    image: companyLogos[2],
+  },
+  {
+    key: "Google",
+    value: 22.5,
+    color: "bg-sky-300 dark:bg-sky-400",
+    image: companyLogos[3],
+  },
+  {
+    key: "Meta",
+    value: 18.7,
+    color: "bg-orange-300 dark:bg-orange-400",
+    image: companyLogos[4],
+  },
 ];
 
-export const dataSVG: SVGBarData[] = [
-  { key: "Apple Inc", value: 58.3, color: "bg-pink-300 dark:bg-pink-400" },
-  { key: "Microsoft", value: 42.7, color: "bg-purple-300 dark:bg-purple-400" },
-  { key: "Amazon", value: 31.5, color: "bg-indigo-300 dark:bg-indigo-400" },
-  { key: "Google", value: 22.5, color: "bg-sky-300 dark:bg-sky-400" },
-  { key: "Meta", value: 18.7, color: "bg-orange-300 dark:bg-orange-400" },
+export const dataImage: ImageBarData[] = [
   {
-    key: "Spanish or vanish",
+    key: "Portugal",
+    value: 55.8,
+    image: "https://hatscripts.github.io/circle-flags/flags/pt.svg",
+  },
+  {
+    key: "France",
+    value: 34.3,
+    image: "https://hatscripts.github.io/circle-flags/flags/fr.svg",
+  },
+  {
+    key: "Sweden",
+    value: 27.1,
+    image: "https://hatscripts.github.io/circle-flags/flags/se.svg",
+  },
+  {
+    key: "Spain",
+    value: 22.5,
+    image: "https://hatscripts.github.io/circle-flags/flags/es.svg",
+  },
+  {
+    key: "Italy",
+    value: 18.7,
+    image: "https://hatscripts.github.io/circle-flags/flags/it.svg",
+  },
+  {
+    key: "Germany",
     value: 10.8,
-    color: "bg-lime-400 dark:bg-lime-500",
+    image: "https://hatscripts.github.io/circle-flags/flags/de.svg",
   },
 ];
 

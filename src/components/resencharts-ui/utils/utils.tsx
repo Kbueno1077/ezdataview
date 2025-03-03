@@ -2,7 +2,7 @@ import type { JSX } from "react";
 import { BarChartHorizontal } from "../BarChartHorizontal/BarChartHorizontal";
 import { BarChartHorizontalGradient } from "../BarChartHorizontal/BarChartHorizontalGradient";
 import { BarChartHorizontalMulti } from "../BarChartHorizontal/BarChartHorizontalMulti";
-import { BarChartHorizontalSVG } from "../BarChartHorizontal/BarChartHorizontalSVG";
+import { BarChartHorizontalImage } from "../BarChartHorizontal/BarChartHorizontalImage";
 import { BarChartHorizontalThin } from "../BarChartHorizontal/BarChartHorizontalThin";
 import { BarChartVertical } from "../BarChartVertical/BarChartVertical";
 import { BarChartVerticalMulti } from "../BarChartVertical/BarChartVerticalMulti";
@@ -52,9 +52,9 @@ export const getChartTypeByName = (
       );
     }
 
-    case "horizontal-bar-svg": {
+    case "horizontal-bar-image": {
       return (
-        <BarChartHorizontalSVG
+        <BarChartHorizontalImage
           data={data}
           withTooltip={withTooltip}
           className={className}

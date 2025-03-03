@@ -3,6 +3,7 @@ import {
   barVerticalMulti,
   dataGradient,
   dataHorizontal,
+  dataImage,
   dataMulti,
   dataSVG,
   dataThin,
@@ -44,8 +45,14 @@ export const data = [
   {
     id: "4",
     name: "Bar Chart Horizontal SVG",
-    type: "horizontal-bar-svg",
+    type: "horizontal-bar-image",
     data: dataSVG,
+  },
+  {
+    id: "4.5",
+    name: "Bar Chart Horizontal Image",
+    type: "horizontal-bar-image",
+    data: dataImage,
   },
 
   {

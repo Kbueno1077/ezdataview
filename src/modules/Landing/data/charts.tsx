@@ -1,5 +1,5 @@
+import { BarChartHorizontalImage } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalImage";
 import { BarChartHorizontalMulti } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalMulti";
-import { BarChartHorizontalSVG } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalSVG";
 import { BarChartVertical } from "@/components/resencharts-ui/BarChartVertical/BarChartVertical";
 import { BarChartVerticalMulti } from "@/components/resencharts-ui/BarChartVertical/BarChartVerticalMulti";
 import { BreakdownChart } from "@/components/resencharts-ui/BreakdownChart/BreakdownChart";
@@ -34,7 +34,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Custom color schemes to match your brand identity",
       "Smooth animations for engaging user experience",
     ],
-    chartType: <BarChartHorizontalSVG data={dataSVG} />,
+    chartType: <BarChartHorizontalImage data={dataSVG} />,
   },
 
   {

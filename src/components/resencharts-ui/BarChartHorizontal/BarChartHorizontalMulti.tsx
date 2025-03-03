@@ -1,11 +1,12 @@
 import { max, scaleBand, scaleLinear } from "d3";
+import Image from "next/image";
 import React, { CSSProperties } from "react";
 import { AnimatedBar } from "../Animated/AnimatedBar";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
+} from "../Tooltip/Tooltip";
 import { MultiBarData } from "../utils/types";
 
 const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
@@ -64,9 +65,12 @@ export function BarChartHorizontalMulti({
             }}
             className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
           >
-            <img
+            <Image
               key={i}
-              src={`https://hatscripts.github.io/circle-flags/flags/${entry.flag}.svg`}
+              src={entry.image ?? ""}
+              alt={`${entry.key} flag`}
+              width={28}
+              height={28}
               className="opacity-80 dark:opacity-100"
             />
           </div>
@@ -85,11 +89,7 @@ export function BarChartHorizontalMulti({
         "
       >
         <div className="relative w-full h-full">
-          <svg
-            viewBox="0 0 100 100"
-            preserveAspectRatio="none"
-            className="h-full"
-          >
+          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
             {/* Grid lines */}
             {xScale
               .ticks(8)

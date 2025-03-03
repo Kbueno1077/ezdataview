@@ -6,13 +6,20 @@ export type HorizontalBarData = {
 export type MultiBarData = {
   key: string;
   values: number[];
-  flag?: string;
+  image?: string;
 };
 
 export type SVGBarData = {
   key: string;
   value: number;
-  color: string;
+  image: React.ReactNode;
+  color?: string;
+};
+export type ImageBarData = {
+  key: string;
+  value: number;
+  image: string;
+  color?: string;
 };
 
 export type GradientBarData = {

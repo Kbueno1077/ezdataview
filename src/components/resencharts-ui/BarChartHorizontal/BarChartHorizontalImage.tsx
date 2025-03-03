@@ -1,21 +1,21 @@
-import React, { CSSProperties } from "react";
-import { scaleBand, scaleLinear, max } from "d3";
+import { max, scaleBand, scaleLinear } from "d3";
+import Image from "next/image";
+import { CSSProperties } from "react";
+import { AnimatedBar } from "../Animated/AnimatedBar";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
-import { SVGBarData } from "../utils/types";
-import { AnimatedBar } from "../Animated/AnimatedBar";
-import { companyLogos } from "@/modules/landing/utils";
+import { ImageBarData, SVGBarData } from "../utils/types";
 
-export function BarChartHorizontalSVG({
+export function BarChartHorizontalImage({
   data,
   withTooltip = true,
   withAnimation = false,
   className,
 }: {
-  data: SVGBarData[];
+  data: SVGBarData[] | ImageBarData[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -79,7 +79,7 @@ export function BarChartHorizontalSVG({
          translate-y-[var(--marginTop)]
          overflow-visible"
       >
-        {data.map((entry, i) => (
+        {data.map((entry: ImageBarData | SVGBarData, i) => (
           <div
             key={i}
             style={{
@@ -88,13 +88,24 @@ export function BarChartHorizontalSVG({
             }}
             className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
           >
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 18 18"
-              className=""
-            >
-              {companyLogos[i]}
-            </svg>
+            {typeof entry.image === "string" ? (
+              <Image
+                key={i}
+                src={entry.image}
+                alt={`${entry.key} icon`}
+                width={28}
+                height={28}
+                className="opacity-80 dark:opacity-100"
+              />
+            ) : (
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 18 18"
+                className="opacity-80 dark:opacity-100"
+              >
+                {entry.image}
+              </svg>
+            )}
           </div>
         ))}
       </div>
@@ -121,7 +132,9 @@ export function BarChartHorizontalSVG({
                 key={index}
                 index={index}
                 withAnimation={withAnimation}
-                className={`absolute ${d.color}`}
+                className={`absolute ${
+                  d.color || "bg-gray-200 dark:bg-gray-800"
+                }`}
                 style={{
                   left: "0",
                   top: `${yScale(d.key)}%`,
@@ -139,7 +152,9 @@ export function BarChartHorizontalSVG({
                 <AnimatedBar
                   index={index}
                   withAnimation={withAnimation}
-                  className={`inset-0 absolute ${d.color}`}
+                  className={`inset-0 absolute ${
+                    d.color || "bg-gray-200 dark:bg-gray-800"
+                  }`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
