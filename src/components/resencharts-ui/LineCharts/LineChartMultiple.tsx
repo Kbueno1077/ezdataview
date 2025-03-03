@@ -12,14 +12,17 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { LineDataSeries } from "../utils/types";
+import { AnimatedLine } from "../Animated/AnimatedLine";
 
 export function LineChartMultiple({
   data,
   withTooltip = true,
+  withAnimation = true,
   className,
 }: {
   data?: LineDataSeries[];
   withTooltip?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -46,10 +49,14 @@ export function LineChartMultiple({
     .y((d) => yScale(d.value))
     .curve(curveMonotoneX);
 
-  const paths = processedSeries.map((s) => ({
-    path: line(s.data),
-    color: s.color,
-  }));
+  const paths = processedSeries.map((s) => {
+    const pathString = String(line(s.data) || "");
+    return {
+      path: line(s.data),
+      color: s.color,
+      lineLength: pathString.length / 100,
+    };
+  });
 
   if (paths.some((p) => !p.path)) {
     return null;
@@ -131,14 +138,20 @@ export function LineChartMultiple({
 
           {/* Lines */}
           {paths.map((p, i) => (
-            <path
+            <AnimatedLine
               key={i}
-              d={p.path!}
-              fill="none"
-              className={p.color.line}
-              strokeWidth="2"
-              vectorEffect="non-scaling-stroke"
-            />
+              withAnimation={withAnimation}
+              lineLength={p.lineLength}
+            >
+              <path
+                key={i}
+                d={p.path!}
+                fill="none"
+                className={p.color.line}
+                strokeWidth="2"
+                vectorEffect="non-scaling-stroke"
+              />
+            </AnimatedLine>
           ))}
 
           {/* Points and Tooltips */}

@@ -76,8 +76,9 @@ export function BarChartHorizontalThin({
                   position: "absolute",
                   left: "0",
                   top: `${yScale(d.key)}%`,
-                  width: `${barWidth}%`,
-                  height: `${barHeight}%`,
+                  width: `100%`,
+                  height: `calc(${barHeight}% + 8px)`,
+                  transform: "translateY(-4px)",
                 }}
                 className={`${hoverColor} hover:bg-gray-200/50 relative z-10`}
               />
@@ -87,9 +88,8 @@ export function BarChartHorizontalThin({
           return (
             <ClientTooltip key={index}>
               <TooltipTrigger>
-                <AnimatedBar
+                <div
                   key={index}
-                  withAnimation={withAnimation}
                   style={{
                     position: "absolute",
                     left: "0",

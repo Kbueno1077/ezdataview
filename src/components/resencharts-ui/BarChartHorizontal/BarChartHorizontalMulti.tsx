@@ -1,11 +1,12 @@
+import { max, scaleBand, scaleLinear } from "d3";
 import React, { CSSProperties } from "react";
-import { scaleBand, scaleLinear, max } from "d3";
+import { AnimatedBar } from "../Animated/AnimatedBar";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
-import { AnimatedBar } from "../Animated/AnimatedBar";
+import { MultiBarData } from "../utils/types";
 
 const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
 const PX_BETWEEN_BARS = 0.2;
@@ -16,7 +17,7 @@ export function BarChartHorizontalMulti({
   withAnimation = false,
   className,
 }: {
-  data: { key: string; values: number[]; flag: string }[];
+  data: MultiBarData[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -84,7 +85,11 @@ export function BarChartHorizontalMulti({
         "
       >
         <div className="relative w-full h-full">
-          <svg viewBox="0 0 100 100" preserveAspectRatio="none">
+          <svg
+            viewBox="0 0 100 100"
+            preserveAspectRatio="none"
+            className="h-full"
+          >
             {/* Grid lines */}
             {xScale
               .ticks(8)

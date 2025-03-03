@@ -1,25 +1,28 @@
-import { CSSProperties } from "react";
 import {
-  scaleTime,
-  scaleLinear,
-  max,
-  line as d3_line,
   curveMonotoneX,
+  line as d3_line,
+  max,
+  scaleLinear,
+  scaleTime,
 } from "d3";
+import { CSSProperties } from "react";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
-import { LineChartDataPoint } from "../utils/fixtures/LineChart";
+import { LineChartDataPoint } from "../utils/types";
+import { AnimatedLine } from "../Animated/AnimatedLine";
 
 export function LineChartCurved({
   data,
   withTooltip = true,
+  withAnimation = true,
   className,
 }: {
   data: LineChartDataPoint[];
   withTooltip?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -43,6 +46,7 @@ export function LineChartCurved({
     .curve(curveMonotoneX);
 
   const d = line(lineChartData);
+  const lineLength = d ? d.length / 100 : 1;
 
   if (!d) {
     return null;
@@ -122,13 +126,15 @@ export function LineChartCurved({
               </g>
             ))}
           {/* Line */}
-          <path
-            d={d}
-            fill="none"
-            className="stroke-violet-400"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
+          <AnimatedLine withAnimation={withAnimation} lineLength={lineLength}>
+            <path
+              d={d}
+              fill="none"
+              className="stroke-violet-400"
+              strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
+            />
+          </AnimatedLine>
 
           {/* Circles and Tooltips */}
           {lineChartData.map((d, index) => {

@@ -5,11 +5,13 @@ import { motion } from "motion/react";
 export function AnimatedLine({
   children,
   withAnimation = false,
+  lineLength = 1,
 }: {
   children: React.ReactNode;
   withAnimation?: boolean;
+  lineLength?: number;
 }) {
-  const strokeDashValue = 1000; // For really long lines, you might need to increase this value
+  const strokeDashValue = 1500 * lineLength;
 
   if (!withAnimation) {
     return <div className="absolute inset-0">{children}</div>;

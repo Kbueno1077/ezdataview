@@ -62,7 +62,7 @@ const ChartShowcaseSection: React.FC<Props> = ({
         viewport={{ once: true }}
       >
         <div
-          className={clsx("flex flex-wrap items-center w-full max-w-lg", {
+          className={clsx("flex flex-wrap items-center w-full ", {
             "justify-start": imageAtRight,
             "lg:order-1 justify-end": !imageAtRight,
           })}

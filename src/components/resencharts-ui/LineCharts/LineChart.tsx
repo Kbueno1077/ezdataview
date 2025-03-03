@@ -1,19 +1,22 @@
+import { line as d3_line, max, scaleLinear, scaleTime } from "d3";
 import { CSSProperties } from "react";
-import { scaleTime, scaleLinear, max, line as d3_line } from "d3";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
-import { LineChartDataPoint } from "../utils/fixtures/LineChart";
+import { LineChartDataPoint } from "../utils/types";
+import { AnimatedLine } from "../Animated/AnimatedLine";
 
 export function LineChart({
   data,
   withTooltip = true,
+  withAnimation = true,
   className,
 }: {
   data: LineChartDataPoint[];
   withTooltip?: boolean;
+  withAnimation?: boolean;
   className?: string;
 }) {
   if (!data) {
@@ -36,6 +39,7 @@ export function LineChart({
     .y((d) => yScale(d.value));
 
   const d = line(lineChartData);
+  const lineLength = d ? d.length / 100 : 1; // Calculate line length for animation scaling
 
   if (!d) {
     return null;
@@ -115,13 +119,16 @@ export function LineChart({
               </g>
             ))}
           {/* Line */}
-          <path
-            d={d}
-            fill="none"
-            className="stroke-fuchsia-400"
-            strokeWidth="2"
-            vectorEffect="non-scaling-stroke"
-          />
+
+          <AnimatedLine withAnimation={withAnimation} lineLength={lineLength}>
+            <path
+              d={d}
+              fill="none"
+              className="stroke-fuchsia-400"
+              strokeWidth="2"
+              vectorEffect="non-scaling-stroke"
+            />
+          </AnimatedLine>
 
           {/* Circles and Tooltips */}
           {lineChartData.map((d, index) => {

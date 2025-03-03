@@ -35,6 +35,7 @@ export const getChartTypeByName = (
         <BarChartHorizontal
           data={data}
           className={className}
+          withTooltip={withTooltip}
           withAnimation={withAnimation}
         />
       );
@@ -85,6 +86,7 @@ export const getChartTypeByName = (
       return (
         <BarChartVertical
           data={data}
+          withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
         />
@@ -111,6 +113,7 @@ export const getChartTypeByName = (
         <LineChart
           data={data}
           withTooltip={withTooltip}
+          withAnimation={withAnimation}
           className={className}
         />
       );
@@ -121,6 +124,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          withAnimation={withAnimation}
         />
       );
     }
@@ -130,6 +134,7 @@ export const getChartTypeByName = (
           data={data}
           withTooltip={withTooltip}
           className={className}
+          withAnimation={withAnimation}
         />
       );
     }
