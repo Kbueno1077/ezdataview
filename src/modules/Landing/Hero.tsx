@@ -1,8 +1,7 @@
+import LottieReact from "@/components/LottieReact";
 import React from "react";
-import Image from "next/image";
-
-import ExampleResultButton from "./CTA/ExampleResultButton";
 import ExampleBuildButton from "./CTA/ExampleBuildButton";
+import ExampleResultButton from "./CTA/ExampleResultButton";
 
 export const heroDetails = {
   heading: "Beautiful Charts Made Simple",
@@ -15,13 +14,13 @@ const Hero: React.FC = () => {
   return (
     <section
       id="hero"
-      className="relative flex items-center justify-center pb-0 pt-32 md:pt-40 px-5"
+      className="relative h-screen flex items-center justify-center pb-0 pt-12 md:pt-40 px-5"
     >
       <div className="absolute left-0 top-0 bottom-0 -z-10 w-full">
         <div className="absolute inset-0 h-full w-full bg-hero-background bg-[linear-gradient(to_right,#80808012_1px,transparent_1px),linear-gradient(to_bottom,#80808012_1px,transparent_1px)] bg-[size:40px_40px] [mask-image:radial-gradient(ellipse_50%_50%_at_50%_50%,#000_60%,transparent_100%)]"></div>
       </div>
 
-      <div className="absolute left-0 right-0 bottom-0 backdrop-blur-[2px] h-40 bg-linear-to-b from-transparent via-[rgba(233,238,255,0.5)] to-[rgba(202,208,230,0.5)]"></div>
+      <div className="absolute left-0 right-0 bottom-0 backdrop-blur-[1px] h-32 bg-linear-to-b from-transparent via-[rgba(233,238,255,0.4)] to-[rgba(202,208,230,0.4)]"></div>
 
       <div className="text-center">
         <h1 className="text-4xl md:text-6xl md:leading-tight font-bold text-foreground max-w-lg md:max-w-2xl mx-auto">
@@ -34,17 +33,8 @@ const Hero: React.FC = () => {
           <ExampleResultButton dark />
           <ExampleBuildButton dark />
         </div>
-        <Image
-          src={heroDetails.centerImageSrc}
-          width={384}
-          height={340}
-          quality={100}
-          sizes="(max-width: 768px) 100vw, 384px"
-          priority={true}
-          unoptimized={true}
-          alt="app mockup"
-          className="relative mt-12 md:mt-16 mx-auto z-10"
-        />
+
+        <LottieReact url="https://lottie.host/f803e348-bab4-4def-87e6-1b6362fc3759/lIMzlZ318Y.lottie" />
       </div>
     </section>
   );

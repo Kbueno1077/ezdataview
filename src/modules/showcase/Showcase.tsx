@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { Chart, ViewMode } from "./types";
 import ViewModeSelector from "./components/ViewModeSelector";
 import ChartGrid from "./components/ChartGrid";
@@ -16,16 +16,38 @@ function Showcase({ data, title = "Charts" }: ShowcaseProps) {
   const [activeDashboardPage, setActiveDashboardPage] = useState(0);
   const chartsPerPage = 6;
   const totalPages = Math.ceil(data.length / chartsPerPage);
+  const [isMobile, setIsMobile] = useState(false);
 
-  const handleViewModeChange = useCallback((mode: ViewMode) => {
-    setViewMode(mode);
+  useEffect(() => {
+    const checkIfMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkIfMobile();
+
+    window.addEventListener("resize", checkIfMobile);
+
+    return () => window.removeEventListener("resize", checkIfMobile);
   }, []);
+  useEffect(() => {
+    if (isMobile) {
+      setViewMode("dashboard");
+    }
+  }, [isMobile]);
+
+  const handleViewModeChange = useCallback(
+    (mode: ViewMode) => {
+      if (!isMobile) {
+        setViewMode(mode);
+      }
+    },
+    [isMobile]
+  );
 
   const handlePageChange = useCallback((page: number) => {
     setActiveDashboardPage(page);
   }, []);
 
-  // Memoize the dashboard data to prevent unnecessary recalculations
   const dashboardData = React.useMemo(() => {
     const startIdx = activeDashboardPage * chartsPerPage;
     return data.slice(startIdx, startIdx + chartsPerPage);
@@ -37,10 +59,12 @@ function Showcase({ data, title = "Charts" }: ShowcaseProps) {
         <h1 className="text-3xl font-bold text-foreground tracking-tight mb-1">
           {title}
         </h1>
-        <ViewModeSelector
-          viewMode={viewMode}
-          onViewModeChange={handleViewModeChange}
-        />
+        {!isMobile && (
+          <ViewModeSelector
+            viewMode={viewMode}
+            onViewModeChange={handleViewModeChange}
+          />
+        )}
       </div>
 
       <div

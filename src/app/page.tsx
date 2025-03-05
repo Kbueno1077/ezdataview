@@ -12,7 +12,7 @@ const HomePage: React.FC = () => {
   return (
     <>
       <Hero />
-      <Container>
+      <Container className="mt-5 sm:mt-0">
         <Section
           id="features"
           title="Our Features"

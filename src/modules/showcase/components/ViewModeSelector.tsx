@@ -12,13 +12,13 @@ interface ViewModeSelectorProps {
 const ViewModeSelector: React.FC<ViewModeSelectorProps> = React.memo(
   ({ viewMode, onViewModeChange }) => {
     return (
-      <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-1 flex space-x-2">
+      <div className="flex rounded-md overflow-hidden">
         <button
           onClick={() => onViewModeChange("list")}
-          className={`p-2 rounded-md transition-all cursor-pointer ${
+          className={`p-3 transition-all duration-200 cursor-pointer ${
             viewMode === "list"
-              ? "bg-gray-100 text-foreground"
-              : "text-gray-500 hover:bg-gray-50"
+              ? "bg-blue-500 text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
           aria-label="List view"
           aria-pressed={viewMode === "list"}
@@ -28,10 +28,10 @@ const ViewModeSelector: React.FC<ViewModeSelectorProps> = React.memo(
         </button>
         <button
           onClick={() => onViewModeChange("grid")}
-          className={`p-2 rounded-md transition-all cursor-pointer ${
+          className={`p-3 transition-all duration-200 cursor-pointer ${
             viewMode === "grid"
-              ? "bg-gray-100 text-foreground"
-              : "text-gray-500 hover:bg-gray-50"
+              ? "bg-purple-500 text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
           aria-label="Grid view"
           aria-pressed={viewMode === "grid"}
@@ -41,10 +41,10 @@ const ViewModeSelector: React.FC<ViewModeSelectorProps> = React.memo(
         </button>
         <button
           onClick={() => onViewModeChange("dashboard")}
-          className={`p-2 rounded-md transition-all cursor-pointer ${
+          className={`p-3 transition-all duration-200 cursor-pointer ${
             viewMode === "dashboard"
-              ? "bg-gray-100 text-foreground"
-              : "text-gray-500 hover:bg-gray-50"
+              ? "bg-teal-500 text-white"
+              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
           }`}
           aria-label="Dashboard view"
           aria-pressed={viewMode === "dashboard"}

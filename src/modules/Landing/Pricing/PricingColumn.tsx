@@ -13,24 +13,29 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
   return (
     <div
       className={clsx(
-        "w-full max-w-sm mx-auto rounded-2xl lg:max-w-full  transition-transform duration-200 hover:scale-[1.02]",
+        "w-full max-w-sm mx-auto rounded-2xl overflow-hidden lg:max-w-full transition-transform duration-200 hover:scale-[1.02] flex flex-col",
         highlight
           ? "bg-gradient-to-br from-violet-600/90 to-indigo-600/90 text-white shadow-xl shadow-violet-500/20"
           : "bg-white/80 border border-gray-200/50"
       )}
     >
-      <div className="p-8 space-y-4">
+      <div className="p-6">
         {highlight && (
-          <span className="px-4 py-1 text-xs font-semibold tracking-wider text-white bg-white/20 rounded-full">
-            MOST POPULAR
-          </span>
+          <div className="mb-3">
+            <span className="px-4 py-1 text-xs font-semibold tracking-wider text-white bg-white/20 rounded-full">
+              MOST POPULAR
+            </span>
+          </div>
         )}
         <h3
-          className={clsx("text-2xl font-bold", !highlight && "text-gray-900")}
+          className={clsx(
+            "text-2xl font-bold mb-2",
+            !highlight && "text-gray-900"
+          )}
         >
           {name}
         </h3>
-        <div className="flex items-baseline">
+        <div className="flex items-baseline mb-6">
           <span
             className={clsx(
               "text-5xl font-extrabold tracking-tight",
@@ -65,11 +70,11 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
 
       <div
         className={clsx(
-          "p-8 rounded-b-2xl space-y-6",
+          "p-6 flex-1",
           highlight ? "bg-white/10" : "bg-gray-50/50"
         )}
       >
-        <div>
+        <div className="mb-6">
           <p
             className={clsx(
               "font-semibold mb-1",
@@ -85,10 +90,10 @@ const PricingColumn: React.FC<Props> = ({ tier, highlight }: Props) => {
 
         <ul className="space-y-4">
           {features.map((feature, index) => (
-            <li key={index} className="flex items-center gap-3">
+            <li key={index} className="flex items-start gap-3">
               <CheckCircle
                 className={clsx(
-                  "h-5 w-5",
+                  "h-5 w-5 flex-shrink-0 mt-0.5",
                   highlight ? "text-white" : "text-violet-600"
                 )}
               />

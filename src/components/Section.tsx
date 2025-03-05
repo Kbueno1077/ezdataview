@@ -16,7 +16,7 @@ const Section: React.FC<React.PropsWithChildren<Props>> = ({
   children,
 }: React.PropsWithChildren<Props>) => {
   return (
-    <section id={id} className="py-10 lg:py-20">
+    <section id={id} className="py-5 lg:py-10">
       <div className="mb-12">
         <SectionTitle>
           <h2 className="text-center mb-4 text-3xl lg:text-4xl font-bold bg-gradient-to-r from-primary to-secondary bg-clip-text text-transparent">
