@@ -17,9 +17,41 @@ import { FillableDonutChart } from "../PieCharts/FillableDonutChart";
 import { HalfDonutChart } from "../PieCharts/HalfDonutChart";
 import { PieChart } from "../PieCharts/PieChart";
 import { PieChartImage } from "../PieCharts/PieChartImage";
+import {
+  BreakdownChartItem,
+  DonutChartItem,
+  GradientBarData,
+  HorizontalBarData,
+  ImageBarData,
+  Item,
+  LineChartCurvedData,
+  LineChartData,
+  LineChartDataPoint,
+  LineDataSeries,
+  MultiBarData,
+  pieChartItem,
+  SVGBarData,
+  VerticalBarData,
+  VerticalMultiBarData,
+} from "./types";
 
 export const getChartTypeByName = (
-  data: any,
+  data:
+    | HorizontalBarData[]
+    | GradientBarData[]
+    | MultiBarData[]
+    | SVGBarData[]
+    | ImageBarData[]
+    | VerticalBarData[]
+    | VerticalMultiBarData[]
+    | LineChartData[]
+    | LineChartCurvedData[]
+    | pieChartItem[]
+    | DonutChartItem[]
+    | LineDataSeries[]
+    | LineChartDataPoint[]
+    | BreakdownChartItem[],
+
   chartType: string,
   options?: {
     withTooltip?: boolean;
@@ -33,7 +65,7 @@ export const getChartTypeByName = (
     case "horizontal-bar": {
       return (
         <BarChartHorizontal
-          data={data}
+          data={data as HorizontalBarData[]}
           className={className}
           withTooltip={withTooltip}
           withAnimation={withAnimation}
@@ -44,7 +76,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-gradient": {
       return (
         <BarChartHorizontalGradient
-          data={data}
+          data={data as GradientBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -55,7 +87,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-image": {
       return (
         <BarChartHorizontalImage
-          data={data}
+          data={data as SVGBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -65,7 +97,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-multi": {
       return (
         <BarChartHorizontalMulti
-          data={data}
+          data={data as MultiBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -75,7 +107,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-thin": {
       return (
         <BarChartHorizontalThin
-          data={data}
+          data={data as HorizontalBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -85,7 +117,7 @@ export const getChartTypeByName = (
     case "vertical-bar": {
       return (
         <BarChartVertical
-          data={data}
+          data={data as VerticalBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -95,7 +127,7 @@ export const getChartTypeByName = (
     case "vertical-bar-multi": {
       return (
         <BarChartVerticalMulti
-          data={data}
+          data={data as VerticalMultiBarData[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -103,15 +135,25 @@ export const getChartTypeByName = (
       );
     }
     case "breakdown": {
-      return <BreakdownChart data={data} className={className} />;
+      return (
+        <BreakdownChart
+          data={data as BreakdownChartItem[]}
+          className={className}
+        />
+      );
     }
     case "breakdown-thin": {
-      return <BreakdownChartThin data={data} className={className} />;
+      return (
+        <BreakdownChartThin
+          data={data as BreakdownChartItem[]}
+          className={className}
+        />
+      );
     }
     case "line": {
       return (
         <LineChart
-          data={data}
+          data={data as LineChartDataPoint[]}
           withTooltip={withTooltip}
           withAnimation={withAnimation}
           className={className}
@@ -121,7 +163,7 @@ export const getChartTypeByName = (
     case "line-multi": {
       return (
         <LineChartMultiple
-          data={data}
+          data={data as LineDataSeries[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -131,7 +173,7 @@ export const getChartTypeByName = (
     case "line-curved": {
       return (
         <LineChartCurved
-          data={data}
+          data={data as LineChartDataPoint[]}
           withTooltip={withTooltip}
           className={className}
           withAnimation={withAnimation}
@@ -140,35 +182,39 @@ export const getChartTypeByName = (
     }
     case "pie": {
       return (
-        <PieChart data={data} withTooltip={withTooltip} className={className} />
+        <PieChart
+          data={data as pieChartItem[]}
+          withTooltip={withTooltip}
+          className={className}
+        />
       );
     }
     case "pie-image": {
       return (
         <PieChartImage
-          data={data}
+          data={data as pieChartItem[]}
           withTooltip={withTooltip}
           className={className}
         />
       );
     }
     case "half-donut": {
-      return <HalfDonutChart data={data} className={className} />;
+      return <HalfDonutChart data={data as Item[]} className={className} />;
     }
     case "donut": {
       return (
         <DonutChart
-          data={data}
+          data={data as DonutChartItem[]}
           withTooltip={withTooltip}
           className={className}
         />
       );
     }
     case "fillable": {
-      return <FillableChart data={data} className={className} />;
+      return <FillableChart data={data as Item[]} className={className} />;
     }
     case "fillable-donut": {
-      return <FillableDonutChart data={data} className={className} />;
+      return <FillableDonutChart data={data as Item[]} className={className} />;
     }
 
     default:

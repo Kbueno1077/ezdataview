@@ -1,6 +1,5 @@
 import { pie, arc, PieArcDatum } from "d3";
-
-type Item = { name: string; value: number };
+import { Item } from "../utils/types";
 
 export function HalfDonutChart({
   data,
