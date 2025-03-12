@@ -19,7 +19,7 @@ const BuildPage: React.FC<PageProps> = ({ params }) => {
           <ChartSheet />
         </div>
 
-        <div className="w-1/3 min-w-[375px] max-w-[500px] ">
+        <div className="w-1/3 min-w-[375px] max-w-[500px]">
           <Sidebar />
         </div>
       </div>

@@ -1,14 +1,13 @@
 import { useBuildStore } from "@/providers/store-provider";
-import { useState } from "react";
 
-import { TrashIcon } from "lucide-react";
+import { PaintRoller, Palette, TrashIcon } from "lucide-react";
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 
-function BarchartUiBuilder() {
+function BarChartBuilder() {
   const {
     workspaceCharts,
     currentChartIndex,
@@ -18,6 +17,13 @@ function BarchartUiBuilder() {
     updateChartConfig,
   } = useBuildStore((state) => state);
 
+  const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
+  const chartType = workspaceCharts[currentChartIndex].chartType;
+
+  const allowColor = !chartType.includes("thin");
+  const allowImage = chartType.includes("image");
+  const allowMulti = chartType.includes("multi");
+
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
 
@@ -25,16 +31,13 @@ function BarchartUiBuilder() {
       id: newItemId,
       key: `Bar ${workspaceCharts[currentChartIndex].data.length + 1}`,
       value: 0,
-      color: "#B093F6",
+      color: "",
       image: "",
       values: [],
     };
 
     addChartItem(newItem);
   };
-
-  const { multipleValues, withImage, withTooltip, useAnimation } =
-    workspaceCharts[currentChartIndex];
 
   const handleUpdateBar = (index: number, key: string, value: any) => {
     updateChartItem(index, key, value);
@@ -50,33 +53,6 @@ function BarchartUiBuilder() {
 
       <div className="mb-4">
         <div className="flex flex-col gap-0.5 mb-2">
-          <div className="flex items-center">
-            <Checkbox
-              id="useMultipleValues"
-              isSelected={multipleValues}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("multipleValues", checked === true)
-              }
-              className="mr-2"
-            >
-              {" "}
-              Multiple values
-            </Checkbox>
-          </div>
-
-          <div className="flex items-center">
-            <Checkbox
-              id="withImage"
-              isSelected={withImage}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("withImage", checked === true)
-              }
-              className="mr-2"
-            >
-              Image
-            </Checkbox>
-          </div>
-
           <div className="flex items-center">
             <Checkbox
               id="withTooltip"
@@ -144,20 +120,21 @@ function BarchartUiBuilder() {
                     />
                   </div>
 
-                  {!multipleValues ? (
+                  {!allowMulti ? (
                     <div className="flex flex-col">
                       <Input
                         type="number"
                         name="value"
                         value={item.value}
                         placeholder="Enter value"
-                        onChange={(e) =>
-                          handleUpdateBar(
-                            index,
-                            "value",
-                            e.target.value ? parseFloat(e.target.value) : 0
-                          )
-                        }
+                        min={0}
+                        onChange={(e) => {
+                          const value = e.target.value
+                            ? parseFloat(e.target.value)
+                            : 0;
+                          const nonNegativeValue = Math.max(0, value);
+                          handleUpdateBar(index, "value", nonNegativeValue);
+                        }}
                       />
                     </div>
                   ) : (
@@ -166,33 +143,70 @@ function BarchartUiBuilder() {
                     </div>
                   )}
 
-                  <div className="flex flex-col">
-                    <label className="sr-only ">Color (optional)</label>
-                    <input
-                      type="color"
-                      name="color"
-                      value={item.color}
-                      onChange={(e) =>
-                        handleUpdateBar(index, "color", e.target.value)
-                      }
-                      className="border rounded-md h-10 w-full cursor-pointer"
-                    />
-                  </div>
-
-                  {withImage && (
+                  {allowImage && (
                     <div className="flex flex-col">
-                      <label className="mb-2 text-sm font-medium text-gray-700">
-                        Image URL
-                      </label>
-                      <Input
-                        type="text"
-                        name="image"
-                        value={item.image}
-                        placeholder="Enter image URL"
-                        onChange={(e) =>
-                          handleUpdateBar(index, "image", e.target.value)
-                        }
-                      />
+                      <label className="sr-only">Image URL</label>
+                      <div className="flex flex-col gap-2">
+                        <div className="flex gap-2 items-center">
+                          <Input
+                            type="text"
+                            name="image"
+                            value={item.image}
+                            placeholder="Enter image URL"
+                            onChange={(e) =>
+                              handleUpdateBar(index, "image", e.target.value)
+                            }
+                            className="flex-1"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {allowColor && (
+                    <div className="flex flex-col">
+                      <label className="sr-only">Color (optional)</label>
+                      <div className="flex gap-2 items-center">
+                        <input
+                          type="color"
+                          name="color"
+                          value={item.color || "#000000"}
+                          onChange={(e) =>
+                            handleUpdateBar(index, "color", e.target.value)
+                          }
+                          className={`border rounded-md h-10 flex-1 ${
+                            item.color
+                              ? "cursor-pointer"
+                              : "cursor-not-allowed opacity-50"
+                          }`}
+                          disabled={!item.color}
+                        />
+
+                        <Button
+                          isIconOnly
+                          size="sm"
+                          variant="flat"
+                          onPress={() =>
+                            handleUpdateBar(
+                              index,
+                              "color",
+                              item.color ? "" : "#000000"
+                            )
+                          }
+                        >
+                          {item.color ? (
+                            <div>
+                              <span className="sr-only">Use Default Color</span>
+                              <Palette size={16} />
+                            </div>
+                          ) : (
+                            <div>
+                              <span className="sr-only">Use Custom Color</span>
+                              <PaintRoller size={16} />
+                            </div>
+                          )}
+                        </Button>
+                      </div>
                     </div>
                   )}
                 </div>
@@ -216,4 +230,4 @@ function BarchartUiBuilder() {
   );
 }
 
-export default BarchartUiBuilder;
+export default BarChartBuilder;

@@ -31,6 +31,7 @@ export type GradientBarData = {
 export type VerticalBarData = {
   key: string;
   value: number;
+  color?: string;
 };
 
 export type VerticalMultiBarData = {

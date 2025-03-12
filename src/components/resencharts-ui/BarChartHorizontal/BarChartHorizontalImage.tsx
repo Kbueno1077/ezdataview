@@ -34,6 +34,15 @@ export function BarChartHorizontalImage({
     .domain([0, max(data.map((d) => d.value)) ?? 0])
     .range([0, 100]);
 
+  function isValidUrl(string: string) {
+    try {
+      new URL(string);
+      return true;
+    } catch (_) {
+      return false;
+    }
+  }
+
   return (
     <div
       className={`relative w-full h-72 ${className}`}
@@ -79,35 +88,41 @@ export function BarChartHorizontalImage({
          translate-y-[var(--marginTop)]
          overflow-visible"
       >
-        {data.map((entry: ImageBarData | SVGBarData, i) => (
-          <div
-            key={i}
-            style={{
-              top: `${yScale(entry.key)! + yScale.bandwidth() / 2}%`,
-              left: `0`,
-            }}
-            className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
-          >
-            {typeof entry.image === "string" ? (
-              <Image
-                key={i}
-                src={entry.image}
-                alt={`${entry.key} icon`}
-                width={28}
-                height={28}
-                className="opacity-80 dark:opacity-100"
-              />
-            ) : (
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 18 18"
-                className="opacity-80 dark:opacity-100"
-              >
-                {entry.image}
-              </svg>
-            )}
-          </div>
-        ))}
+        {data.map((entry: ImageBarData | SVGBarData, i) => {
+          if (!entry.image) return null;
+
+          const isUrl = isValidUrl(entry.image);
+
+          return (
+            <div
+              key={i}
+              style={{
+                top: `${yScale(entry.key)! + yScale.bandwidth() / 2}%`,
+                left: `0`,
+              }}
+              className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
+            >
+              {typeof entry.image === "string" && isUrl ? (
+                <Image
+                  key={i}
+                  src={entry.image}
+                  alt={`${entry.key} icon`}
+                  width={28}
+                  height={28}
+                  className="opacity-80 dark:opacity-100"
+                />
+              ) : (
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  viewBox="0 0 18 18"
+                  className="opacity-80 dark:opacity-100"
+                >
+                  {entry.image}
+                </svg>
+              )}
+            </div>
+          );
+        })}
       </div>
 
       {/* Chart Area */}
@@ -126,21 +141,22 @@ export function BarChartHorizontalImage({
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
+          const defaultColor = "bg-gray-200 dark:bg-gray-800";
+
           if (!withTooltip) {
             return (
               <AnimatedBar
                 key={index}
                 index={index}
                 withAnimation={withAnimation}
-                className={`absolute ${
-                  d.color || "bg-gray-200 dark:bg-gray-800"
-                }`}
+                className={`absolute ${d.color || defaultColor}`}
                 style={{
                   left: "0",
                   top: `${yScale(d.key)}%`,
                   width: `${barWidth}%`,
                   height: `${barHeight}%`,
                   borderRadius: "0 6px 6px 0",
+                  backgroundColor: d.color,
                 }}
               />
             );
@@ -152,15 +168,14 @@ export function BarChartHorizontalImage({
                 <AnimatedBar
                   index={index}
                   withAnimation={withAnimation}
-                  className={`inset-0 absolute ${
-                    d.color || "bg-gray-200 dark:bg-gray-800"
-                  }`}
+                  className={`inset-0 absolute ${d.color || defaultColor}`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
                     width: `${barWidth}%`,
                     height: `${barHeight}%`,
                     borderRadius: "0 6px 6px 0",
+                    backgroundColor: d.color,
                   }}
                 />
               </TooltipTrigger>

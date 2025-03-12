@@ -4,8 +4,7 @@ import { Toggle } from "@/components/ui/toggle";
 import { useBuildStore } from "@/providers/store-provider";
 import { Lock, Unlock } from "lucide-react";
 import { useState } from "react";
-import { chartTypes } from "./data";
-import { getChartUIBuilder } from "./schemas/chartUI";
+import { chartTypes, getChartUIBuilder } from "./utils/builder-ui";
 
 import { Select, SelectItem, SharedSelection } from "@heroui/react";
 
@@ -22,7 +21,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="border-l border-r rounded-lg shadow-md bg-white z-10 h-full p-2 overflow-y-auto">
+    <div className="border-l  border-r rounded-lg shadow-md bg-white z-10 h-full p-2 overflow-y-auto">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Toggle

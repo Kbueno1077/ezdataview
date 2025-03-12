@@ -1,12 +1,12 @@
 import { max, scaleBand, scaleLinear } from "d3";
 import { CSSProperties } from "react";
 import { AnimatedVerticalBar } from "../Animated/AnimatedVerticalBar";
-import { VerticalBarData } from "../utils/types";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
+import { VerticalBarData } from "../utils/types";
 
 export function BarChartVertical({
   data,
@@ -30,8 +30,10 @@ export function BarChartVertical({
     ...Array.from({ length: Math.max(0, minBars - data.length) }, (_, i) => ({
       key: `Empty ${i + 1}`,
       value: 0,
+      color: "bg-gradient-to-b from-fuchsia-200 to-fuchsia-300",
     })),
   ];
+
   // Scales
   const xScale = scaleBand()
     .domain(filledData.map((d) => d.key))
@@ -143,6 +145,8 @@ export function BarChartVertical({
         {filledData.map((d, index) => {
           const barWidth = xScale.bandwidth();
           const barHeight = yScale(0) - yScale(d.value);
+          const defaultColor =
+            "bg-gradient-to-b from-fuchsia-200 to-fuchsia-300";
 
           if (!withTooltip) {
             return (
@@ -150,12 +154,13 @@ export function BarChartVertical({
                 key={index}
                 index={index}
                 withAnimation={withAnimation}
-                className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
+                className={`absolute bottom-0 ${d.color || defaultColor}`}
                 style={{
                   width: `${barWidth}%`,
                   height: `${barHeight}%`,
                   borderRadius: "6px 6px 0 0",
                   marginLeft: `${xScale(d.key)}%`,
+                  backgroundColor: d.color,
                 }}
               />
             );
@@ -168,19 +173,23 @@ export function BarChartVertical({
                   key={index}
                   index={index}
                   withAnimation={withAnimation}
-                  className="absolute bottom-0 bg-gradient-to-b from-fuchsia-200 to-fuchsia-300"
+                  className={`absolute bottom-0 ${d.color || defaultColor}`}
                   style={{
                     width: `${barWidth}%`,
                     height: `${barHeight}%`,
                     borderRadius: "6px 6px 0 0",
                     marginLeft: `${xScale(d.key)}%`,
+                    backgroundColor: d.color,
                   }}
                 />
               </TooltipTrigger>
 
               <TooltipContent>
                 <div className="flex gap-2.5 items-center">
-                  <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
+                  <div
+                    className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"
+                    style={{ backgroundColor: d.color }}
+                  ></div>
                   <div>
                     <div>{d.key}</div>
                     <div className="text-gray-500 text-sm/5">{d.value}%</div>

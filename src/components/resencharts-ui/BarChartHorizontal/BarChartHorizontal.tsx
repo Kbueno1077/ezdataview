@@ -6,7 +6,6 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { AnimatedBar } from "../Animated/AnimatedBar";
-import clsx from "clsx";
 
 export function BarChartHorizontal({
   data,
@@ -62,6 +61,7 @@ export function BarChartHorizontal({
         {data.map((d, index) => {
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
+          const defaultColor = "bg-gradient-to-r from-pink-300 to-pink-400";
 
           if (!withTooltip) {
             return (
@@ -69,14 +69,15 @@ export function BarChartHorizontal({
                 key={index}
                 index={index}
                 withAnimation={withAnimation}
+                className={`absolute ${d.color || defaultColor}`}
                 style={{
                   left: "0",
                   top: `${yScale(d.key)}%`,
                   width: `${barWidth}%`,
                   height: `${barHeight}%`,
-                  borderRadius: "0 6px 6px 0", // Rounded right corners
+                  borderRadius: "0 6px 6px 0",
+                  backgroundColor: d.color,
                 }}
-                className={"absolute"}
               />
             );
           }
@@ -87,7 +88,7 @@ export function BarChartHorizontal({
                 <AnimatedBar
                   index={index}
                   withAnimation={withAnimation}
-                  className="absolute"
+                  className={`absolute ${d.color || defaultColor}`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
@@ -108,7 +109,7 @@ export function BarChartHorizontal({
                   ></div>
                   <div>
                     <div>{d.key}</div>
-                    <div className="text-gray-500 text-sm/5">{d.value}%</div>
+                    <div className="text-gray-500 text-sm/5">{d.value}</div>
                   </div>
                 </div>
               </TooltipContent>

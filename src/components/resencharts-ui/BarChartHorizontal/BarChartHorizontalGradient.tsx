@@ -7,7 +7,7 @@ import {
 } from "../Tooltip/Tooltip";
 import { GradientBarData } from "../utils/types";
 import { AnimatedBar } from "../Animated/AnimatedBar";
-import { gradientFromHex } from "@/modules/build/data";
+import { gradientFromHex } from "../utils/utils";
 
 export function BarChartHorizontalGradient({
   data,
@@ -33,6 +33,15 @@ export function BarChartHorizontalGradient({
   const xScale = scaleLinear()
     .domain([0, max(data.map((d) => d.value)) ?? 0])
     .range([0, 100]);
+
+  const defaulColors = [
+    "bg-gradient-to-r from-pink-300 to-pink-400",
+    "bg-gradient-to-r from-purple-300 to-purple-400",
+    "bg-gradient-to-r from-indigo-300 to-indigo-400",
+    "bg-gradient-to-r from-sky-300 to-sky-400",
+    "bg-gradient-to-r from-orange-200 to-orange-300",
+    "bg-gradient-to-r from-lime-300 to-lime-400",
+  ];
 
   const longestWord = max(data.map((d) => d.key.length)) || 1;
   return (
@@ -90,17 +99,16 @@ export function BarChartHorizontalGradient({
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
           const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.color);
-
-          // Use the key with index to ensure component re-renders when color changes
-          const barKey = `bar-${index}-${d.color}`;
           const gradient = isHexColor ? gradientFromHex(d.color) : d.color;
 
           if (!withTooltip) {
             return (
               <AnimatedBar
-                key={barKey}
+                key={index}
                 withAnimation={withAnimation}
-                className={`bg-gradient-to-b ${gradient} absolute`}
+                className={`bg-gradient-to-b ${
+                  gradient || defaulColors[index % defaulColors.length]
+                } absolute`}
                 index={index}
                 style={{
                   position: "absolute",
@@ -117,13 +125,14 @@ export function BarChartHorizontalGradient({
           }
 
           return (
-            <ClientTooltip key={barKey}>
+            <ClientTooltip key={index}>
               <TooltipTrigger>
                 <AnimatedBar
-                  key={`trigger-${barKey}`}
                   index={index}
                   withAnimation={withAnimation}
-                  className={`bg-gradient-to-b ${gradient} absolute`}
+                  className={`bg-gradient-to-b ${
+                    gradient || defaulColors[index % defaulColors.length]
+                  } absolute`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,

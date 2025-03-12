@@ -12,12 +12,36 @@ import {
 import { companyLogos } from "@/modules/landing/utils";
 
 export const dataHorizontal: HorizontalBarData[] = [
-  { key: "Technology", value: 38.1 },
-  { key: "Financial Services", value: 27.8 },
-  { key: "Renewable Energy", value: 23.1 },
-  { key: "Consumer Cyclical", value: 19.5 },
-  { key: "Consumer Staples", value: 16.2 },
-  { key: "Utilities", value: 5.8 },
+  {
+    key: "Technology",
+    value: 38.1,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Financial Services",
+    value: 27.8,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Renewable Energy",
+    value: 23.1,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Consumer Cyclical",
+    value: 19.5,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Consumer Staples",
+    value: 16.2,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
+  {
+    key: "Utilities",
+    value: 5.8,
+    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+  },
 ].sort((a, b) => b.value - a.value);
 
 export const dataGradient: GradientBarData[] = [

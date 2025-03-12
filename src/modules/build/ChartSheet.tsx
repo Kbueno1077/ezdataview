@@ -2,40 +2,81 @@
 
 import { getChartTypeByName } from "@/components/resencharts-ui/utils/utils";
 import { Input } from "@heroui/input";
+import { Button } from "@heroui/button";
 import { useBuildStore } from "@/providers/store-provider";
+import { useState } from "react";
+import { ZoomIn, ZoomOut } from "lucide-react";
 
 function ChartSheet() {
   const { workspaceCharts, currentChartIndex } = useBuildStore(
     (state) => state
   );
+  const [zoomLevel, setZoomLevel] = useState(90);
 
   const currentChart = workspaceCharts[currentChartIndex];
 
-  const hash =
-    currentChart.id +
-    "-" +
-    currentChart.chartType +
-    "-" +
-    currentChart.data.map((item) => item.color).join("-");
+  const handleZoomIn = () => {
+    setZoomLevel((prev) => Math.min(prev + 5, 100));
+  };
+
+  const handleZoomOut = () => {
+    setZoomLevel((prev) => Math.max(prev - 5, 10));
+  };
 
   return (
     <div>
-      <Input
-        placeholder="Title for this Workspace"
-        className="border-none outline-none shadow-none max-w-[250px]"
-      />
+      <div className="flex items-center justify-between">
+        <Input
+          placeholder="Title for this Workspace"
+          className="border-none outline-none shadow-none max-w-[250px]"
+        />
+
+        {currentChart.data.length > 0 && (
+          <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 rounded-lg p-1.5 shadow-sm border border-gray-200 dark:border-gray-700">
+            <Button
+              size="sm"
+              isIconOnly
+              onPress={handleZoomOut}
+              disabled={zoomLevel <= 10}
+              aria-label="Zoom out"
+              className="text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              <ZoomOut className="h-3.5 w-3.5" />
+            </Button>
+
+            <Button
+              size="sm"
+              isIconOnly
+              onPress={handleZoomIn}
+              disabled={zoomLevel >= 100}
+              aria-label="Zoom in"
+              className="text-gray-600 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+            >
+              <ZoomIn className="h-3.5 w-3.5" />
+            </Button>
+
+            <span className="text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[40px] text-center">
+              {zoomLevel}%
+            </span>
+          </div>
+        )}
+      </div>
 
       {currentChart.data.length > 0 ? (
         <div
-          className="flex justify-center items-center w-full px-4 py-4"
-          key={hash}
+          style={{
+            transform: `scale(${zoomLevel / 100})`,
+            transformOrigin: "center",
+            transition: "transform 0.2s ease",
+          }}
         >
-          {getChartTypeByName(currentChart.data, currentChart.chartType, {
-            hash,
-            withTooltip: currentChart.withTooltip,
-            withAnimation: currentChart.useAnimation,
-            className: "mx-auto w-full h-[calc(100vh-100px)]",
-          })}
+          <div className="flex justify-center items-center w-full px-4 py-4">
+            {getChartTypeByName(currentChart.data, currentChart.chartType, {
+              withTooltip: currentChart.withTooltip,
+              withAnimation: currentChart.useAnimation,
+              className: "mx-auto w-full h-[calc(100vh-100px)]",
+            })}
+          </div>
         </div>
       ) : (
         <div className="flex justify-center items-center w-full h-[calc(100vh-200px)] px-4">
