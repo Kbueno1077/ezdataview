@@ -7,6 +7,7 @@ import {
 } from "../Tooltip/Tooltip";
 import { GradientBarData } from "../utils/types";
 import { AnimatedBar } from "../Animated/AnimatedBar";
+import { gradientFromHex } from "@/modules/build/data";
 
 export function BarChartHorizontalGradient({
   data,
@@ -88,13 +89,18 @@ export function BarChartHorizontalGradient({
         {data.map((d, index) => {
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
+          const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.color);
+
+          // Use the key with index to ensure component re-renders when color changes
+          const barKey = `bar-${index}-${d.color}`;
+          const gradient = isHexColor ? gradientFromHex(d.color) : d.color;
 
           if (!withTooltip) {
             return (
               <AnimatedBar
-                key={index}
+                key={barKey}
                 withAnimation={withAnimation}
-                className={`bg-gradient-to-b ${d.color}`}
+                className={`bg-gradient-to-b ${gradient} absolute`}
                 index={index}
                 style={{
                   position: "absolute",
@@ -104,19 +110,20 @@ export function BarChartHorizontalGradient({
                   height: `${barHeight}%`,
                   borderRadius: "0 6px 6px 0", // Rounded right corners
                   zIndex: 1,
+                  ...(isHexColor ? gradientFromHex(d.color) : {}),
                 }}
               />
             );
           }
 
           return (
-            <ClientTooltip key={index}>
+            <ClientTooltip key={barKey}>
               <TooltipTrigger>
                 <AnimatedBar
-                  key={index}
+                  key={`trigger-${barKey}`}
                   index={index}
                   withAnimation={withAnimation}
-                  className={`bg-gradient-to-b ${d.color} absolute`}
+                  className={`bg-gradient-to-b ${gradient} absolute`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
@@ -124,6 +131,7 @@ export function BarChartHorizontalGradient({
                     height: `${barHeight}%`,
                     borderRadius: "0 6px 6px 0", // Rounded right corners
                     zIndex: 1,
+                    ...(isHexColor ? gradientFromHex(d.color) : {}),
                   }}
                 />
               </TooltipTrigger>

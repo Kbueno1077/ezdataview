@@ -3,10 +3,9 @@ import { Manrope, Source_Sans_3 } from "next/font/google";
 
 import { siteDetails } from "@/modules/landing/data/siteDetails";
 
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
 import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
+import { Providers } from "./providers";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const sourceSans = Source_Sans_3({ subsets: ["latin"] });
@@ -47,9 +46,7 @@ export default function RootLayout({
         <body
           className={`${manrope.className} ${sourceSans.className} antialiased`}
         >
-          <Header />
-          <main>{children}</main>
-          <Footer />
+          <Providers>{children}</Providers>
         </body>
       </html>
     </ClerkProvider>

@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { AnimatedBar } from "../Animated/AnimatedBar";
+import clsx from "clsx";
 
 export function BarChartHorizontal({
   data,
@@ -13,7 +14,7 @@ export function BarChartHorizontal({
   withAnimation = false,
   className,
 }: {
-  data: { key: string; value: number }[];
+  data: { key: string; value: number; color?: string }[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -32,7 +33,7 @@ export function BarChartHorizontal({
     .domain([0, max(data.map((d) => d.value)) ?? 0])
     .range([0, 100]);
 
-  const longestWord = max(data.map((d) => d.key.length)) || 1;
+  const longestWord = max(data.map((d) => d.key?.length)) || 1;
 
   return (
     <div
@@ -75,7 +76,7 @@ export function BarChartHorizontal({
                   height: `${barHeight}%`,
                   borderRadius: "0 6px 6px 0", // Rounded right corners
                 }}
-                className={`absolute bg-purple-300 dark:bg-purple-400`}
+                className={"absolute"}
               />
             );
           }
@@ -86,19 +87,25 @@ export function BarChartHorizontal({
                 <AnimatedBar
                   index={index}
                   withAnimation={withAnimation}
-                  className="inset-0 absolute bg-purple-300 dark:bg-purple-400"
+                  className="absolute"
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
                     width: `${barWidth}%`,
                     height: `${barHeight}%`,
                     borderRadius: "0 6px 6px 0",
+                    backgroundColor: d.color,
                   }}
                 />
               </TooltipTrigger>
               <TooltipContent>
                 <div className="flex gap-2.5 items-center">
-                  <div className="w-1 h-8 bg-purple-300 dark:bg-purple-400 rounded-full"></div>
+                  <div
+                    className={`w-1 h-8 rounded-full`}
+                    style={{
+                      backgroundColor: d.color,
+                    }}
+                  ></div>
                   <div>
                     <div>{d.key}</div>
                     <div className="text-gray-500 text-sm/5">{d.value}%</div>

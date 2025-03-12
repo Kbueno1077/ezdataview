@@ -1,15 +1,9 @@
 "use client";
 
-import {
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
-} from "@headlessui/react";
-import { Minus, Plus } from "lucide-react";
-
 import SectionTitle from "@/components/SectionTitle";
 import { IFAQ } from "@/modules/landing/types";
 import { siteDetails } from "../data/siteDetails";
+import { Accordion, AccordionItem } from "@heroui/react";
 
 export const faqs: IFAQ[] = [
   {
@@ -73,29 +67,17 @@ const FAQ: React.FC = () => {
           </div>
 
           <div className="w-full lg:w-2/3 divide-y divide-gray-200">
-            {faqs.map((faq, index) => (
-              <div key={index} className="py-4">
-                <Disclosure>
-                  {({ open }) => (
-                    <div className="transition-all duration-200 hover:bg-white/50 rounded-lg">
-                      <DisclosureButton className="cursor-pointer flex items-center justify-between w-full px-6 py-4 text-lg text-left group">
-                        <span className="text-xl font-semibold text-gray-900 group-hover:text-secondary transition-colors">
-                          {faq.question}
-                        </span>
-                        {open ? (
-                          <Minus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
-                        ) : (
-                          <Plus className="w-6 h-6 text-secondary flex-shrink-0 ml-4" />
-                        )}
-                      </DisclosureButton>
-                      <DisclosurePanel className="px-6 pb-6 pt-2 text-foreground-accent/90 text-lg leading-relaxed">
-                        {faq.answer}
-                      </DisclosurePanel>
-                    </div>
-                  )}
-                </Disclosure>
-              </div>
-            ))}
+            <Accordion type="single" collapsible>
+              {faqs.map((faq, index) => (
+                <AccordionItem
+                  key={index + 1}
+                  aria-label={faq.question}
+                  title={faq.question}
+                >
+                  {faq.answer}
+                </AccordionItem>
+              ))}
+            </Accordion>
           </div>
         </div>
       </div>

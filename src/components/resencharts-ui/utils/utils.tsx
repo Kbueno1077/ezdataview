@@ -22,17 +22,19 @@ export const getChartTypeByName = (
   data: any,
   chartType: string,
   options?: {
+    hash?: string;
     withTooltip?: boolean;
     className?: string;
     withAnimation?: boolean;
   }
 ): JSX.Element | null => {
-  const { withTooltip = true, className, withAnimation } = options || {};
+  const { withTooltip = true, className, withAnimation, hash } = options || {};
 
   switch (chartType) {
     case "horizontal-bar": {
       return (
         <BarChartHorizontal
+          key={hash}
           data={data}
           className={className}
           withTooltip={withTooltip}
@@ -44,6 +46,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-gradient": {
       return (
         <BarChartHorizontalGradient
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -55,6 +58,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-image": {
       return (
         <BarChartHorizontalImage
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -65,6 +69,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-multi": {
       return (
         <BarChartHorizontalMulti
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -75,6 +80,7 @@ export const getChartTypeByName = (
     case "horizontal-bar-thin": {
       return (
         <BarChartHorizontalThin
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -85,6 +91,7 @@ export const getChartTypeByName = (
     case "vertical-bar": {
       return (
         <BarChartVertical
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -95,6 +102,7 @@ export const getChartTypeByName = (
     case "vertical-bar-multi": {
       return (
         <BarChartVerticalMulti
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -103,14 +111,17 @@ export const getChartTypeByName = (
       );
     }
     case "breakdown": {
-      return <BreakdownChart data={data} className={className} />;
+      return <BreakdownChart key={hash} data={data} className={className} />;
     }
     case "breakdown-thin": {
-      return <BreakdownChartThin data={data} className={className} />;
+      return (
+        <BreakdownChartThin key={hash} data={data} className={className} />
+      );
     }
     case "line": {
       return (
         <LineChart
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           withAnimation={withAnimation}
@@ -121,6 +132,7 @@ export const getChartTypeByName = (
     case "line-multi": {
       return (
         <LineChartMultiple
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -131,6 +143,7 @@ export const getChartTypeByName = (
     case "line-curved": {
       return (
         <LineChartCurved
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -140,12 +153,18 @@ export const getChartTypeByName = (
     }
     case "pie": {
       return (
-        <PieChart data={data} withTooltip={withTooltip} className={className} />
+        <PieChart
+          key={hash}
+          data={data}
+          withTooltip={withTooltip}
+          className={className}
+        />
       );
     }
     case "pie-image": {
       return (
         <PieChartImage
+          key={hash}
           data={data}
           withTooltip={withTooltip}
           className={className}
@@ -153,7 +172,7 @@ export const getChartTypeByName = (
       );
     }
     case "half-donut": {
-      return <HalfDonutChart data={data} className={className} />;
+      return <HalfDonutChart key={hash} data={data} className={className} />;
     }
     case "donut": {
       return (
@@ -165,10 +184,12 @@ export const getChartTypeByName = (
       );
     }
     case "fillable": {
-      return <FillableChart data={data} className={className} />;
+      return <FillableChart key={hash} data={data} className={className} />;
     }
     case "fillable-donut": {
-      return <FillableDonutChart data={data} className={className} />;
+      return (
+        <FillableDonutChart key={hash} data={data} className={className} />
+      );
     }
 
     default:

@@ -3,5 +3,5 @@ export const ctaDetails = {
   subheading:
     "Start visualizing your data with stunning clarity today. Create beautiful, interactive charts in minutes and transform your information into meaningful insights - no technical expertise required!",
   exampleResultUrl: "/example",
-  exampleBuildUrl: "#",
+  exampleBuildUrl: `/build/${Math.random().toString(36).substring(2, 8)}`,
 };

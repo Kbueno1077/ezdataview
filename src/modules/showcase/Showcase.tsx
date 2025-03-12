@@ -1,10 +1,10 @@
 "use client";
 
-import React, { useState, useCallback, useEffect } from "react";
-import { Chart, ViewMode } from "./types";
-import ViewModeSelector from "./components/ViewModeSelector";
+import React, { useCallback, useEffect, useState } from "react";
 import ChartGrid from "./components/ChartGrid";
 import DashboardLayout from "./components/DashboardLayout";
+import ViewModeSelector from "./components/ViewModeSelector";
+import { Chart, ViewMode } from "./types";
 
 interface ShowcaseProps {
   data: Chart[];
