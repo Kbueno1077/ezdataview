@@ -1,6 +1,6 @@
-import ChartSheet from "../../../modules/build/ChartSheet";
-import { Sidebar } from "../../../modules/build/Sidebar";
-import { BuildStoreProvider } from "../../../providers/store-provider";
+import ChartSheet from "@/modules/build/ChartSheet";
+import { Sidebar } from "@/modules/build/Sidebar";
+import { BuildStoreProvider } from "@/providers/store-provider";
 
 interface PageProps {
   params: {
