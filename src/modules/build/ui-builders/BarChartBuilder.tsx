@@ -49,10 +49,10 @@ function BarChartBuilder() {
   };
 
   return (
-    <div className="px-1">
-      <h3 className="font-semibold mb-2 ">Add Bar Chart Data</h3>
+    <div>
+      <label className="text-sm font-medium">Chart Properties</label>
 
-      <div className="mb-4">
+      <div className="mb-4 mt-1">
         <div className="flex flex-col gap-0.5 mb-2">
           <div className="flex items-center">
             <Checkbox
@@ -124,7 +124,7 @@ function BarChartBuilder() {
                     />
                   </div>
 
-                  {!allowMulti ? (
+                  {!allowMulti && (
                     <div className="flex flex-col">
                       <Input
                         type="number"
@@ -141,8 +141,10 @@ function BarChartBuilder() {
                         }}
                       />
                     </div>
-                  ) : (
-                    <div className="flex flex-col bg-gray-50 p-4 rounded-md">
+                  )}
+
+                  {allowMulti && (
+                    <div className="flex flex-col ">
                       <div className="flex flex-col gap-2">
                         {item.values.map(
                           (value: number, valueIndex: number) => (
@@ -220,74 +222,74 @@ function BarChartBuilder() {
                       </div>
                     </div>
                   )}
-                </div>
 
-                <div className="flex justify-between items-center mt-4">
-                  <div>
-                    {allowColor && (
-                      <div className="flex flex-col">
-                        <label className="sr-only">Color (optional)</label>
-                        <div className="flex gap-2 items-center">
-                          <input
-                            type="color"
-                            name="color"
-                            value={item.color || "#000000"}
-                            onChange={(e) =>
-                              handleUpdateBar(index, "color", e.target.value)
-                            }
-                            className={` rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md ${
-                              item.color
-                                ? "cursor-pointer "
-                                : "cursor-not-allowed opacity-50"
-                            }`}
-                            style={{
-                              background: item.color || "#000000",
-                            }}
-                            title={item.color || "Select a color"}
-                            disabled={!item.color}
-                          />
+                  <div className="flex justify-between items-center">
+                    <div>
+                      {allowColor && (
+                        <div className="flex flex-col">
+                          <label className="sr-only">Color (optional)</label>
+                          <div className="flex gap-2 items-center">
+                            <input
+                              type="color"
+                              name="color"
+                              value={item.color || "#000000"}
+                              onChange={(e) =>
+                                handleUpdateBar(index, "color", e.target.value)
+                              }
+                              className={` rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md ${
+                                item.color
+                                  ? "cursor-pointer "
+                                  : "cursor-not-allowed opacity-50"
+                              }`}
+                              style={{
+                                background: item.color || "#000000",
+                              }}
+                              title={item.color || "Select a color"}
+                              disabled={!item.color}
+                            />
 
-                          <Button
-                            isIconOnly
-                            size="sm"
-                            variant="flat"
-                            onPress={() =>
-                              handleUpdateBar(
-                                index,
-                                "color",
-                                item.color ? "" : "#000000"
-                              )
-                            }
-                          >
-                            {item.color ? (
-                              <div>
-                                <span className="sr-only">
-                                  Use Default Color
-                                </span>
-                                <Palette size={16} />
-                              </div>
-                            ) : (
-                              <div>
-                                <span className="sr-only">
-                                  Use Custom Color
-                                </span>
-                                <PaintRoller size={16} />
-                              </div>
-                            )}
-                          </Button>
+                            <Button
+                              isIconOnly
+                              size="sm"
+                              variant="flat"
+                              onPress={() =>
+                                handleUpdateBar(
+                                  index,
+                                  "color",
+                                  item.color ? "" : "#000000"
+                                )
+                              }
+                            >
+                              {item.color ? (
+                                <div>
+                                  <span className="sr-only">
+                                    Use Default Color
+                                  </span>
+                                  <Palette size={16} />
+                                </div>
+                              ) : (
+                                <div>
+                                  <span className="sr-only">
+                                    Use Custom Color
+                                  </span>
+                                  <PaintRoller size={16} />
+                                </div>
+                              )}
+                            </Button>
+                          </div>
                         </div>
-                      </div>
-                    )}
-                  </div>
+                      )}
+                    </div>
 
-                  <Button
-                    isIconOnly
-                    variant="solid"
-                    color="danger"
-                    onPress={() => deleteChartItem(index)}
-                  >
-                    <TrashIcon size={16} />
-                  </Button>
+                    <Button
+                      isIconOnly
+                      variant="solid"
+                      color="danger"
+                      onPress={() => deleteChartItem(index)}
+                    >
+                      <TrashIcon size={16} />
+                    </Button>
+                  </div>
                 </div>
               </AccordionItem>
             </Accordion>
