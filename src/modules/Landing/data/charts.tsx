@@ -1,26 +1,26 @@
-import { BarChartHorizontalImage } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalImage";
-import { BarChartHorizontalMulti } from "@/components/resencharts-ui/BarChartHorizontal/BarChartHorizontalMulti";
-import { BarChartVertical } from "@/components/resencharts-ui/BarChartVertical/BarChartVertical";
-import { BarChartVerticalMulti } from "@/components/resencharts-ui/BarChartVertical/BarChartVerticalMulti";
-import { BreakdownChart } from "@/components/resencharts-ui/BreakdownChart/BreakdownChart";
-import { LineChart } from "@/components/resencharts-ui/LineCharts/LineChart";
-import { LineChartMultiple } from "@/components/resencharts-ui/LineCharts/LineChartMultiple";
-import { DonutChart } from "@/components/resencharts-ui/PieCharts/DonutChart";
-import { PieChart } from "@/components/resencharts-ui/PieCharts/PieChart";
+import { BarChartHorizontalImage } from "@/components/rosencharts/BarChartHorizontal/BarChartHorizontalImage";
+import { BarChartHorizontalMulti } from "@/components/rosencharts/BarChartHorizontal/BarChartHorizontalMulti";
+import { BarChartVertical } from "@/components/rosencharts/BarChartVertical/BarChartVertical";
+import { BarChartVerticalMulti } from "@/components/rosencharts/BarChartVertical/BarChartVerticalMulti";
+import { BreakdownChart } from "@/components/rosencharts/BreakdownChart/BreakdownChart";
+import { LineChart } from "@/components/rosencharts/LineCharts/LineChart";
+import { LineChartMultiple } from "@/components/rosencharts/LineCharts/LineChartMultiple";
+import { DonutChart } from "@/components/rosencharts/PieCharts/DonutChart";
+import { PieChart } from "@/components/rosencharts/PieCharts/PieChart";
 import {
   barVertical,
   dataMulti,
   dataSVG,
-} from "@/components/resencharts-ui/utils/fixtures/BarCharts";
-import { breakdownChartData } from "@/components/resencharts-ui/utils/fixtures/BreakdownCharts";
+} from "@/components/rosencharts/utils/fixtures/BarCharts";
+import { breakdownChartData } from "@/components/rosencharts/utils/fixtures/BreakdownCharts";
 import {
   lineChartData,
   lineChartMultipleData,
-} from "@/components/resencharts-ui/utils/fixtures/LineChart";
+} from "@/components/rosencharts/utils/fixtures/LineChart";
 import {
   donutChartData,
   pieChartData,
-} from "@/components/resencharts-ui/utils/fixtures/PieChart";
+} from "@/components/rosencharts/utils/fixtures/PieChart";
 import { IChartShowcase } from "@/modules/landing/types";
 
 export const chartShowcases: IChartShowcase[] = [

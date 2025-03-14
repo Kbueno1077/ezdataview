@@ -14,7 +14,7 @@ export function AnimatedLine({
   const strokeDashValue = 1500 * lineLength;
 
   if (!withAnimation) {
-    return <div className="absolute inset-0">{children}</div>;
+    return children;
   }
 
   return (

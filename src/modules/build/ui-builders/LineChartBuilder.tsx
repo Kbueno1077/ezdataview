@@ -6,8 +6,11 @@ import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
+import { DatePicker } from "@heroui/date-picker";
+import { parseDate } from "@internationalized/date";
+import { format } from "@formkit/tempo";
 
-function BarChartBuilder() {
+function LineChartBuilder() {
   const {
     workspaceCharts,
     currentChartIndex,
@@ -22,19 +25,20 @@ function BarChartBuilder() {
 
   const allowColor =
     !chartType.includes("thin") && !chartType.includes("multi");
-  const allowImage = chartType.includes("image");
-  const allowMulti = chartType.includes("multi");
+  const allowMulti =
+    chartType.includes("multi") || chartType.includes("curved");
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
+    const newDate = new Date();
 
+    const formattedDate = format(newDate, "YYYY-MM-DD");
     const newItem = {
       id: newItemId,
-      key: `Bar ${workspaceCharts[currentChartIndex].data.length + 1}`,
+      date: formattedDate,
       value: 0,
       color: "",
-      image: "",
-      values: [],
+      data: [{ date: formattedDate, value: 0 }],
     };
 
     addChartItem(newItem);
@@ -45,6 +49,7 @@ function BarChartBuilder() {
     key: string,
     value: string | number | string[] | number[]
   ) => {
+    console.log("🚀 ~ LineChartBuilder ~ value:", value);
     updateChartItem(index, key, value);
   };
 
@@ -103,7 +108,7 @@ function BarChartBuilder() {
         variant="solid"
         startContent={<Plus className="h-4 w-4" />}
       >
-        Add {allowMulti ? "Grouped Bars" : "Bar"} (
+        Add {allowMulti ? "Grouped Bars" : "Line"} (
         {workspaceCharts[currentChartIndex].data.length})
       </Button>
 
@@ -121,11 +126,13 @@ function BarChartBuilder() {
             return (
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
-                  aria-label={`${allowMulti ? "Grouped Bar" : "Bar"} ${
+                  aria-label={`${allowMulti ? "Grouped Line" : "Line"} ${
                     index + 1
-                  }: ${item.key}`}
-                  title={`${allowMulti ? "Grouped Bar" : "Bar"} ${index + 1}`}
-                  subtitle={item.key}
+                  }: ${item.date}`}
+                  title={`${allowMulti ? "Multiple Lines" : "Line"} ${
+                    index + 1
+                  }`}
+                  subtitle={item.date}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
@@ -143,22 +150,33 @@ function BarChartBuilder() {
                   }
                 >
                   <div className="space-y-4 -mt-4 p-2">
-                    <div className="flex flex-col">
-                      <label htmlFor={`key-${item.id}`} className="mb-1">
-                        Bar Label
-                      </label>
-                      <Input
-                        id={`key-${item.id}`}
-                        type="text"
-                        name="key"
-                        value={item.key}
-                        placeholder="Enter bar label"
-                        onChange={(e) =>
-                          handleUpdateBar(index, "key", e.target.value)
-                        }
-                        aria-label="Bar label"
-                      />
-                    </div>
+                    {!allowMulti && (
+                      <div className="flex flex-col">
+                        <label htmlFor={`key-${item.id}`} className="mb-1">
+                          Line Date
+                        </label>
+
+                        <div className="relative">
+                          <DatePicker
+                            id={`date-${item.id}`}
+                            name="date"
+                            value={parseDate(item.date)}
+                            label="Select date"
+                            onChange={(e) => {
+                              console.log(e?.toString());
+
+                              handleUpdateBar(
+                                index,
+                                "date",
+                                e?.toString() || ""
+                              );
+                            }}
+                            aria-label="Line date"
+                            className="w-full"
+                          />
+                        </div>
+                      </div>
+                    )}
 
                     {!allowMulti && (
                       <div className="flex flex-col">
@@ -179,7 +197,7 @@ function BarChartBuilder() {
                             const nonNegativeValue = Math.max(0, value);
                             handleUpdateBar(index, "value", nonNegativeValue);
                           }}
-                          aria-label="Bar value"
+                          aria-label="Line value"
                         />
                       </div>
                     )}
@@ -190,56 +208,90 @@ function BarChartBuilder() {
                           Multiple Values
                         </legend>
                         <div className="flex flex-col gap-2">
-                          {item.values && item.values.length > 0 ? (
-                            item.values.map(
-                              (value: number, valueIndex: number) => (
+                          {item.data && item.data.length > 0 ? (
+                            item.data.map(
+                              (
+                                dateValue: { date: string; value: number },
+                                valueIndex: number
+                              ) => (
                                 <div
                                   key={valueIndex}
                                   className="flex gap-2 items-center"
                                 >
-                                  <label
-                                    htmlFor={`value-${item.id}-${valueIndex}`}
-                                    className="sr-only"
-                                  >
-                                    Value {valueIndex + 1}
-                                  </label>
-                                  <Input
-                                    id={`value-${item.id}-${valueIndex}`}
-                                    type="number"
-                                    name={`value-${valueIndex}`}
-                                    value={value.toString()}
-                                    placeholder={`Value ${valueIndex + 1}`}
-                                    min={0}
-                                    onChange={(e) => {
-                                      const newValue = e.target.value
-                                        ? parseFloat(e.target.value)
-                                        : 0;
-                                      const nonNegativeValue = Math.max(
-                                        0,
-                                        newValue
-                                      );
-                                      const newValues = [...item.values];
-                                      newValues[valueIndex] = nonNegativeValue;
-                                      handleUpdateBar(
-                                        index,
-                                        "values",
-                                        newValues
-                                      );
-                                    }}
-                                    className="flex-1"
-                                    aria-label={`Value ${valueIndex + 1}`}
-                                  />
+                                  <div className="flex-1">
+                                    <label
+                                      htmlFor={`date-${item.id}-${valueIndex}`}
+                                      className="sr-only"
+                                    >
+                                      Date {valueIndex + 1}
+                                    </label>
+                                    <DatePicker
+                                      id={`date-${item.id}-${valueIndex}`}
+                                      name={`date-${valueIndex}`}
+                                      value={parseDate(dateValue.date)}
+                                      label="Select date"
+                                      size="sm"
+                                      onChange={(e) => {
+                                        const newValues = [...item.data];
+                                        newValues[valueIndex].date =
+                                          e?.toString() || "";
+                                        handleUpdateBar(
+                                          index,
+                                          "data",
+                                          newValues
+                                        );
+                                      }}
+                                      aria-label={`Date ${valueIndex + 1}`}
+                                      className="w-full"
+                                    />
+                                  </div>
+                                  <div className="flex-1">
+                                    <label
+                                      htmlFor={`value-${item.id}-${valueIndex}`}
+                                      className="sr-only"
+                                    >
+                                      Value {valueIndex + 1}
+                                    </label>
+                                    <Input
+                                      id={`value-${item.id}-${valueIndex}`}
+                                      type="number"
+                                      name={`value-${valueIndex}`}
+                                      value={dateValue.value.toString()}
+                                      placeholder={`Value ${valueIndex + 1}`}
+                                      min={0}
+                                      size="lg"
+                                      onChange={(e) => {
+                                        const newValue = e.target.value
+                                          ? parseFloat(e.target.value)
+                                          : 0;
+                                        const nonNegativeValue = Math.max(
+                                          0,
+                                          newValue
+                                        );
+                                        const newValues = [...item.data];
+                                        newValues[valueIndex].value =
+                                          nonNegativeValue;
+                                        handleUpdateBar(
+                                          index,
+                                          "data",
+                                          newValues
+                                        );
+                                      }}
+                                      className="w-full"
+                                      aria-label={`Value ${valueIndex + 1}`}
+                                    />
+                                  </div>
                                   <Tooltip content="Remove value">
                                     <Button
-                                      size="sm"
+                                      size="lg"
                                       variant="light"
                                       isIconOnly
                                       onPress={() => {
-                                        const newValues = [...item.values];
+                                        const newValues = [...item.data];
                                         newValues.splice(valueIndex, 1);
                                         handleUpdateBar(
                                           index,
-                                          "values",
+                                          "data",
                                           newValues
                                         );
                                       }}
@@ -248,7 +300,7 @@ function BarChartBuilder() {
                                         valueIndex + 1
                                       }`}
                                     >
-                                      <Trash size={16} />
+                                      <Trash size={18} />
                                     </Button>
                                   </Tooltip>
                                 </div>
@@ -263,40 +315,24 @@ function BarChartBuilder() {
                             size="sm"
                             variant="flat"
                             onPress={() => {
-                              const newValues = [...(item.values || []), 0];
-                              handleUpdateBar(index, "values", newValues);
+                              const newDate = new Date();
+                              const formattedDate = format(
+                                newDate,
+                                "YYYY-MM-DD"
+                              );
+                              const newValues = [
+                                ...(item.data || []),
+                                { date: formattedDate, value: 0 },
+                              ];
+                              handleUpdateBar(index, "data", newValues);
                             }}
                             className="mt-2"
                             startContent={<Plus size={14} />}
                           >
-                            Add Value ({item.values?.length || 0})
+                            Add Value ({item.data?.length || 0})
                           </Button>
                         </div>
                       </fieldset>
-                    )}
-
-                    {(allowImage || allowMulti) && (
-                      <div className="flex flex-col">
-                        <label htmlFor={`image-${item.id}`} className="mb-1">
-                          Image URL
-                        </label>
-                        <Input
-                          id={`image-${item.id}`}
-                          type="text"
-                          name="image"
-                          value={item.image}
-                          placeholder="Enter image URL"
-                          onChange={(e) =>
-                            handleUpdateBar(index, "image", e.target.value)
-                          }
-                          aria-label="Image URL"
-                        />
-                        {item.image && (
-                          <div className="mt-2 text-xs text-gray-500">
-                            Image will be displayed on the bar
-                          </div>
-                        )}
-                      </div>
                     )}
 
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
@@ -307,7 +343,7 @@ function BarChartBuilder() {
                               htmlFor={`color-${item.id}`}
                               className="sr-only"
                             >
-                              Bar Color
+                              Line Color
                             </label>
                             <Tooltip content={item.color || "Select a color"}>
                               <input
@@ -323,7 +359,7 @@ function BarChartBuilder() {
                                   )
                                 }
                                 className="rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md cursor-pointer"
-                                aria-label="Bar color"
+                                aria-label="Line color"
                               />
                             </Tooltip>
 
@@ -369,8 +405,8 @@ function BarChartBuilder() {
                           isIconOnly
                           variant="solid"
                           color="danger"
-                          onPress={() => handleDeleteItem(index, item.key)}
-                          aria-label={`Delete ${item.key}`}
+                          onPress={() => handleDeleteItem(index, item.date)}
+                          aria-label={`Delete ${item.date}`}
                         >
                           <TrashIcon size={16} />
                         </Button>
@@ -387,4 +423,4 @@ function BarChartBuilder() {
   );
 }
 
-export default BarChartBuilder;
+export default LineChartBuilder;

@@ -3,7 +3,7 @@
 
 "use client";
 
-import { getChartTypeByName } from "@/components/resencharts-ui/utils/utils";
+import { getChartTypeByName } from "@/components/rosencharts/utils/utils";
 import {
   Drawer,
   DrawerContent,
@@ -26,6 +26,7 @@ function ChartSheet() {
   const [zoomLevel, setZoomLevel] = useState(90);
 
   const currentChart = workspaceCharts[currentChartIndex];
+  console.log("🚀 ~ ChartSheet ~ currentChart:", currentChart);
 
   const handleZoomIn = () => {
     setZoomLevel((prev) => Math.min(prev + 5, 100));

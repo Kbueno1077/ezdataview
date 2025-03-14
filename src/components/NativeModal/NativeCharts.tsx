@@ -2,7 +2,7 @@
 
 import { useRef, useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
-import { getChartTypeByName } from "../resencharts-ui/utils/utils";
+import { getChartTypeByName } from "../rosencharts/utils/utils";
 import styles from "./NativeCharts.module.css";
 import NativeModal from "./NativeModal";
 

@@ -27,7 +27,6 @@ export type ChartData = {
   description: string;
   chartType: string;
 
-  multipleValues?: boolean;
   withImage?: boolean;
   withTooltip?: boolean;
   useAnimation?: boolean;
@@ -41,7 +40,6 @@ const defaultChart = {
   chartType: "horizontal-bar",
   data: [],
 
-  multipleValues: false,
   withImage: false,
   withTooltip: true,
   useAnimation: false,

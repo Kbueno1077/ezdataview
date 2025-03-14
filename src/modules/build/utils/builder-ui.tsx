@@ -1,5 +1,6 @@
 import type { JSX } from "react";
 import BarChartBuilder from "../ui-builders/BarChartBuilder";
+import LineChartBuilder from "../ui-builders/LineChartBuilder";
 
 export const getChartUIBuilder = (
   chartType: string,
@@ -30,7 +31,7 @@ export const getChartUIBuilder = (
     case "line-multi":
     case "line-curved": {
       // Return line chart UI builder when implemented
-      return <div className={className}>Line Chart UI Builder</div>;
+      return <LineChartBuilder />;
     }
 
     case "pie":
