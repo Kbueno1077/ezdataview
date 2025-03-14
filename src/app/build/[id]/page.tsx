@@ -2,14 +2,10 @@ import ChartSheet from "@/modules/build/ChartSheet";
 import { Sidebar } from "@/modules/build/Sidebar";
 import { BuildStoreProvider } from "@/providers/store-provider";
 
-interface PageProps {
-  params: {
-    id: string;
-  };
-}
+type tParams = Promise<{ id: string[] }>;
 
-const BuildPage: React.FC<PageProps> = ({ params }) => {
-  const { id } = params;
+const Page = async ({ params }: { params: tParams }) => {
+  const { id } = await params;
   console.log("🚀 ~ id:", id);
 
   return (
@@ -27,4 +23,4 @@ const BuildPage: React.FC<PageProps> = ({ params }) => {
   );
 };
 
-export default BuildPage;
+export default Page;
