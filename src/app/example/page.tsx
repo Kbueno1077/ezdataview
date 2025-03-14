@@ -1,8 +1,8 @@
-import Container from "@/components/Container";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import { data } from "@/components/resencharts-ui/utils/fixtures/exampleChartsData";
-import Showcase from "@/modules/showcase/Showcase";
+import Container from "../../components/Container";
+import Footer from "../../components/Footer";
+import Header from "../../components/Header";
+import { data } from "../../components/resencharts-ui/utils/fixtures/exampleChartsData";
+import Showcase from "../../modules/showcase/Showcase";
 
 const ExamplePage: React.FC = () => {
   return (

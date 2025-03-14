@@ -1,13 +1,13 @@
-import Container from "@/components/Container";
-import Footer from "@/components/Footer";
-import Header from "@/components/Header";
-import Section from "@/components/Section";
-import ChartShowcase from "@/modules/landing/ChartShowcase/ChartShowcase";
-import CTA from "@/modules/landing/CTA/CTA";
-import FAQ from "@/modules/landing/FAQ/FAQ";
-import FeatureGrid from "@/modules/landing/Features/FeaturesGrid";
-import Hero from "@/modules/landing/Hero";
-import Pricing from "@/modules/landing/Pricing/Pricing";
+import Container from "../components/Container";
+import Footer from "../components/Footer";
+import Header from "../components/Header";
+import Section from "../components/Section";
+import ChartShowcase from "../modules/landing/ChartShowcase/ChartShowcase";
+import CTA from "../modules/landing/CTA/CTA";
+import FAQ from "../modules/landing/FAQ/FAQ";
+import FeatureGrid from "../modules/landing/Features/FeaturesGrid";
+import Hero from "../modules/landing/Hero";
+import Pricing from "../modules/landing/Pricing/Pricing";
 
 const HomePage: React.FC = () => {
   return (
