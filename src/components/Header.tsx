@@ -1,12 +1,8 @@
 import Container from "@/components/Container";
-import CustomSignInButton from "@/modules/auth/SignInButton";
-import CustomSignUpButton from "@/modules/auth/SignUpButton";
-import UserButtonClerk from "@/modules/auth/UserButtonClerk";
 import { menuItems } from "@/modules/landing/data/menuItems";
 import { siteDetails } from "@/modules/landing/data/siteDetails";
-import { SignedIn, SignedOut } from "@clerk/nextjs";
+import { ChartArea } from "lucide-react";
 import Link from "next/link";
-import { Fingerprint } from "lucide-react";
 
 const Header: React.FC = () => {
   return (
@@ -15,7 +11,7 @@ const Header: React.FC = () => {
         <nav className="shadow-md md:shadow-none bg-white md:bg-transparent mx-auto flex justify-between items-center py-2 px-5 md:py-10">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <Fingerprint className="text-foreground min-w-fit w-7 h-7" />
+            <ChartArea className="text-foreground min-w-fit w-7 h-7" />
             <span className="manrope text-xl font-semibold text-foreground cursor-pointer">
               {siteDetails.siteName}
             </span>
@@ -35,19 +31,19 @@ const Header: React.FC = () => {
             ))}
 
             <>
-              <SignedOut>
+              {/* <SignedOut>
                 <CustomSignInButton />
                 <CustomSignUpButton />
               </SignedOut>
               <SignedIn>
                 <UserButtonClerk />
-              </SignedIn>
+              </SignedIn> */}
             </>
           </ul>
 
           {/* Mobile Menu Button */}
 
-          <div className="md:hidden flex items-center gap-2">
+          {/* <div className="md:hidden flex items-center gap-2">
             <SignedOut>
               <CustomSignInButton />
               <CustomSignUpButton />
@@ -55,7 +51,7 @@ const Header: React.FC = () => {
             <SignedIn>
               <UserButtonClerk />
             </SignedIn>
-          </div>
+          </div> */}
         </nav>
       </Container>
     </header>

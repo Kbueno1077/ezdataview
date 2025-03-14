@@ -8,7 +8,6 @@ import FAQ from "@/modules/landing/FAQ/FAQ";
 import FeatureGrid from "@/modules/landing/Features/FeaturesGrid";
 import Hero from "@/modules/landing/Hero";
 import Pricing from "@/modules/landing/Pricing/Pricing";
-import Stats from "@/modules/landing/Stats";
 
 const HomePage: React.FC = () => {
   return (
@@ -36,7 +35,7 @@ const HomePage: React.FC = () => {
 
           <Section
             id="pricing"
-            title="Pricing"
+            title="Pricing (Demo)"
             description="Simple, transparent pricing. No surprises."
           >
             <Pricing />
@@ -44,7 +43,7 @@ const HomePage: React.FC = () => {
 
           <FAQ />
 
-          <Stats />
+          {/* <Stats /> */}
 
           <CTA />
         </Container>

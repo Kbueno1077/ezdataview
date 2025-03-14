@@ -22,7 +22,7 @@ const ExampleBuildButton = ({ dark }: { dark?: boolean }) => {
             xmlns="http://www.w3.org/2000/svg"
             width="30"
             height="30"
-            fill={dark ? "#FFD700" : "#DAA520"}
+            fill={dark ? "#FFD700" : "#F0C14B"}
             viewBox="0 0 16 16"
           >
             <path d="M8.211 2.047a.5.5 0 0 0-.422 0l-7.5 3.5a.5.5 0 0 0 .025.917l7.5 3a.5.5 0 0 0 .372 0L14 7.14V13a1 1 0 0 0-1 1v2h3v-2a1 1 0 0 0-1-1V6.739l.686-.275a.5.5 0 0 0 .025-.917l-7.5-3.5Z" />

@@ -12,7 +12,7 @@ export const tiers: IPricing[] = [
   },
   {
     name: "Pro",
-    price: 5.99,
+    price: "X.XX",
     features: [
       "Unlimited charts",
       "Unlimited data retention",
