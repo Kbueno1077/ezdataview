@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { ImageBarData, SVGBarData } from "../utils/types";
+import { isValidUrl } from "../utils/utils";
 
 export function BarChartHorizontalImage({
   data,
@@ -33,15 +34,6 @@ export function BarChartHorizontalImage({
   const xScale = scaleLinear()
     .domain([0, max(data.map((d) => d.value)) ?? 0])
     .range([0, 100]);
-
-  function isValidUrl(string: string) {
-    try {
-      new URL(string);
-      return true;
-    } catch (_) {
-      return false;
-    }
-  }
 
   return (
     <div
@@ -91,7 +83,8 @@ export function BarChartHorizontalImage({
         {data.map((entry: ImageBarData | SVGBarData, i) => {
           if (!entry.image) return null;
 
-          const isUrl = isValidUrl(entry.image);
+          const isUrl =
+            typeof entry.image === "string" ? isValidUrl(entry.image) : false;
 
           return (
             <div

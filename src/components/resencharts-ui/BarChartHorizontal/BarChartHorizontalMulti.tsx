@@ -8,6 +8,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { MultiBarData } from "../utils/types";
+import { isValidUrl } from "../utils/utils";
 
 const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
 const PX_BETWEEN_BARS = 0.2;
@@ -56,25 +57,34 @@ export function BarChartHorizontalMulti({
          translate-y-[var(--marginTop)]
          overflow-visible"
       >
-        {data.map((entry, i) => (
-          <div
-            key={i}
-            style={{
-              top: `${yScale(entry.key)! + yScale.bandwidth() / 2}%`,
-              left: `0`,
-            }}
-            className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
-          >
-            <Image
+        {data.map((entry, i) => {
+          if (!entry.image) return null;
+
+          const isUrl =
+            typeof entry.image === "string" ? isValidUrl(entry.image) : false;
+
+          if (!isUrl) return null;
+
+          return (
+            <div
               key={i}
-              src={entry.image ?? ""}
-              alt={`${entry.key} flag`}
-              width={28}
-              height={28}
-              className="opacity-80 dark:opacity-100"
-            />
-          </div>
-        ))}
+              style={{
+                top: `${yScale(entry.key)! + yScale.bandwidth() / 2}%`,
+                left: `0`,
+              }}
+              className="absolute rounded-full overflow-hidden size-7 text-sm text-gray-700 -translate-y-1/2 pointer-events-none"
+            >
+              <Image
+                key={i}
+                src={entry.image ?? ""}
+                alt={`${entry.key} flag`}
+                width={28}
+                height={28}
+                className="opacity-80 dark:opacity-100"
+              />
+            </div>
+          );
+        })}
       </div>
 
       {/* Chart Area */}

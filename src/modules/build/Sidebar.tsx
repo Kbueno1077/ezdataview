@@ -21,7 +21,7 @@ export function Sidebar() {
   };
 
   return (
-    <div className="border-l  border-r rounded-lg shadow-md bg-white z-10 h-full p-2 overflow-y-auto">
+    <div className="border-l rounded-lg shadow-md bg-white z-10  p-2 ">
       <div className="flex flex-col gap-2">
         <div className="flex items-center gap-2">
           <Toggle
@@ -58,7 +58,7 @@ export function Sidebar() {
           </div>
         )}
 
-        <div>
+        <div className="mb-4">
           {getChartUIBuilder(workspaceCharts[currentChartIndex].chartType)}
         </div>
       </div>

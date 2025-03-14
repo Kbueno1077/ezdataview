@@ -21,6 +21,7 @@ export const initBuildStore = (): BuildState => {
 export type ChartData = {
   id: string;
   chartName: string;
+  description: string;
   chartType: string;
 
   multipleValues?: boolean;
@@ -33,6 +34,7 @@ export type ChartData = {
 const defaultChart = {
   id: Math.random().toString(36).substring(2, 12),
   chartName: "",
+  description: "",
   chartType: "horizontal-bar",
   data: [],
 
