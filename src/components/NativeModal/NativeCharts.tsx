@@ -39,6 +39,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
     );
   }, []);
 
+  //@ts-expect-error - This is a workaround to get the chart type by name
   const previewChartNode = getChartTypeByName(chart.data, chart.type, {
     withTooltip: true,
     withAnimation: true,

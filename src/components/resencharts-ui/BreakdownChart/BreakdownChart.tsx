@@ -1,5 +1,5 @@
 import React, { CSSProperties } from "react";
-import { BreakdownChartItem } from "../utils/fixtures/BreakdownCharts";
+import { BreakdownChartItem } from "../utils/types";
 
 export function BreakdownChart({
   data,
