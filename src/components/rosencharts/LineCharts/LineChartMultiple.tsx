@@ -147,7 +147,7 @@ export function LineChartMultiple({
                 key={i}
                 d={p.path!}
                 fill="none"
-                className={p.color.line}
+                className={p?.color?.line ?? "stroke-fuchsia-400"}
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"
               />
@@ -170,7 +170,7 @@ export function LineChartMultiple({
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={data.color.point}
+                      className={data?.color?.point ?? "text-fuchsia-300"}
                     />
                   ))}
                   <g className="group/tooltip">
@@ -233,7 +233,7 @@ export function LineChartMultiple({
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={data.color.point}
+                      className={data?.color?.point ?? "text-fuchsia-300"}
                     />
                   ))}
                   <g className="group/tooltip">

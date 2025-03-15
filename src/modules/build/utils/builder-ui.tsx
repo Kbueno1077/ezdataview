@@ -65,7 +65,7 @@ export const chartTypes: ChartType[] = [
   { title: "Breakdown", value: "breakdown" },
   { title: "Breakdown Thin", value: "breakdown-thin" },
   { title: "Lines", value: "line" },
-  { title: "Lines Curved", value: "line-curved" },
+  { title: "Lines Curved", value: "line-multi" },
   { title: "Pie", value: "pie" },
   { title: "Pie Image", value: "pie-image" },
   { title: "Half Donut", value: "half-donut" },

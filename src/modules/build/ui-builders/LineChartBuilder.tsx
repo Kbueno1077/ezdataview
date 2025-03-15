@@ -360,11 +360,23 @@ function LineChartBuilder() {
                                   value={dateValue.value.toString()}
                                   placeholder={`Value ${valueIndex + 1}`}
                                   min={0}
+                                  step="any"
                                   size="lg"
                                   onChange={(e) => {
-                                    const newValue = e.target.value
-                                      ? parseFloat(e.target.value)
-                                      : 0;
+                                    // Handle empty input or invalid input
+                                    let newValue = 0;
+                                    try {
+                                      newValue = e.target.value
+                                        ? parseFloat(e.target.value)
+                                        : 0;
+                                    } catch (error) {
+                                      console.error(
+                                        "Invalid number input:",
+                                        error
+                                      );
+                                    }
+
+                                    // Ensure non-negative value
                                     const nonNegativeValue = Math.max(
                                       0,
                                       newValue
