@@ -1,5 +1,8 @@
+"use client";
+
 import { useBuildStore } from "@/providers/store-provider";
 import { PaintRoller, Palette, Trash, TrashIcon, Plus } from "lucide-react";
+import { ChartDataItem } from "@/stores/builder-store";
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
@@ -22,34 +25,53 @@ function LineChartBuilder() {
 
   const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
   const chartType = workspaceCharts[currentChartIndex].chartType;
+  const currentData = workspaceCharts[currentChartIndex].data;
 
   const allowColor =
     !chartType.includes("thin") && !chartType.includes("multi");
   const allowMulti =
     chartType.includes("multi") || chartType.includes("curved");
 
-  const handleAddBar = () => {
+  const handleAddLine = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
-    const newDate = new Date();
 
-    const formattedDate = format(newDate, "YYYY-MM-DD");
-    const newItem = {
+    // Get dates from existing lines or create a default one
+    let initialData = [];
+    if (
+      currentData.length > 0 &&
+      currentData[0].data &&
+      currentData[0].data.length > 0
+    ) {
+      // Copy dates from the first line but with 0 values
+      initialData = currentData[0].data.map((item) => ({
+        date: item.date,
+        value: 0,
+      }));
+    } else {
+      // Create a default date if no lines exist yet
+      const newDate = new Date();
+      const formattedDate = format(newDate, "YYYY-MM-DD");
+      initialData = [{ date: formattedDate, value: 0 }];
+    }
+
+    const newItem: ChartDataItem = {
       id: newItemId,
-      date: formattedDate,
-      value: 0,
-      color: "",
-      data: [{ date: formattedDate, value: 0 }],
+      data: initialData,
     };
 
     addChartItem(newItem);
   };
 
-  const handleUpdateBar = (
+  const handleUpdateLine = (
     index: number,
     key: string,
-    value: string | number | string[] | number[]
+    value:
+      | string
+      | number
+      | string[]
+      | number[]
+      | { date: string; value: number }[]
   ) => {
-    console.log("🚀 ~ LineChartBuilder ~ value:", value);
     updateChartItem(index, key, value);
   };
 
@@ -61,6 +83,105 @@ function LineChartBuilder() {
     if (confirm(`Are you sure you want to delete ${itemName}?`)) {
       deleteChartItem(index);
     }
+  };
+
+  // Function to add a new date to all lines
+  const handleAddDate = () => {
+    // Get the latest date from existing data
+    let latestDate = new Date();
+    if (
+      currentData.length > 0 &&
+      Array.isArray(currentData[0].data) &&
+      currentData[0].data.length > 0
+    ) {
+      const lastDateStr =
+        currentData[0].data[currentData[0].data.length - 1].date;
+      const lastDate = new Date(lastDateStr);
+      // Set new date to one day after the latest date
+      latestDate = new Date(lastDate);
+      latestDate.setDate(latestDate.getDate() + 1);
+    }
+
+    const formattedDate = format(latestDate, "YYYY-MM-DD");
+
+    currentData.forEach((item, itemIndex) => {
+      const newValues = [
+        ...(item.data || []),
+        { date: formattedDate, value: 0 },
+      ];
+      updateChartItem(itemIndex, "data", newValues);
+    });
+  };
+
+  // Function to update date across all line series
+  const handleDateChange = (newDate: string, valueIndex: number) => {
+    if (currentData.length > 0 && Array.isArray(currentData[0].data)) {
+      // If all checks pass, update the date
+      currentData.forEach((item, itemIndex) => {
+        if (Array.isArray(item.data) && item.data[valueIndex]) {
+          const newValues = [...item.data];
+          const newDateObj = new Date(newDate);
+
+          // Update the current date
+          newValues[valueIndex] = {
+            ...newValues[valueIndex],
+            date: newDate,
+          };
+
+          // Check and update all subsequent dates that are now less than the new date
+          for (let i = valueIndex + 1; i < newValues.length; i++) {
+            const nextDateObj = new Date(newValues[i].date);
+            if (nextDateObj < newDateObj) {
+              newValues[i] = {
+                ...newValues[i],
+                date: newDate,
+              };
+            } else {
+              break; // Stop once we find a date that's greater than or equal to the new date
+            }
+          }
+
+          updateChartItem(itemIndex, "data", newValues);
+        }
+      });
+    }
+  };
+
+  // Function to delete a date point from all lines
+  const handleDeleteDate = (valueIndex: number) => {
+    if (
+      confirm(`Are you sure you want to delete this date point from all lines?`)
+    ) {
+      currentData.forEach((item, itemIndex) => {
+        if (Array.isArray(item.data) && item.data.length > valueIndex) {
+          const newValues = [...item.data];
+          newValues.splice(valueIndex, 1);
+          updateChartItem(itemIndex, "data", newValues);
+        }
+      });
+    }
+  };
+
+  // Get dates from the first line to display in the shared date section
+  const sharedDates =
+    currentData.length > 0 && Array.isArray(currentData[0].data)
+      ? currentData[0].data.map((item) => item.date)
+      : [];
+
+  // Calculate min and max dates for each date picker
+  const getDateConstraints = (index: number) => {
+    if (currentData.length === 0 || !Array.isArray(currentData[0].data)) {
+      return { minValue: undefined, maxValue: undefined };
+    }
+
+    const dates = currentData[0].data.map((item) => new Date(item.date));
+
+    // For min date: use the date of the previous item (if exists)
+    const minDate = index > 0 ? dates[index - 1] : undefined;
+
+    return {
+      minValue: minDate ? parseDate(format(minDate, "YYYY-MM-DD")) : undefined,
+    };
   };
 
   return (
@@ -101,8 +222,65 @@ function LineChartBuilder() {
         </div>
       </fieldset>
 
+      {/* Shared dates section */}
+      <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+        <legend className="text-sm font-medium px-2">Shared Dates</legend>
+
+        <div className="space-y-3">
+          {sharedDates.length > 0 ? (
+            sharedDates.map((date, valueIndex) => (
+              <div key={valueIndex} className="flex gap-2 items-center">
+                <div className="flex-1">
+                  <DatePicker
+                    id={`shared-date-${valueIndex}`}
+                    name={`shared-date-${valueIndex}`}
+                    value={parseDate(date)}
+                    label="Select date"
+                    size="sm"
+                    onChange={(e) => {
+                      const formattedDate = format(
+                        e?.toString() || "",
+                        "YYYY-MM-DD"
+                      );
+                      handleDateChange(formattedDate, valueIndex);
+                    }}
+                    aria-label={`Date ${valueIndex + 1}`}
+                    className="w-full"
+                    {...getDateConstraints(valueIndex)}
+                  />
+                </div>
+                <Tooltip content="Remove this date from all lines">
+                  <Button
+                    size="sm"
+                    variant="light"
+                    isIconOnly
+                    onPress={() => handleDeleteDate(valueIndex)}
+                    className="text-gray-500"
+                    aria-label={`Remove date ${valueIndex + 1}`}
+                  >
+                    <Trash size={16} />
+                  </Button>
+                </Tooltip>
+              </div>
+            ))
+          ) : (
+            <p className="text-sm text-gray-500">No dates added yet</p>
+          )}
+
+          <Button
+            size="sm"
+            variant="flat"
+            onPress={handleAddDate}
+            className="mt-2"
+            startContent={<Plus size={14} />}
+          >
+            Add Date ({sharedDates.length})
+          </Button>
+        </div>
+      </fieldset>
+
       <Button
-        onPress={handleAddBar}
+        onPress={handleAddLine}
         className="w-full rounded-md gap-2"
         color="primary"
         variant="solid"
@@ -116,23 +294,22 @@ function LineChartBuilder() {
         {workspaceCharts[currentChartIndex].data.length === 0 && (
           <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
             <p className="text-gray-500">
-              No bars added yet. Click the button above to add your first bar.
+              No lines added yet. Click the button above to add your first line.
             </p>
           </div>
         )}
 
         {workspaceCharts[currentChartIndex].data.map(
-          (item: any, index: number) => {
+          (item: ChartDataItem, index: number) => {
             return (
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
                   aria-label={`${allowMulti ? "Grouped Line" : "Line"} ${
                     index + 1
-                  }: ${item.date}`}
+                  }`}
                   title={`${allowMulti ? "Multiple Lines" : "Line"} ${
                     index + 1
                   }`}
-                  subtitle={item.date}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
@@ -150,190 +327,75 @@ function LineChartBuilder() {
                   }
                 >
                   <div className="space-y-4 -mt-4 p-2">
-                    {!allowMulti && (
-                      <div className="flex flex-col">
-                        <label htmlFor={`key-${item.id}`} className="mb-1">
-                          Line Date
-                        </label>
-
-                        <div className="relative">
-                          <DatePicker
-                            id={`date-${item.id}`}
-                            name="date"
-                            value={parseDate(item.date)}
-                            label="Select date"
-                            onChange={(e) => {
-                              console.log(e?.toString());
-
-                              handleUpdateBar(
-                                index,
-                                "date",
-                                e?.toString() || ""
-                              );
-                            }}
-                            aria-label="Line date"
-                            className="w-full"
-                          />
-                        </div>
-                      </div>
-                    )}
-
-                    {!allowMulti && (
-                      <div className="flex flex-col">
-                        <label htmlFor={`value-${item.id}`} className="mb-1">
-                          Value
-                        </label>
-                        <Input
-                          id={`value-${item.id}`}
-                          type="number"
-                          name="value"
-                          value={item.value}
-                          placeholder="Enter value"
-                          min={0}
-                          onChange={(e) => {
-                            const value = e.target.value
-                              ? parseFloat(e.target.value)
-                              : 0;
-                            const nonNegativeValue = Math.max(0, value);
-                            handleUpdateBar(index, "value", nonNegativeValue);
-                          }}
-                          aria-label="Line value"
-                        />
-                      </div>
-                    )}
-
-                    {allowMulti && (
-                      <fieldset className="border border-gray-200 dark:border-gray-700 rounded-md p-3">
-                        <legend className="text-sm font-medium px-2">
-                          Multiple Values
-                        </legend>
-                        <div className="flex flex-col gap-2">
-                          {item.data && item.data.length > 0 ? (
-                            item.data.map(
-                              (
-                                dateValue: { date: string; value: number },
-                                valueIndex: number
-                              ) => (
-                                <div
-                                  key={valueIndex}
-                                  className="flex gap-2 items-center"
+                    <fieldset className="border border-gray-200 dark:border-gray-700 rounded-md p-3">
+                      <legend className="text-sm font-medium px-2">
+                        Values
+                      </legend>
+                      <div className="flex flex-col gap-2">
+                        {Array.isArray(item.data) && item.data.length > 0 ? (
+                          item.data.map((dateValue, valueIndex) => (
+                            <div
+                              key={valueIndex}
+                              className="flex gap-2 items-center"
+                            >
+                              <div className="flex-1">
+                                <label
+                                  htmlFor={`date-display-${item.id}-${valueIndex}`}
+                                  className="text-sm text-gray-500 mb-1 block"
                                 >
-                                  <div className="flex-1">
-                                    <label
-                                      htmlFor={`date-${item.id}-${valueIndex}`}
-                                      className="sr-only"
-                                    >
-                                      Date {valueIndex + 1}
-                                    </label>
-                                    <DatePicker
-                                      id={`date-${item.id}-${valueIndex}`}
-                                      name={`date-${valueIndex}`}
-                                      value={parseDate(dateValue.date)}
-                                      label="Select date"
-                                      size="sm"
-                                      onChange={(e) => {
-                                        const newValues = [...item.data];
-                                        newValues[valueIndex].date =
-                                          e?.toString() || "";
-                                        handleUpdateBar(
-                                          index,
-                                          "data",
-                                          newValues
-                                        );
-                                      }}
-                                      aria-label={`Date ${valueIndex + 1}`}
-                                      className="w-full"
-                                    />
-                                  </div>
-                                  <div className="flex-1">
-                                    <label
-                                      htmlFor={`value-${item.id}-${valueIndex}`}
-                                      className="sr-only"
-                                    >
-                                      Value {valueIndex + 1}
-                                    </label>
-                                    <Input
-                                      id={`value-${item.id}-${valueIndex}`}
-                                      type="number"
-                                      name={`value-${valueIndex}`}
-                                      value={dateValue.value.toString()}
-                                      placeholder={`Value ${valueIndex + 1}`}
-                                      min={0}
-                                      size="lg"
-                                      onChange={(e) => {
-                                        const newValue = e.target.value
-                                          ? parseFloat(e.target.value)
-                                          : 0;
-                                        const nonNegativeValue = Math.max(
-                                          0,
-                                          newValue
-                                        );
-                                        const newValues = [...item.data];
-                                        newValues[valueIndex].value =
-                                          nonNegativeValue;
-                                        handleUpdateBar(
-                                          index,
-                                          "data",
-                                          newValues
-                                        );
-                                      }}
-                                      className="w-full"
-                                      aria-label={`Value ${valueIndex + 1}`}
-                                    />
-                                  </div>
-                                  <Tooltip content="Remove value">
-                                    <Button
-                                      size="lg"
-                                      variant="light"
-                                      isIconOnly
-                                      onPress={() => {
-                                        const newValues = [...item.data];
-                                        newValues.splice(valueIndex, 1);
-                                        handleUpdateBar(
-                                          index,
-                                          "data",
-                                          newValues
-                                        );
-                                      }}
-                                      className="text-gray-500"
-                                      aria-label={`Remove value ${
-                                        valueIndex + 1
-                                      }`}
-                                    >
-                                      <Trash size={18} />
-                                    </Button>
-                                  </Tooltip>
-                                </div>
-                              )
-                            )
-                          ) : (
-                            <p className="text-sm text-gray-500">
-                              No values added yet
-                            </p>
-                          )}
-                          <Button
-                            size="sm"
-                            variant="flat"
-                            onPress={() => {
-                              const newDate = new Date();
-                              const formattedDate = format(
-                                newDate,
-                                "YYYY-MM-DD"
-                              );
-                              const newValues = [
-                                ...(item.data || []),
-                                { date: formattedDate, value: 0 },
-                              ];
-                              handleUpdateBar(index, "data", newValues);
-                            }}
-                            className="mt-2"
-                            startContent={<Plus size={14} />}
-                          >
-                            Add Value ({item.data?.length || 0})
-                          </Button>
-                        </div>
-                      </fieldset>
-                    )}
+                                  {dateValue.date}
+                                </label>
+                              </div>
+                              <div className="flex-1">
+                                <label
+                                  htmlFor={`value-${item.id}-${valueIndex}`}
+                                  className="sr-only"
+                                >
+                                  Value {valueIndex + 1}
+                                </label>
+                                <Input
+                                  id={`value-${item.id}-${valueIndex}`}
+                                  type="number"
+                                  name={`value-${valueIndex}`}
+                                  value={dateValue.value.toString()}
+                                  placeholder={`Value ${valueIndex + 1}`}
+                                  min={0}
+                                  size="lg"
+                                  onChange={(e) => {
+                                    const newValue = e.target.value
+                                      ? parseFloat(e.target.value)
+                                      : 0;
+                                    const nonNegativeValue = Math.max(
+                                      0,
+                                      newValue
+                                    );
+
+                                    if (Array.isArray(item.data)) {
+                                      const newValues = [...item.data];
+                                      newValues[valueIndex] = {
+                                        ...newValues[valueIndex],
+                                        value: nonNegativeValue,
+                                      };
+                                      handleUpdateLine(
+                                        index,
+                                        "data",
+                                        newValues
+                                      );
+                                    }
+                                  }}
+                                  className="w-full"
+                                  aria-label={`Value ${valueIndex + 1}`}
+                                />
+                              </div>
+                            </div>
+                          ))
+                        ) : (
+                          <p className="text-sm text-gray-500">
+                            No values added yet
+                          </p>
+                        )}
+                      </div>
+                    </fieldset>
 
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
                       <div>
@@ -352,7 +414,7 @@ function LineChartBuilder() {
                                 name="color"
                                 value={item.color || "#000000"}
                                 onChange={(e) =>
-                                  handleUpdateBar(
+                                  handleUpdateLine(
                                     index,
                                     "color",
                                     e.target.value
@@ -375,7 +437,7 @@ function LineChartBuilder() {
                                 size="sm"
                                 variant="flat"
                                 onPress={() =>
-                                  handleUpdateBar(
+                                  handleUpdateLine(
                                     index,
                                     "color",
                                     item.color ? "" : "#3b82f6"
@@ -399,14 +461,18 @@ function LineChartBuilder() {
                       </div>
 
                       <Tooltip
-                        content={`Delete ${allowMulti ? "grouped bar" : "bar"}`}
+                        content={`Delete ${
+                          allowMulti ? "grouped line" : "line"
+                        }`}
                       >
                         <Button
                           isIconOnly
                           variant="solid"
                           color="danger"
-                          onPress={() => handleDeleteItem(index, item.date)}
-                          aria-label={`Delete ${item.date}`}
+                          onPress={() =>
+                            handleDeleteItem(index, `Line ${index + 1}`)
+                          }
+                          aria-label={`Delete Line ${index + 1}`}
                         >
                           <TrashIcon size={16} />
                         </Button>

@@ -91,23 +91,23 @@ export const data = [
 
   {
     id: "10",
-    name: "Line Chart",
+    name: "Lines Chart",
     type: "line",
     data: lineChartData,
   },
 
   {
-    id: "11",
-    name: "Line Chart Multi",
-    type: "line-multi",
-    data: lineChartMultipleData,
+    id: "12",
+    name: "Lines Chart Curved",
+    type: "line-curved",
+    data: lineChartCurvedData,
   },
 
   {
-    id: "12",
-    name: "Line Chart Curved",
-    type: "line-curved",
-    data: lineChartCurvedData,
+    id: "11",
+    name: "Lines Chart Multiple",
+    type: "line-multi",
+    data: lineChartMultipleData,
   },
 
   {

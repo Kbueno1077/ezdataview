@@ -21,6 +21,19 @@ export const initBuildStore = (): BuildState => {
 };
 
 // DEFAULT CHART DATA
+export interface ChartDataItem {
+  id: string;
+  data?: Array<{
+    date: string;
+    value: number;
+  }>;
+  color?: string;
+  key?: string;
+  value?: number;
+  image?: string;
+  values?: number[];
+}
+
 export type ChartData = {
   id: string;
   chartName: string;
@@ -30,7 +43,7 @@ export type ChartData = {
   withImage?: boolean;
   withTooltip?: boolean;
   useAnimation?: boolean;
-  data: unknown[];
+  data: ChartDataItem[];
 };
 
 const defaultChart = {

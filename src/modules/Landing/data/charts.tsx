@@ -77,7 +77,7 @@ export const chartShowcases: IChartShowcase[] = [
   },
 
   {
-    title: "Line Chart",
+    title: "Lines Chart",
     description:
       "Visualize trends and patterns over time with our elegant line charts. Ideal for showing continuous data, progress tracking, and temporal relationships.",
     features: [

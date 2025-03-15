@@ -26,7 +26,6 @@ function ChartSheet() {
   const [zoomLevel, setZoomLevel] = useState(90);
 
   const currentChart = workspaceCharts[currentChartIndex];
-  console.log("🚀 ~ ChartSheet ~ currentChart:", currentChart);
 
   const handleZoomIn = () => {
     setZoomLevel((prev) => Math.min(prev + 5, 100));

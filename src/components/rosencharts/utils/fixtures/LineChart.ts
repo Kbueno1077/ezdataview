@@ -2,16 +2,20 @@ import { LineDataSeries } from "../types";
 
 // Default data for LineChart
 export const lineChartData = [
-  { date: "2023-04-30", value: 4 },
-  { date: "2023-05-01", value: 6 },
-  { date: "2023-05-02", value: 5 },
-  { date: "2023-05-03", value: 7 },
-  { date: "2023-05-04", value: 10 },
-  { date: "2023-05-05", value: 10 },
-  { date: "2023-05-06", value: 11 },
-  { date: "2023-05-07", value: 8 },
-  { date: "2023-05-08", value: 8 },
-  { date: "2023-05-09", value: 12 },
+  {
+    data: [
+      { date: "2023-04-30", value: 4 },
+      { date: "2023-05-01", value: 6 },
+      { date: "2023-05-02", value: 5 },
+      { date: "2023-05-03", value: 7 },
+      { date: "2023-05-04", value: 10 },
+      { date: "2023-05-05", value: 10 },
+      { date: "2023-05-06", value: 11 },
+      { date: "2023-05-07", value: 8 },
+      { date: "2023-05-08", value: 8 },
+      { date: "2023-05-09", value: 12 },
+    ],
+  },
 ];
 
 export const lineChartCurvedData = [

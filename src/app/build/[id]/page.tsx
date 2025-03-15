@@ -6,7 +6,6 @@ type tParams = Promise<{ id: string[] }>;
 
 const Page = async ({ params }: { params: tParams }) => {
   const { id } = await params;
-  console.log("🚀 ~ id:", id);
 
   return (
     <BuildStoreProvider>

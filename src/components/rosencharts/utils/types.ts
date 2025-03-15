@@ -69,7 +69,7 @@ export type DataPoint = {
 
 export type LineDataSeries = {
   data: DataPoint[];
-  color: {
+  color?: {
     line: string;
     point: string;
   };
