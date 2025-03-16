@@ -31,7 +31,7 @@ export function Sidebar() {
   const currentChartType = workspaceCharts[currentChartIndex].chartType;
 
   return (
-    <aside className="border-l rounded-lg shadow-md bg-white dark:bg-gray-800 z-10 p-4 h-full overflow-y-auto">
+    <aside className="w-1/3 min-w-[300px] max-w-[380px] fixed right-0 top-0 overflow-x-hidden  border-l rounded-lg shadow-md bg-white dark:bg-gray-800 z-10 p-4 h-full overflow-y-auto">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-2">
