@@ -21,6 +21,33 @@ export function PieChartImage({
     return null;
   }
 
+  const defaultColors = [
+    {
+      colorFrom: "text-pink-400",
+      colorTo: "text-pink-400",
+    },
+    {
+      colorFrom: "text-purple-400",
+      colorTo: "text-purple-400",
+    },
+    {
+      colorFrom: "text-indigo-400",
+      colorTo: "text-indigo-400",
+    },
+    {
+      colorFrom: "text-sky-400",
+      colorTo: "text-sky-400",
+    },
+    {
+      colorFrom: "text-lime-400",
+      colorTo: "text-lime-400",
+    },
+    {
+      colorFrom: "text-amber-400",
+      colorTo: "text-amber-400",
+    },
+  ];
+
   // Chart dimensions
   const radius = Math.PI * 100;
   const gap = 0.02; // Gap between slices
@@ -71,7 +98,9 @@ export function PieChartImage({
                   x2={labelX * LINE_LENGTH}
                   y2={labelY * LINE_LENGTH}
                   stroke={`currentColor`}
-                  className={d.data.color}
+                  className={
+                    d.data.colorFrom || defaultColors[i % data.length].colorFrom
+                  }
                   strokeWidth={4}
                 />
               </g>
@@ -86,7 +115,9 @@ export function PieChartImage({
                   key={i}
                   fill={"currentColor"}
                   d={arcGenerator(d)!}
-                  className={`${d.data.color}`}
+                  className={`${
+                    d.data.colorFrom || defaultColors[i % data.length].colorFrom
+                  }`}
                 />
               );
             }
@@ -98,7 +129,10 @@ export function PieChartImage({
                     key={i}
                     fill={"currentColor"}
                     d={arcGenerator(d)!}
-                    className={`${d.data.color}`}
+                    className={`${
+                      d.data.colorFrom ||
+                      defaultColors[i % data.length].colorFrom
+                    }`}
                   />
                 </TooltipTrigger>
                 <TooltipContent>

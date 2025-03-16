@@ -2,6 +2,7 @@ import type { JSX } from "react";
 import BarChartBuilder from "../ui-builders/BarChartBuilder";
 import LineChartBuilder from "../ui-builders/LineChartBuilder";
 import BreakdownBuilder from "../ui-builders/BreakdownBuilder";
+import PieChartBuilder from "../ui-builders/PieChartBuilder";
 
 export const getChartUIBuilder = (
   chartType: string,
@@ -42,7 +43,7 @@ export const getChartUIBuilder = (
     case "fillable":
     case "fillable-donut": {
       // Return pie chart UI builder when implemented
-      return <div className={className}>Pie Chart UI Builder</div>;
+      return <PieChartBuilder />;
     }
 
     default:

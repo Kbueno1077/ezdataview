@@ -3,10 +3,11 @@ import { PaintRoller, Palette, Plus, TrashIcon } from "lucide-react";
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
 
-function BreakdownBuilder() {
+function PieChartBuilder() {
   const {
     workspaceCharts,
     currentChartIndex,
@@ -17,23 +18,28 @@ function BreakdownBuilder() {
   } = useBuildStore((state) => state);
 
   const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
+  const chartType = workspaceCharts[currentChartIndex].chartType;
 
-  const allowColor = true;
+  const allowColor =
+    !chartType.includes("thin") && !chartType.includes("multi");
+  const allowImage = chartType.includes("image");
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
 
     const newItem = {
       id: newItemId,
-      key: `Section ${workspaceCharts[currentChartIndex].data.length + 1}`,
+      name: `Pie ${workspaceCharts[currentChartIndex].data.length + 1}`,
       value: 0,
-      color: "",
+      image: "",
+      colorFrom: "",
+      colorTo: "",
     };
 
     addChartItem(newItem);
   };
 
-  const handleUpdateSection = (
+  const handleUpdatePie = (
     index: number,
     key: string,
     value: string | number | string[] | number[]
@@ -55,7 +61,7 @@ function BreakdownBuilder() {
     <div className="">
       <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
 
-      {/* <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
+      <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
         <legend className="text-sm font-medium px-2">Chart Properties</legend>
 
         <div className="space-y-2">
@@ -72,8 +78,22 @@ function BreakdownBuilder() {
               Show tooltips on hover
             </label>
           </div>
+
+          {/* <div className="flex items-center">
+            <Checkbox
+              id="useAnimation"
+              isSelected={useAnimation}
+              onValueChange={(checked) =>
+                handleUpdateChartConfig("useAnimation", checked === true)
+              }
+              aria-labelledby="animation-label"
+            />
+            <label id="animation-label" htmlFor="useAnimation" className="ml-2">
+              Enable animations
+            </label>
+          </div> */}
         </div>
-      </fieldset> */}
+      </fieldset>
 
       <Button
         onPress={handleAddBar}
@@ -82,15 +102,14 @@ function BreakdownBuilder() {
         variant="solid"
         startContent={<Plus className="h-4 w-4" />}
       >
-        Add Section ({workspaceCharts[currentChartIndex].data.length})
+        Add Piece ({workspaceCharts[currentChartIndex].data.length})
       </Button>
 
       <div className="space-y-2 mt-4">
         {workspaceCharts[currentChartIndex].data.length === 0 && (
           <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
             <p className="text-gray-500">
-              No sections added yet. Click the button above to add your first
-              bar.
+              No bars added yet. Click the button above to add your first bar.
             </p>
           </div>
         )}
@@ -100,9 +119,9 @@ function BreakdownBuilder() {
             return (
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
-                  aria-label={`Section ${index + 1}: ${item.key}`}
-                  title={`Section ${index + 1}`}
-                  subtitle={item.key}
+                  aria-label={`Piece ${index + 1}: ${item.name}`}
+                  title={`Piece ${index + 1}`}
+                  subtitle={item.name}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
@@ -127,11 +146,11 @@ function BreakdownBuilder() {
                       <Input
                         id={`key-${item.id}`}
                         type="text"
-                        name="key"
-                        value={item.key}
+                        name="name"
+                        value={item.name}
                         placeholder="Enter bar label"
                         onChange={(e) =>
-                          handleUpdateSection(index, "key", e.target.value)
+                          handleUpdatePie(index, "name", e.target.value)
                         }
                         aria-label="Bar label"
                       />
@@ -153,65 +172,102 @@ function BreakdownBuilder() {
                             ? parseFloat(e.target.value)
                             : 0;
                           const nonNegativeValue = Math.max(0, value);
-                          handleUpdateSection(index, "value", nonNegativeValue);
+                          handleUpdatePie(index, "value", nonNegativeValue);
                         }}
                         aria-label="Bar value"
                       />
                     </div>
+
+                    {allowImage && (
+                      <div className="flex flex-col">
+                        <label htmlFor={`image-${item.id}`} className="mb-1">
+                          Image URL
+                        </label>
+                        <Input
+                          id={`image-${item.id}`}
+                          type="text"
+                          name="image"
+                          value={item.image}
+                          placeholder="Enter image URL"
+                          onChange={(e) =>
+                            handleUpdatePie(index, "image", e.target.value)
+                          }
+                          aria-label="Image URL"
+                        />
+                        {item.image && (
+                          <div className="mt-2 text-xs text-gray-500">
+                            Image will be displayed on the bar
+                          </div>
+                        )}
+                      </div>
+                    )}
 
                     <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
                       <div>
                         {allowColor && (
                           <div className="flex items-center gap-2">
                             <label
-                              htmlFor={`color-${item.id}`}
+                              htmlFor={`colorFrom-${item.id}`}
                               className="sr-only"
                             >
-                              Bar Color
+                              From Color
                             </label>
-                            <Tooltip content={item.color || "Select a color"}>
+                            <Tooltip
+                              content={item.colorFrom || "Select from color"}
+                            >
                               <input
-                                id={`color-${item.id}`}
+                                id={`colorFrom-${item.id}`}
                                 type="color"
-                                name="color"
-                                value={item.color || "#000000"}
-                                onChange={(e) =>
-                                  handleUpdateSection(
+                                name="colorFrom"
+                                value={item.colorFrom || "#000000"}
+                                onChange={(e) => {
+                                  handleUpdatePie(
                                     index,
-                                    "color",
+                                    "colorFrom",
                                     e.target.value
-                                  )
-                                }
+                                  );
+
+                                  handleUpdatePie(
+                                    index,
+                                    "colorTo",
+                                    e.target.value
+                                  );
+                                }}
                                 className="rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md cursor-pointer"
-                                aria-label="Bar color"
+                                aria-label="From color"
                               />
                             </Tooltip>
 
                             <Tooltip
                               content={
-                                item.color
-                                  ? "Use default color"
-                                  : "Use custom color"
+                                item.colorFrom
+                                  ? "Use default colors"
+                                  : "Use custom colors"
                               }
                             >
                               <Button
                                 isIconOnly
                                 size="sm"
                                 variant="flat"
-                                onPress={() =>
-                                  handleUpdateSection(
+                                onPress={() => {
+                                  handleUpdatePie(
                                     index,
-                                    "color",
-                                    item.color ? "" : "#3b82f6"
-                                  )
-                                }
+                                    "colorFrom",
+                                    item.colorFrom ? "" : "#3b82f6"
+                                  );
+                                  handleUpdatePie(
+                                    index,
+                                    "colorTo",
+                                    item.colorTo ? "" : "#3b82f6"
+                                  );
+                                }}
                                 aria-label={
-                                  item.color
-                                    ? "Use default color"
-                                    : "Use custom color"
+                                  item.colorFrom
+                                    ? "Use default colors"
+                                    : "Use custom colors"
                                 }
                               >
-                                {item.color ? (
+                                {item.colorFrom ? (
                                   <Palette size={16} />
                                 ) : (
                                   <PaintRoller size={16} />
@@ -222,13 +278,13 @@ function BreakdownBuilder() {
                         )}
                       </div>
 
-                      <Tooltip content={`Delete section`}>
+                      <Tooltip content={`Delete Piece`}>
                         <Button
                           isIconOnly
                           variant="solid"
                           color="danger"
-                          onPress={() => handleDeleteItem(index, item.key)}
-                          aria-label={`Delete ${item.key}`}
+                          onPress={() => handleDeleteItem(index, item.name)}
+                          aria-label={`Delete ${item.name}`}
                         >
                           <TrashIcon size={16} />
                         </Button>
@@ -245,4 +301,4 @@ function BreakdownBuilder() {
   );
 }
 
-export default BreakdownBuilder;
+export default PieChartBuilder;

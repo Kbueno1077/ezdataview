@@ -59,7 +59,6 @@ export const getChartTypeByName = (
     withAnimation?: boolean;
   }
 ): JSX.Element | null => {
-  console.log("🚀 ~ data:", data);
   const { withTooltip = true, className, withAnimation } = options || {};
 
   switch (chartType) {

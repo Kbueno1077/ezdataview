@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { pieChartItem } from "../utils/types";
+import { gradientFromHex } from "../utils/utils";
 
 export function PieChart({
   data,
@@ -19,6 +20,33 @@ export function PieChart({
   if (!data) {
     return null;
   }
+
+  const defaultColors = [
+    {
+      colorFrom: "text-pink-400",
+      colorTo: "text-pink-400",
+    },
+    {
+      colorFrom: "text-purple-400",
+      colorTo: "text-purple-400",
+    },
+    {
+      colorFrom: "text-indigo-400",
+      colorTo: "text-indigo-400",
+    },
+    {
+      colorFrom: "text-sky-400",
+      colorTo: "text-sky-400",
+    },
+    {
+      colorFrom: "text-lime-400",
+      colorTo: "text-lime-400",
+    },
+    {
+      colorFrom: "text-amber-400",
+      colorTo: "text-amber-400",
+    },
+  ];
 
   // Chart dimensions
   const radius = Math.PI * 100;
@@ -34,7 +62,6 @@ export function PieChart({
     .innerRadius(20)
     .outerRadius(radius)
     .cornerRadius(8);
-
   const labelRadius = radius * 0.8;
   const arcLabel = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(labelRadius)
@@ -59,6 +86,12 @@ export function PieChart({
           {/* Slices */}
           {arcs.map((d, i) => {
             const midAngle = (d.startAngle + d.endAngle) / 2;
+            const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
+              d.data.colorFrom
+            );
+            const gradient = isHexColor
+              ? gradientFromHex(d.data.colorFrom)
+              : d.data.colorFrom;
 
             if (!withTooltip) {
               return (
@@ -77,12 +110,27 @@ export function PieChart({
                     <stop
                       offset="0%"
                       stopColor={"currentColor"}
-                      className={d.data.colorFrom}
+                      className={
+                        d.data.colorFrom ||
+                        defaultColors[i % data.length].colorFrom
+                      }
+                      style={{
+                        ...(isHexColor
+                          ? gradientFromHex(d.data.colorFrom)
+                          : {}),
+                      }}
                     />
                     <stop
                       offset="100%"
                       stopColor={"currentColor"}
-                      className={d.data.colorTo}
+                      className={
+                        d.data.colorTo || defaultColors[i % data.length].colorTo
+                      }
+                      style={{
+                        ...(isHexColor
+                          ? gradientFromHex(d.data.colorFrom)
+                          : {}),
+                      }}
                     />
                   </linearGradient>
                 </g>
@@ -107,12 +155,28 @@ export function PieChart({
                       <stop
                         offset="0%"
                         stopColor={"currentColor"}
-                        className={d.data.colorFrom}
+                        className={
+                          d.data.colorFrom ||
+                          defaultColors[i % data.length].colorFrom
+                        }
+                        style={{
+                          ...(isHexColor
+                            ? gradientFromHex(d.data.colorFrom)
+                            : {}),
+                        }}
                       />
                       <stop
                         offset="100%"
                         stopColor={"currentColor"}
-                        className={d.data.colorTo}
+                        className={
+                          d.data.colorTo ||
+                          defaultColors[i % data.length].colorTo
+                        }
+                        style={{
+                          ...(isHexColor
+                            ? gradientFromHex(d.data.colorFrom)
+                            : {}),
+                        }}
                       />
                     </linearGradient>
                   </g>
@@ -130,7 +194,7 @@ export function PieChart({
 
         {/* Labels as absolutely positioned divs */}
         <div className="absolute inset-0 pointer-events-none">
-          {arcs.map((d: PieArcDatum<pieChartItem>, i) => {
+          {arcs.map((d: PieArcDatumWithColor<pieChartItem>, i) => {
             const angle = computeAngle(d);
             if (angle <= MIN_ANGLE) return null;
 
