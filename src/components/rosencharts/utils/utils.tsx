@@ -9,8 +9,7 @@ import { BarChartVerticalMulti } from "../BarChartVertical/BarChartVerticalMulti
 import { BreakdownChart } from "../BreakdownChart/BreakdownChart";
 import { BreakdownChartThin } from "../BreakdownChart/BreakdownChartThin";
 import { LineChart } from "../LineCharts/LineChart";
-import { LineChartCurved } from "../LineCharts/LineChartCurved";
-import { LineChartMultiple } from "../LineCharts/LineChartMultiple";
+import { LineChartCurvedDeprecated } from "../LineCharts/LineChartCurved";
 import { DonutChart } from "../PieCharts/DonutChart";
 import { FillableChart } from "../PieCharts/FillableChart";
 import { FillableDonutChart } from "../PieCharts/FillableDonutChart";
@@ -34,6 +33,7 @@ import {
   VerticalBarData,
   VerticalMultiBarData,
 } from "./types";
+import { LineChartCurved } from "../LineCharts/LineChartMultiple";
 
 export const getChartTypeByName = (
   data:
@@ -59,6 +59,7 @@ export const getChartTypeByName = (
     withAnimation?: boolean;
   }
 ): JSX.Element | null => {
+  console.log("🚀 ~ data:", data);
   const { withTooltip = true, className, withAnimation } = options || {};
 
   switch (chartType) {
@@ -153,7 +154,7 @@ export const getChartTypeByName = (
     case "line": {
       return (
         <LineChart
-          data={data as LineChartDataPoint[]}
+          data={data as LineDataSeries[]}
           withTooltip={withTooltip}
           withAnimation={withAnimation}
           className={className}
@@ -162,7 +163,7 @@ export const getChartTypeByName = (
     }
     case "line-multi": {
       return (
-        <LineChartMultiple
+        <LineChartCurved
           data={data as LineDataSeries[]}
           withTooltip={withTooltip}
           className={className}
@@ -172,7 +173,7 @@ export const getChartTypeByName = (
     }
     case "line-curved": {
       return (
-        <LineChartCurved
+        <LineChartCurvedDeprecated
           data={data as LineChartDataPoint[]}
           withTooltip={withTooltip}
           className={className}

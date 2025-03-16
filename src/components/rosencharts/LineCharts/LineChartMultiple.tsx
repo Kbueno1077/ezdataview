@@ -14,7 +14,7 @@ import {
 import { LineDataSeries } from "../utils/types";
 import { AnimatedLine } from "../Animated/AnimatedLine";
 
-export function LineChartMultiple({
+export function LineChartCurved({
   data,
   withTooltip = true,
   withAnimation = true,

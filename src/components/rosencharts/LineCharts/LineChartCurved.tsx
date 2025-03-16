@@ -15,7 +15,7 @@ import { LineChartDataPoint } from "../utils/types";
 import { AnimatedLine } from "../Animated/AnimatedLine";
 
 // DEPRECATED
-export function LineChartCurved({
+export function LineChartCurvedDeprecated({
   data,
   withTooltip = true,
   withAnimation = true,

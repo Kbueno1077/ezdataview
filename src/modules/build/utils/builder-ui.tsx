@@ -1,6 +1,7 @@
 import type { JSX } from "react";
 import BarChartBuilder from "../ui-builders/BarChartBuilder";
 import LineChartBuilder from "../ui-builders/LineChartBuilder";
+import BreakdownBuilder from "../ui-builders/BreakdownBuilder";
 
 export const getChartUIBuilder = (
   chartType: string,
@@ -24,7 +25,7 @@ export const getChartUIBuilder = (
     case "breakdown":
     case "breakdown-thin": {
       // Return breakdown chart UI builder when implemented
-      return <div className={className}>Breakdown Chart UI Builder</div>;
+      return <BreakdownBuilder />;
     }
 
     case "line":

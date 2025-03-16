@@ -1,4 +1,5 @@
-import React, { CSSProperties } from "react";
+import { CSSProperties } from "react";
+import { gradientFromHex } from "../utils/utils";
 
 export function BreakdownChartThin({
   data,
@@ -18,6 +19,14 @@ export function BreakdownChartThin({
   let cumulativeWidth = 0;
 
   const cornerRadius = 4; // Adjust this value to change the roundness
+
+  const defaulColors = [
+    "from-fuchsia-300/80 to-fuchsia-400/80 dark:from-fuchsia-500 dark:to-fuchsia-700",
+    "from-violet-300 to-violet-400 dark:from-violet-500 dark:to-violet-700",
+    "from-blue-300 to-blue-400 dark:from-blue-500 dark:to-blue-700",
+    "from-sky-300 to-sky-400 dark:from-sky-500 dark:to-sky-700",
+    "from-orange-200 to-orange-300 dark:from-amber-500 dark:to-amber-700",
+  ];
 
   return (
     <div
@@ -47,6 +56,8 @@ export function BreakdownChartThin({
           const barWidth = (d.value / totalWidth) * 100;
           const xPosition = cumulativeWidth;
           cumulativeWidth += barWidth + gap;
+          const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.color);
+          const gradient = isHexColor ? gradientFromHex(d.color) : d.color;
 
           return (
             <div
@@ -60,11 +71,14 @@ export function BreakdownChartThin({
               }}
             >
               <div
-                className={`bg-gradient-to-b ${d.color}`}
+                className={`bg-gradient-to-b ${
+                  gradient || defaulColors[index % defaulColors.length]
+                }`}
                 style={{
                   width: "100%",
                   height: "100%",
                   borderRadius: `${cornerRadius}px`,
+                  ...(isHexColor ? gradientFromHex(d.color) : {}),
                 }}
               />
               <div
