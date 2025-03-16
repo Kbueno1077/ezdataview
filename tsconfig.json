@@ -18,11 +18,7 @@
       }
     ],
     "paths": {
-      "@/*": ["./src/*"],
-      "@/components/*": ["./src/components/*"],
-      "@/modules/*": ["./src/modules/*"],
-      "@/stores/*": ["./src/stores/*"],
-      "@/utils/*": ["./src/utils/*"]
+      "@/*": ["./src/*"]
     },
     "target": "ES2017"
   },

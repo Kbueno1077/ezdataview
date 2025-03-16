@@ -89,9 +89,6 @@ export function PieChart({
             const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
               d.data.colorFrom
             );
-            const gradient = isHexColor
-              ? gradientFromHex(d.data.colorFrom)
-              : d.data.colorFrom;
 
             if (!withTooltip) {
               return (
@@ -194,7 +191,7 @@ export function PieChart({
 
         {/* Labels as absolutely positioned divs */}
         <div className="absolute inset-0 pointer-events-none">
-          {arcs.map((d: PieArcDatumWithColor<pieChartItem>, i) => {
+          {arcs.map((d: PieArcDatum<pieChartItem>, i) => {
             const angle = computeAngle(d);
             if (angle <= MIN_ANGLE) return null;
 
