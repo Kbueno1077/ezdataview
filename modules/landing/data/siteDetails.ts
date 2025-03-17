@@ -1,10 +1,10 @@
 export const siteDetails = {
-  siteName: "EZdataView",
-  siteUrl: "https://ezdataview.vercel.app/",
+  siteName: "EZ - Data View",
+  siteUrl: "https://ezdataviewkbueno-studio.com",
   metadata: {
-    title: "EZdataView - Interactive Data Visualization Platform",
+    title: "EZ - DataView -> Interactive Data Visualization Platform",
     description:
-      "EZdataView helps you create, customize, and share interactive charts and data visualizations with ease.",
+      "EZ - DataView helps you create, customize, and share interactive charts and data visualizations with ease.",
   },
   language: "en-us",
   locale: "en-US",

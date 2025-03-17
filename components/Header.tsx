@@ -10,14 +10,14 @@ const Header: React.FC = () => {
       <Container className="px-0!">
         <nav className="shadow-md md:shadow-none bg-white md:bg-transparent mx-auto flex justify-between items-center py-2 px-5 md:py-10">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          <Link href="/" className="flex items-center">
             <Image
               src="/ez-charts-logo-nobg.png"
               alt="logo"
-              width={32}
-              height={32}
+              width={64}
+              height={64}
             />
-            <span className="manrope text-xl font-semibold text-foreground cursor-pointer">
+            <span className="text-2xl font-bold  cursor-pointer bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               {siteDetails.siteName}
             </span>
           </Link>

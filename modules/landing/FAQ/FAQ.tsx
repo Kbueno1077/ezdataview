@@ -14,11 +14,12 @@ export const faqs: IFAQ[] = [
     question:
       "Do I need technical expertise to create professional-looking charts?",
     answer:
-      "Not at all! EZdataView is designed for everyone. Our interface will have you creating stunning visualizations in minutes, regardless of your technical background.",
+      "Not at all! EZ - DataView  is designed for everyone. Our interface will have you creating stunning visualizations in minutes, regardless of your technical background.",
   },
   {
     question: "How can I import my data?",
-    answer: "EZdataView will supports multiple data import and export options",
+    answer:
+      "EZ - DataView  will supports multiple data import and export options",
   },
   {
     question: "What if I need help using the app?",
