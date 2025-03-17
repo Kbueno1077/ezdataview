@@ -1,5 +1,5 @@
+import { PaintRoller, Palette, Plus, Trash, TrashIcon } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
-import { PaintRoller, Palette, Trash, TrashIcon, Plus } from "lucide-react";
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";

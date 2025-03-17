@@ -57,9 +57,16 @@ export const getChartTypeByName = (
     withTooltip?: boolean;
     className?: string;
     withAnimation?: boolean;
+    suffix?: string;
   }
 ): JSX.Element | null => {
-  const { withTooltip = true, className, withAnimation } = options || {};
+  const {
+    withTooltip = true,
+    className,
+    withAnimation,
+    suffix,
+  } = options || {};
+  console.log("🚀 ~ options:", options);
 
   switch (chartType) {
     case "horizontal-bar": {
@@ -211,10 +218,22 @@ export const getChartTypeByName = (
       );
     }
     case "fillable": {
-      return <FillableChart data={data as Item[]} className={className} />;
+      return (
+        <FillableChart
+          data={data as Item[]}
+          className={className}
+          suffix={suffix}
+        />
+      );
     }
     case "fillable-donut": {
-      return <FillableDonutChart data={data as Item[]} className={className} />;
+      return (
+        <FillableDonutChart
+          data={data as Item[]}
+          className={className}
+          suffix={suffix}
+        />
+      );
     }
 
     default:

@@ -44,6 +44,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
     withTooltip: true,
     withAnimation: true,
     className: "",
+    suffix: "%",
   });
 
   const handleChartClick = () => {

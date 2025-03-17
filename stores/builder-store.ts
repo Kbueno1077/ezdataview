@@ -43,6 +43,7 @@ export type ChartData = {
   withImage?: boolean;
   withTooltip?: boolean;
   useAnimation?: boolean;
+  suffix?: string;
   data: ChartDataItem[];
 };
 
@@ -56,6 +57,7 @@ const defaultChart = {
   withImage: false,
   withTooltip: true,
   useAnimation: false,
+  suffix: "",
 };
 
 export type BuildActions = {

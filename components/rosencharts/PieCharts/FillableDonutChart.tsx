@@ -5,9 +5,11 @@ type Item = { name: string; value: number };
 export function FillableDonutChart({
   data,
   className,
+  suffix,
 }: {
   data: Item[];
   className?: string;
+  suffix?: string;
 }) {
   if (!data) {
     return null;
@@ -81,8 +83,12 @@ export function FillableDonutChart({
         <div className="text-xl font-bold">
           <span className="text-violet-600 dark:text-violet-400">
             {data[0].value}
+            {suffix}
           </span>
-          <span className="text-zinc-400 dark:text-zinc-600"> / 100</span>
+          <span className="text-zinc-400 dark:text-zinc-600">
+            {" "}
+            / 100 {suffix}
+          </span>
         </div>
       </div>
     </div>

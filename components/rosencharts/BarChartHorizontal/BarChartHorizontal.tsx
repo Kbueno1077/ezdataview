@@ -12,6 +12,7 @@ export function BarChartHorizontal({
   data,
   withTooltip = true,
   withAnimation = false,
+
   className,
 }: {
   data: HorizontalBarData[];

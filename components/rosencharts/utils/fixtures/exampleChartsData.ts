@@ -138,7 +138,7 @@ export const data = [
   },
   {
     id: "17",
-    name: "Inner Donut Chart ",
+    name: "Filled Donut Chart ",
     type: "fillable-donut",
     data: filledDonutChartData,
   },

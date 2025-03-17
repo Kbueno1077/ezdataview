@@ -2,7 +2,7 @@ export const siteDetails = {
   siteName: "EZ - Data View",
   siteUrl: "https://ezdataview.kbueno-studio.com",
   metadata: {
-    title: "EZ - DataView -> Interactive Data Visualization Platform",
+    title: "EZ Data View",
     description:
       "EZ - DataView helps you create, customize, and share interactive charts and data visualizations with ease.",
   },

@@ -17,12 +17,13 @@ function PieChartBuilder() {
     updateChartConfig,
   } = useBuildStore((state) => state);
 
-  const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
+  const { withTooltip, suffix } = workspaceCharts[currentChartIndex];
   const chartType = workspaceCharts[currentChartIndex].chartType;
 
   const allowColor =
     !chartType.includes("thin") && !chartType.includes("multi");
   const allowImage = chartType.includes("image");
+  const usesTooltip = !chartType.includes("fillable");
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -60,38 +61,49 @@ function PieChartBuilder() {
   return (
     <div className="">
       <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
-
       <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
         <legend className="text-sm font-medium px-2">Chart Properties</legend>
 
         <div className="space-y-2">
-          <div className="flex items-center">
-            <Checkbox
-              id="withTooltip"
-              isSelected={withTooltip}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("withTooltip", checked === true)
-              }
-              aria-labelledby="tooltip-label"
-            />
-            <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
-              Show tooltips on hover
-            </label>
-          </div>
+          {usesTooltip && (
+            <div className="flex items-center">
+              <Checkbox
+                id="withTooltip"
+                isSelected={withTooltip}
+                onValueChange={(checked) =>
+                  handleUpdateChartConfig("withTooltip", checked === true)
+                }
+                aria-labelledby="tooltip-label"
+              />
+              <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
+                Show tooltips on hover
+              </label>
+            </div>
+          )}
 
-          {/* <div className="flex items-center">
-            <Checkbox
-              id="useAnimation"
-              isSelected={useAnimation}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("useAnimation", checked === true)
-              }
-              aria-labelledby="animation-label"
-            />
-            <label id="animation-label" htmlFor="useAnimation" className="ml-2">
-              Enable animations
-            </label>
-          </div> */}
+          <div className="flex flex-col space-y-2 ">
+            <label className="text-sm font-medium">Suffix Options:</label>
+            <div className="flex gap-2">
+              <Button
+                variant={!suffix ? "solid" : "flat"}
+                color={!suffix ? "primary" : "default"}
+                onPress={() => handleUpdateChartConfig("suffix", "")}
+                className="flex-1"
+                size="sm"
+              >
+                No Suffix
+              </Button>
+              <Button
+                variant={suffix === "%" ? "solid" : "flat"}
+                color={suffix === "%" ? "primary" : "default"}
+                onPress={() => handleUpdateChartConfig("suffix", "%")}
+                className="flex-1"
+                size="sm"
+              >
+                Use %
+              </Button>
+            </div>
+          </div>
         </div>
       </fieldset>
 

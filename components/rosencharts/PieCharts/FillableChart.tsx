@@ -5,10 +5,13 @@ type Item = { name: string; value: number };
 export function FillableChart({
   data,
   className,
+  suffix,
 }: {
   data: Item[];
   className?: string;
+  suffix?: string;
 }) {
+  console.log("🚀 ~ suffix:", suffix);
   if (!data) {
     return null;
   }
@@ -94,7 +97,8 @@ export function FillableChart({
           fill="currentColor"
           className="text-zinc-800 dark:text-zinc-300"
         >
-          {data[0].value}%
+          {data[0].value}
+          {suffix}
         </text>
       </svg>
     </div>
