@@ -1,6 +1,6 @@
 export const siteDetails = {
   siteName: "EZ - Data View",
-  siteUrl: "https://ezdataviewkbueno-studio.com",
+  siteUrl: "https://ezdataview.kbueno-studio.com",
   metadata: {
     title: "EZ - DataView -> Interactive Data Visualization Platform",
     description:
