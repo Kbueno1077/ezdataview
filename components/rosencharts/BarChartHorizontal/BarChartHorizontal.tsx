@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { AnimatedBar } from "../Animated/AnimatedBar";
+import { HorizontalBarData } from "../utils/types";
 
 export function BarChartHorizontal({
   data,
@@ -13,7 +14,7 @@ export function BarChartHorizontal({
   withAnimation = false,
   className,
 }: {
-  data: { key: string; value: number; color?: string }[];
+  data: HorizontalBarData[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -21,6 +22,8 @@ export function BarChartHorizontal({
   if (!data) {
     return null;
   }
+
+  const defaultColor = "bg-gradient-to-r from-purple-400 to-purple-400";
 
   // Scales
   const yScale = scaleBand()
@@ -59,9 +62,10 @@ export function BarChartHorizontal({
       >
         {/* Bars with Rounded Right Corners */}
         {data.map((d, index) => {
+          d.color = d.color || "";
+
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
-          const defaultColor = "bg-gradient-to-r from-pink-300 to-pink-400";
 
           if (!withTooltip) {
             return (
@@ -76,7 +80,7 @@ export function BarChartHorizontal({
                   width: `${barWidth}%`,
                   height: `${barHeight}%`,
                   borderRadius: "0 6px 6px 0",
-                  backgroundColor: d.color,
+                  backgroundColor: d.color || defaultColor,
                 }}
               />
             );
@@ -95,14 +99,16 @@ export function BarChartHorizontal({
                     width: `${barWidth}%`,
                     height: `${barHeight}%`,
                     borderRadius: "0 6px 6px 0",
-                    backgroundColor: d.color,
+                    backgroundColor: d.color || defaultColor,
                   }}
                 />
               </TooltipTrigger>
               <TooltipContent>
                 <div className="flex gap-2.5 items-center">
                   <div
-                    className={`w-1 h-8 rounded-full`}
+                    className={`w-1 h-8 rounded-full ${
+                      d.color ? d.color : defaultColor
+                    }`}
                     style={{
                       backgroundColor: d.color,
                     }}

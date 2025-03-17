@@ -8,7 +8,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { ImageBarData, SVGBarData } from "../utils/types";
-import { isValidUrl } from "../utils/utils";
+import { gradientFromHex, isValidUrl } from "../utils/utils";
 
 export function BarChartHorizontalImage({
   data,
@@ -24,6 +24,15 @@ export function BarChartHorizontalImage({
   if (!data) {
     return null;
   }
+
+  const defaultColors = [
+    "bg-gradient-to-r from-pink-300 to-pink-400",
+    "bg-gradient-to-r from-purple-300 to-purple-400",
+    "bg-gradient-to-r from-indigo-300 to-indigo-400",
+    "bg-gradient-to-r from-sky-300 to-sky-400",
+    "bg-gradient-to-r from-orange-200 to-orange-300",
+    "bg-gradient-to-r from-lime-300 to-lime-400",
+  ];
 
   // Scales
   const yScale = scaleBand()
@@ -131,10 +140,13 @@ export function BarChartHorizontalImage({
       >
         {/* Bars with Rounded Right Corners */}
         {data.map((d, index) => {
+          d.color = d.color || "";
+
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
 
-          const defaultColor = "bg-gray-200 dark:bg-gray-800";
+          const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.color);
+          const gradient = isHexColor ? gradientFromHex(d.color) : d.color;
 
           if (!withTooltip) {
             return (
@@ -142,7 +154,9 @@ export function BarChartHorizontalImage({
                 key={index}
                 index={index}
                 withAnimation={withAnimation}
-                className={`absolute ${d.color || defaultColor}`}
+                className={`bg-gradient-to-b ${
+                  gradient || defaultColors[index % defaultColors.length]
+                } absolute`}
                 style={{
                   left: "0",
                   top: `${yScale(d.key)}%`,
@@ -150,6 +164,7 @@ export function BarChartHorizontalImage({
                   height: `${barHeight}%`,
                   borderRadius: "0 6px 6px 0",
                   backgroundColor: d.color,
+                  ...(isHexColor ? gradientFromHex(d.color) : {}),
                 }}
               />
             );
@@ -161,7 +176,9 @@ export function BarChartHorizontalImage({
                 <AnimatedBar
                   index={index}
                   withAnimation={withAnimation}
-                  className={`inset-0 absolute ${d.color || defaultColor}`}
+                  className={`bg-gradient-to-b ${
+                    gradient || defaultColors[index % defaultColors.length]
+                  } absolute`}
                   style={{
                     left: "0",
                     top: `${yScale(d.key)}%`,
@@ -169,12 +186,27 @@ export function BarChartHorizontalImage({
                     height: `${barHeight}%`,
                     borderRadius: "0 6px 6px 0",
                     backgroundColor: d.color,
+                    ...(isHexColor ? gradientFromHex(d.color) : {}),
                   }}
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <div>{d.key}</div>
-                <div className="text-gray-500 text-sm">{d.value}</div>
+                <div className="flex gap-2.5 items-center">
+                  <div
+                    className={`w-1 h-8 rounded-full ${
+                      d.color
+                        ? d.color
+                        : defaultColors[index % defaultColors.length]
+                    }`}
+                    style={{
+                      backgroundColor: d.color,
+                    }}
+                  ></div>
+                  <div>
+                    <div>{d.key}</div>
+                    <div className="text-gray-500 text-sm/5">{d.value}</div>
+                  </div>
+                </div>
               </TooltipContent>
             </ClientTooltip>
           );

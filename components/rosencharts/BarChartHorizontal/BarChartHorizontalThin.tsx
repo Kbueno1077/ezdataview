@@ -6,6 +6,7 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { AnimatedBar } from "../Animated/AnimatedBar";
+import { HorizontalBarData } from "../utils/types";
 
 export function BarChartHorizontalThin({
   data,
@@ -13,7 +14,7 @@ export function BarChartHorizontalThin({
   withAnimation = false,
   className,
 }: {
-  data: { key: string; value: number }[];
+  data: HorizontalBarData[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;

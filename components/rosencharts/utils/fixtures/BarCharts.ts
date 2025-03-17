@@ -15,32 +15,32 @@ export const dataHorizontal: HorizontalBarData[] = [
   {
     key: "Technology",
     value: 38.1,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
   {
     key: "Financial Services",
     value: 27.8,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
   {
     key: "Renewable Energy",
     value: 23.1,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
   {
     key: "Consumer Cyclical",
     value: 19.5,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
   {
     key: "Consumer Staples",
     value: 16.2,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
   {
     key: "Utilities",
     value: 5.8,
-    color: "bg-gradient-to-r from-purple-300 to-purple-400",
+    color: "bg-gradient-to-r from-purple-400 to-purple-400",
   },
 ].sort((a, b) => b.value - a.value);
 
@@ -99,6 +99,7 @@ export const dataMulti: MultiBarData[] = [
     image: "https://hatscripts.github.io/circle-flags/flags/ph.svg",
   },
 ];
+
 export const dataSVG: SVGBarData[] = [
   {
     key: "Apple Inc",
@@ -137,31 +138,37 @@ export const dataImage: ImageBarData[] = [
     key: "Portugal",
     value: 55.8,
     image: "https://hatscripts.github.io/circle-flags/flags/pt.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
   {
     key: "France",
     value: 34.3,
     image: "https://hatscripts.github.io/circle-flags/flags/fr.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
   {
     key: "Sweden",
     value: 27.1,
     image: "https://hatscripts.github.io/circle-flags/flags/se.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
   {
     key: "Spain",
     value: 22.5,
     image: "https://hatscripts.github.io/circle-flags/flags/es.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
   {
     key: "Italy",
     value: 18.7,
     image: "https://hatscripts.github.io/circle-flags/flags/it.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
   {
     key: "Germany",
     value: 10.8,
     image: "https://hatscripts.github.io/circle-flags/flags/de.svg",
+    color: "bg-gray-300 dark:bg-gray-800",
   },
 ];
 

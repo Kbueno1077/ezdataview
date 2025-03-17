@@ -44,13 +44,13 @@ export const data = [
   },
   {
     id: "4",
-    name: "Bar Chart Horizontal SVG",
+    name: "Bar Chart Horizontal Image (SVG)",
     type: "horizontal-bar-image",
     data: dataSVG,
   },
   {
     id: "4.5",
-    name: "Bar Chart Horizontal Image",
+    name: "Bar Chart Horizontal Image (IMG)",
     type: "horizontal-bar-image",
     data: dataImage,
   },

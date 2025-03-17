@@ -1,6 +1,13 @@
 export type HorizontalBarData = {
   key: string;
   value: number;
+  color?: string;
+};
+
+export type GradientBarData = {
+  key: string;
+  value: number;
+  color?: string;
 };
 
 export type MultiBarData = {
@@ -20,12 +27,6 @@ export type ImageBarData = {
   value: number;
   image: string;
   color?: string;
-};
-
-export type GradientBarData = {
-  key: string;
-  value: number;
-  color: string;
 };
 
 export type VerticalBarData = {

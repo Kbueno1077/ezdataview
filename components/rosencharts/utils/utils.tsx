@@ -236,9 +236,9 @@ const generateLighterColor = (hex: string): string => {
   const g = parseInt(hex.substring(2, 4), 16);
   const b = parseInt(hex.substring(4, 6), 16);
 
-  const lighterR = Math.floor(r + (255 - r) * 0.2);
-  const lighterG = Math.floor(g + (255 - g) * 0.2);
-  const lighterB = Math.floor(b + (255 - b) * 0.2);
+  const lighterR = Math.floor(r + (255 - r) * 0.25);
+  const lighterG = Math.floor(g + (255 - g) * 0.25);
+  const lighterB = Math.floor(b + (255 - b) * 0.25);
 
   return (
     lighterR.toString(16).padStart(2, "0") +

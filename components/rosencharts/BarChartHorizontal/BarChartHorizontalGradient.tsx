@@ -34,7 +34,7 @@ export function BarChartHorizontalGradient({
     .domain([0, max(data.map((d) => d.value)) ?? 0])
     .range([0, 100]);
 
-  const defaulColors = [
+  const defaultColors = [
     "bg-gradient-to-r from-pink-300 to-pink-400",
     "bg-gradient-to-r from-purple-300 to-purple-400",
     "bg-gradient-to-r from-indigo-300 to-indigo-400",
@@ -96,6 +96,8 @@ export function BarChartHorizontalGradient({
 
         {/* Bars with Rounded Right Corners - now after grid lines with higher z-index */}
         {data.map((d, index) => {
+          d.color = d.color || "";
+
           const barWidth = xScale(d.value);
           const barHeight = yScale.bandwidth();
           const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.color);
@@ -107,7 +109,7 @@ export function BarChartHorizontalGradient({
                 key={index}
                 withAnimation={withAnimation}
                 className={`bg-gradient-to-b ${
-                  gradient || defaulColors[index % defaulColors.length]
+                  gradient || defaultColors[index % defaultColors.length]
                 } absolute`}
                 index={index}
                 style={{
@@ -131,7 +133,7 @@ export function BarChartHorizontalGradient({
                   index={index}
                   withAnimation={withAnimation}
                   className={`bg-gradient-to-b ${
-                    gradient || defaulColors[index % defaulColors.length]
+                    gradient || defaultColors[index % defaultColors.length]
                   } absolute`}
                   style={{
                     left: "0",
@@ -145,8 +147,22 @@ export function BarChartHorizontalGradient({
                 />
               </TooltipTrigger>
               <TooltipContent>
-                <div>{d.key}</div>
-                <div className="text-gray-500 text-sm">{d.value}</div>
+                <div className="flex gap-2.5 items-center">
+                  <div
+                    className={`w-1 h-8 rounded-full ${
+                      d.color
+                        ? d.color
+                        : defaultColors[index % defaultColors.length]
+                    }`}
+                    style={{
+                      backgroundColor: d.color,
+                    }}
+                  ></div>
+                  <div>
+                    <div>{d.key}</div>
+                    <div className="text-gray-500 text-sm/5">{d.value}</div>
+                  </div>
+                </div>
               </TooltipContent>
             </ClientTooltip>
           );
