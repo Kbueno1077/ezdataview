@@ -4,7 +4,7 @@ import { BarChartVertical } from "../../../components/rosencharts/BarChartVertic
 import { BarChartVerticalMulti } from "../../../components/rosencharts/BarChartVertical/BarChartVerticalMulti";
 import { BreakdownChart } from "../../../components/rosencharts/BreakdownChart/BreakdownChart";
 import { LineChart } from "../../../components/rosencharts/LineCharts/LineChart";
-import { LineChartMultiple } from "../../../components/rosencharts/LineCharts/LineChartMultiple";
+import { LineChartCurved } from "../../../components/rosencharts/LineCharts/LineChartCurved";
 import { DonutChart } from "../../../components/rosencharts/PieCharts/DonutChart";
 import { PieChart } from "../../../components/rosencharts/PieCharts/PieChart";
 import {
@@ -99,7 +99,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Consistent visual language across all chart elements",
       "Optimized rendering for smooth performance with large datasets",
     ],
-    chartType: <LineChartMultiple data={lineChartMultipleData} />,
+    chartType: <LineChartCurved data={lineChartMultipleData} />,
   },
 
   {

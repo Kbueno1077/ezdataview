@@ -1,11 +1,11 @@
-import ChartSheet from "../../../modules/build/ChartSheet";
-import { Sidebar } from "../../../modules/build/Sidebar";
-import { BuildStoreProvider } from "../../../providers/store-provider";
+import ChartSheet from "@/modules/build/ChartSheet";
+import { Sidebar } from "@/modules/build/Sidebar";
+import { BuildStoreProvider } from "@/providers/store-provider";
 
 type tParams = Promise<{ id: string[] }>;
 
-const Page = async ({ params }: { params: tParams }) => {
-  const { id } = await params;
+const Page = async ({}: { params: tParams }) => {
+  // const { id } = await params;
 
   return (
     <BuildStoreProvider>
