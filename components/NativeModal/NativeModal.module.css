@@ -32,9 +32,8 @@
   border-radius: 8px;
   padding: 1.5rem;
   width: 90vw;
-  height: 90vh;
+  height: 100%;
   max-width: 1440px;
-  max-height: 90vh;
   overflow-y: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   transform-origin: center;
@@ -102,6 +101,7 @@
 .modalContent {
   flex: 1;
   display: flex;
+  max-height: 100%;
   flex-direction: column;
   justify-content: center;
 }

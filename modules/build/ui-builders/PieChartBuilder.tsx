@@ -48,7 +48,7 @@ function PieChartBuilder() {
     updateChartItem(index, key, value);
   };
 
-  const handleUpdateChartConfig = (key: string, value: boolean) => {
+  const handleUpdateChartConfig = (key: string, value: boolean | string) => {
     updateChartConfig(key, value);
   };
 
@@ -81,29 +81,31 @@ function PieChartBuilder() {
             </div>
           )}
 
-          <div className="flex flex-col space-y-2 ">
-            <label className="text-sm font-medium">Suffix Options:</label>
-            <div className="flex gap-2">
-              <Button
-                variant={!suffix ? "solid" : "flat"}
-                color={!suffix ? "primary" : "default"}
-                onPress={() => handleUpdateChartConfig("suffix", "")}
-                className="flex-1"
-                size="sm"
-              >
-                No Suffix
-              </Button>
-              <Button
-                variant={suffix === "%" ? "solid" : "flat"}
-                color={suffix === "%" ? "primary" : "default"}
-                onPress={() => handleUpdateChartConfig("suffix", "%")}
-                className="flex-1"
-                size="sm"
-              >
-                Use %
-              </Button>
+          {!usesTooltip && (
+            <div className="flex flex-col space-y-2 ">
+              <label className="text-sm font-medium">Suffix Options:</label>
+              <div className="flex gap-2">
+                <Button
+                  variant={!suffix ? "solid" : "flat"}
+                  color={!suffix ? "primary" : "default"}
+                  onPress={() => handleUpdateChartConfig("suffix", "")}
+                  className="flex-1"
+                  size="sm"
+                >
+                  No Suffix
+                </Button>
+                <Button
+                  variant={suffix === "%" ? "solid" : "flat"}
+                  color={suffix === "%" ? "primary" : "default"}
+                  onPress={() => handleUpdateChartConfig("suffix", "%")}
+                  className="flex-1"
+                  size="sm"
+                >
+                  Use %
+                </Button>
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </fieldset>
 

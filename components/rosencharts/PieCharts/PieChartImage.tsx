@@ -78,8 +78,8 @@ export function PieChartImage({
   const MIN_ANGLE = 20;
 
   return (
-    <div className="p-6">
-      <div className="relative max-w-[50%] mx-auto">
+    <div className="p-6 w-full h-full">
+      <div className="relative w-full h-full">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
           className={`overflow-visible ${className}`}

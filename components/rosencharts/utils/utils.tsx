@@ -66,7 +66,6 @@ export const getChartTypeByName = (
     withAnimation,
     suffix,
   } = options || {};
-  console.log("🚀 ~ options:", options);
 
   switch (chartType) {
     case "horizontal-bar": {

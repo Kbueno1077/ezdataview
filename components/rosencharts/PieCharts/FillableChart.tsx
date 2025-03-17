@@ -11,7 +11,6 @@ export function FillableChart({
   className?: string;
   suffix?: string;
 }) {
-  console.log("🚀 ~ suffix:", suffix);
   if (!data) {
     return null;
   }

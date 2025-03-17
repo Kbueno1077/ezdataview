@@ -48,8 +48,8 @@ export function PieChart({
     },
   ];
 
-  // Chart dimensions
-  const radius = Math.PI * 100;
+  // Chart dimensions - using full available space
+  const radius = 100;
   const gap = 0.02; // Gap between slices
 
   // Pie layout and arc generator
@@ -77,11 +77,11 @@ export function PieChart({
   const MIN_ANGLE = 20;
 
   return (
-    <div className="p-4">
-      <div className="relative mx-auto max-w-[50%]">
+    <div className="p-6 w-full h-full">
+      <div className="relative w-full h-full">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`overflow-visible ${className}`}
+          className={`w-full h-full overflow-visible ${className}`}
         >
           {/* Slices */}
           {arcs.map((d, i) => {

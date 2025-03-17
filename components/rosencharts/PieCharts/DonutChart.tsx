@@ -17,7 +17,7 @@ export function DonutChart({
   innerContent?: boolean;
   className?: string;
 }) {
-  const radius = 420; // Chart base dimensions
+  const radius = Math.PI * 120; // Chart base dimensions
   const gap = 0.01; // Gap between slices
   const lightStrokeEffect = 10; // 3d light effect around the slice
 
@@ -80,7 +80,7 @@ export function DonutChart({
 
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`max-w-[50%] mx-auto overflow-visible ${className}`}
+        className={`mx-auto overflow-visible ${className}`}
       >
         {/* Define clip paths and colors for each slice */}
         <defs>

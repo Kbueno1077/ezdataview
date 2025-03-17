@@ -47,48 +47,50 @@ export function FillableDonutChart({
   };
 
   return (
-    <div className="relative">
-      <svg
-        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`overflow-visible mx-auto max-w-[50%] ${className}`}
-      >
-        <defs>
-          {arcs.map((d, i) => (
-            <clipPath
-              key={`fillable-donut-clip-${i}`}
-              id={`fillable-donut-clip-${i}`}
-            >
-              <path d={arcClip(d) || undefined} />
-            </clipPath>
-          ))}
-        </defs>
-        <g>
-          {/* Slices */}
-          {arcs.map((d, i) => (
-            <g key={i} clipPath={`url(#fillable-donut-clip-${i})`}>
-              <path
-                className={`stroke-white/30 dark:stroke-zinc-400/10 ${
-                  i === 1 ? colors.gray : colors.purple
-                }`}
-                strokeWidth={lightStrokeEffect}
-                d={arcGenerator(d) || undefined}
-              />
-            </g>
-          ))}
-        </g>
-      </svg>
-      {/* Centered value display */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-lg font-semibold leading-5">Filled</span>
-        <div className="text-xl font-bold">
-          <span className="text-violet-600 dark:text-violet-400">
-            {data[0].value}
-            {suffix}
-          </span>
-          <span className="text-zinc-400 dark:text-zinc-600">
-            {" "}
-            / 100 {suffix}
-          </span>
+    <div className="p-6 w-full h-full">
+      <div className="relative w-full h-full">
+        <svg
+          viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+          className={`overflow-visible mx-auto  ${className}`}
+        >
+          <defs>
+            {arcs.map((d, i) => (
+              <clipPath
+                key={`fillable-donut-clip-${i}`}
+                id={`fillable-donut-clip-${i}`}
+              >
+                <path d={arcClip(d) || undefined} />
+              </clipPath>
+            ))}
+          </defs>
+          <g>
+            {/* Slices */}
+            {arcs.map((d, i) => (
+              <g key={i} clipPath={`url(#fillable-donut-clip-${i})`}>
+                <path
+                  className={`stroke-white/30 dark:stroke-zinc-400/10 ${
+                    i === 1 ? colors.gray : colors.purple
+                  }`}
+                  strokeWidth={lightStrokeEffect}
+                  d={arcGenerator(d) || undefined}
+                />
+              </g>
+            ))}
+          </g>
+        </svg>
+        {/* Centered value display */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center">
+          <span className="text-lg font-semibold leading-5">Filled</span>
+          <div className="text-xl font-bold">
+            <span className="text-violet-600 dark:text-violet-400">
+              {data[0].value}
+              {suffix}
+            </span>
+            <span className="text-zinc-400 dark:text-zinc-600">
+              {" "}
+              / 100 {suffix}
+            </span>
+          </div>
         </div>
       </div>
     </div>
