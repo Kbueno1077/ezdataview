@@ -80,7 +80,7 @@ export function DonutChart({
 
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`mx-auto overflow-visible ${className}`}
+        className={`mx-auto w-full h-full overflow-visible ${className}`}
       >
         {/* Define clip paths and colors for each slice */}
         <defs>

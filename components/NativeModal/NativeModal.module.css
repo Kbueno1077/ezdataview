@@ -33,7 +33,6 @@
   padding: 1.5rem;
   width: 90vw;
   height: 100%;
-  max-width: 1440px;
   overflow-y: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   transform-origin: center;
@@ -45,6 +44,14 @@
   display: flex;
   flex-direction: column;
   position: relative;
+}
+
+.modalContent {
+  flex: 1;
+  display: flex;
+  max-height: 100%;
+  flex-direction: column;
+  justify-content: center;
 }
 
 .modal.entering {
@@ -60,11 +67,6 @@
 .modal.exiting {
   transform: scale(0.75);
   opacity: 0;
-}
-
-.modal.fullyExpanded {
-  border-radius: 6px;
-  transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1);
 }
 
 .modalHeader {
@@ -96,12 +98,4 @@
 .modalClose:hover {
   color: #000;
   transform: scale(1.1);
-}
-
-.modalContent {
-  flex: 1;
-  display: flex;
-  max-height: 100%;
-  flex-direction: column;
-  justify-content: center;
 }

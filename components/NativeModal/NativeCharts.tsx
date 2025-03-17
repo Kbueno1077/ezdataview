@@ -44,7 +44,6 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
     withTooltip: true,
     withAnimation: true,
     className: "",
-    suffix: "%",
   });
 
   const handleChartClick = () => {
@@ -85,7 +84,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
         </div>
 
         <div className={styles.chartPreview}>
-          <div className="w-full h-full">{previewChartNode}</div>
+          {<div>{previewChartNode}</div>}
         </div>
       </div>
     </div>

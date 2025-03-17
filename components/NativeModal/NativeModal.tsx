@@ -105,9 +105,7 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
   const modalContent = (
     <div className={`${styles.modalOverlay} ${styles[animationState]}`}>
       <div
-        className={`${styles.modal} ${styles[animationState]} ${
-          isFullyExpanded ? styles.fullyExpanded : ""
-        }`}
+        className={`${styles.modal} ${styles[animationState]}`}
         ref={modalRef}
       >
         <div className={styles.modalHeader}>

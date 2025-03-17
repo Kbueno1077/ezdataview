@@ -82,7 +82,7 @@ export function PieChartImage({
       <div className="relative w-full h-full">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`overflow-visible ${className}`}
+          className={`w-full h-full overflow-visible ${className}`}
         >
           {/* Connecting lines */}
           {arcs.map((d, i) => {

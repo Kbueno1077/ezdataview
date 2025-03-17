@@ -52,7 +52,7 @@ export function FillableChart({
     <div className="relative">
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius}`}
-        className={`mx-auto overflow-visible ${className}`}
+        className={`w-full mx-auto h-full overflow-visible ${className}`}
       >
         <defs>
           {arcs.map((d, i) => (
