@@ -1,15 +1,16 @@
 import type { JSX } from "react";
 import { BarChartHorizontal } from "../BarChartHorizontal/BarChartHorizontal";
 import { BarChartHorizontalGradient } from "../BarChartHorizontal/BarChartHorizontalGradient";
-import { BarChartHorizontalMulti } from "../BarChartHorizontal/BarChartHorizontalMulti";
 import { BarChartHorizontalImage } from "../BarChartHorizontal/BarChartHorizontalImage";
+import { BarChartHorizontalMulti } from "../BarChartHorizontal/BarChartHorizontalMulti";
 import { BarChartHorizontalThin } from "../BarChartHorizontal/BarChartHorizontalThin";
 import { BarChartVertical } from "../BarChartVertical/BarChartVertical";
 import { BarChartVerticalMulti } from "../BarChartVertical/BarChartVerticalMulti";
 import { BreakdownChart } from "../BreakdownChart/BreakdownChart";
 import { BreakdownChartThin } from "../BreakdownChart/BreakdownChartThin";
 import { LineChart } from "../LineCharts/LineChart";
-import { LineChartCurvedDeprecated } from "../LineCharts/LineChartCurved";
+import { LineChartCurved } from "../LineCharts/LineChartCurved";
+import { LineChartCurvedDeprecated } from "../LineCharts/LineChartCurvedDeprecated";
 import { DonutChart } from "../PieCharts/DonutChart";
 import { FillableChart } from "../PieCharts/FillableChart";
 import { FillableDonutChart } from "../PieCharts/FillableDonutChart";
@@ -33,7 +34,6 @@ import {
   VerticalBarData,
   VerticalMultiBarData,
 } from "./types";
-import { LineChartCurved } from "../LineCharts/LineChartMultiple";
 
 export const getChartTypeByName = (
   data:

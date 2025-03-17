@@ -1,27 +1,26 @@
-import {
-  curveMonotoneX,
-  line as d3_line,
-  max,
-  scaleLinear,
-  scaleTime,
-} from "d3";
 import { CSSProperties } from "react";
+import {
+  scaleTime,
+  scaleLinear,
+  max,
+  line as d3_line,
+  curveMonotoneX,
+} from "d3";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
-} from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
-import { LineChartDataPoint } from "../utils/types";
+} from "../Tooltip/Tooltip";
+import { LineDataSeries } from "../utils/types";
 import { AnimatedLine } from "../Animated/AnimatedLine";
 
-// DEPRECATED
-export function LineChartCurvedDeprecated({
+export function LineChartCurved({
   data,
   withTooltip = true,
   withAnimation = true,
   className,
 }: {
-  data: LineChartDataPoint[];
+  data?: LineDataSeries[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -29,27 +28,37 @@ export function LineChartCurvedDeprecated({
   if (!data) {
     return null;
   }
-  const lineChartData = data.map((d) => ({ ...d, date: new Date(d.date) }));
+
+  const processedSeries = data.map((s) => ({
+    ...s,
+    data: s.data.map((d) => ({ ...d, date: new Date(d.date) })),
+  }));
+
+  const allValues = processedSeries.flatMap((s) => s.data.map((d) => d.value));
+  const allDates = processedSeries[0].data.map((d) => d.date);
 
   const xScale = scaleTime()
-    .domain([
-      lineChartData[0].date,
-      lineChartData[lineChartData.length - 1].date,
-    ])
+    .domain([allDates[0], allDates[allDates.length - 1]])
     .range([0, 100]);
   const yScale = scaleLinear()
-    .domain([0, max(lineChartData.map((d) => d.value)) ?? 0])
+    .domain([0, max(allValues) ?? 0])
     .range([100, 0]);
 
-  const line = d3_line<(typeof lineChartData)[number]>()
+  const line = d3_line<{ date: Date; value: number }>()
     .x((d) => xScale(d.date))
     .y((d) => yScale(d.value))
     .curve(curveMonotoneX);
 
-  const d = line(lineChartData);
-  const lineLength = d ? d.length / 100 : 1;
+  const paths = processedSeries.map((s) => {
+    const pathString = String(line(s.data) || "");
+    return {
+      path: line(s.data),
+      color: s.color,
+      lineLength: pathString.length / 100,
+    };
+  });
 
-  if (!d) {
+  if (paths.some((p) => !p.path)) {
     return null;
   }
 
@@ -126,39 +135,49 @@ export function LineChartCurvedDeprecated({
                 />
               </g>
             ))}
-          {/* Line */}
-          <AnimatedLine withAnimation={withAnimation} lineLength={lineLength}>
-            <path
-              d={d}
-              fill="none"
-              className="stroke-violet-400"
-              strokeWidth="2"
-              vectorEffect="non-scaling-stroke"
-            />
-          </AnimatedLine>
 
-          {/* Circles and Tooltips */}
-          {lineChartData.map((d, index) => {
+          {/* Lines */}
+          {paths.map((p, i) => (
+            <AnimatedLine
+              key={i}
+              withAnimation={withAnimation}
+              lineLength={p.lineLength}
+            >
+              <path
+                key={i}
+                d={p.path!}
+                fill="none"
+                className={p?.color?.line ?? "stroke-fuchsia-400"}
+                strokeWidth="2"
+                vectorEffect="non-scaling-stroke"
+              />
+            </AnimatedLine>
+          ))}
+
+          {/* Points and Tooltips */}
+          {processedSeries[0].data.map((_, dateIndex) => {
             if (!withTooltip) {
               return (
-                <>
-                  {" "}
-                  <path
-                    key={index}
-                    d={`M ${xScale(d.date)} ${yScale(d.value)} l 0.0001 0`}
-                    vectorEffect="non-scaling-stroke"
-                    strokeWidth="7"
-                    strokeLinecap="round"
-                    fill="none"
-                    stroke="currentColor"
-                    className="text-violet-300"
-                  />
+                <g key={dateIndex}>
+                  {processedSeries.map((data, seriesIndex) => (
+                    <path
+                      key={`${dateIndex}-${seriesIndex}`}
+                      d={`M ${xScale(data.data[dateIndex].date)} ${yScale(
+                        data.data[dateIndex].value
+                      )} l 0.0001 0`}
+                      vectorEffect="non-scaling-stroke"
+                      strokeWidth="7"
+                      strokeLinecap="round"
+                      fill="none"
+                      stroke="currentColor"
+                      className={data?.color?.point ?? "text-fuchsia-300"}
+                    />
+                  ))}
                   <g className="group/tooltip">
-                    {/* Tooltip Line */}
                     <line
-                      x1={xScale(d.date)}
+                      x1={xScale(processedSeries[0].data[dateIndex].date)}
                       y1={0}
-                      x2={xScale(d.date)}
+                      x2={xScale(processedSeries[0].data[dateIndex].date)}
                       y2={100}
                       stroke="currentColor"
                       strokeWidth={1}
@@ -166,56 +185,62 @@ export function LineChartCurvedDeprecated({
                       vectorEffect="non-scaling-stroke"
                       style={{ pointerEvents: "none" }}
                     />
-                    {/* Invisible area closest to a specific point for the tooltip trigger */}
                     <rect
                       x={(() => {
+                        const data = processedSeries[0].data;
                         const prevX =
-                          index > 0
-                            ? xScale(lineChartData[index - 1].date)
-                            : xScale(d.date);
-                        return (prevX + xScale(d.date)) / 2;
+                          dateIndex > 0
+                            ? xScale(data[dateIndex - 1].date)
+                            : xScale(data[dateIndex].date);
+                        return (prevX + xScale(data[dateIndex].date)) / 2;
                       })()}
                       y={0}
                       width={(() => {
+                        const data = processedSeries[0].data;
                         const prevX =
-                          index > 0
-                            ? xScale(lineChartData[index - 1].date)
-                            : xScale(d.date);
+                          dateIndex > 0
+                            ? xScale(data[dateIndex - 1].date)
+                            : xScale(data[dateIndex].date);
                         const nextX =
-                          index < lineChartData.length - 1
-                            ? xScale(lineChartData[index + 1].date)
-                            : xScale(d.date);
-                        const leftBound = (prevX + xScale(d.date)) / 2;
-                        const rightBound = (xScale(d.date) + nextX) / 2;
+                          dateIndex < data.length - 1
+                            ? xScale(data[dateIndex + 1].date)
+                            : xScale(data[dateIndex].date);
+                        const leftBound =
+                          (prevX + xScale(data[dateIndex].date)) / 2;
+                        const rightBound =
+                          (xScale(data[dateIndex].date) + nextX) / 2;
                         return rightBound - leftBound;
                       })()}
                       height={100}
                       fill="transparent"
                     />
                   </g>
-                </>
+                </g>
               );
             }
 
             return (
-              <ClientTooltip key={index}>
+              <ClientTooltip key={dateIndex}>
                 <TooltipTrigger>
-                  <path
-                    key={index}
-                    d={`M ${xScale(d.date)} ${yScale(d.value)} l 0.0001 0`}
-                    vectorEffect="non-scaling-stroke"
-                    strokeWidth="7"
-                    strokeLinecap="round"
-                    fill="none"
-                    stroke="currentColor"
-                    className="text-violet-300"
-                  />
+                  {processedSeries.map((data, seriesIndex) => (
+                    <path
+                      key={`${dateIndex}-${seriesIndex}`}
+                      d={`M ${xScale(data.data[dateIndex].date)} ${yScale(
+                        data.data[dateIndex].value
+                      )} l 0.0001 0`}
+                      vectorEffect="non-scaling-stroke"
+                      strokeWidth="7"
+                      strokeLinecap="round"
+                      fill="none"
+                      stroke="currentColor"
+                      className={data?.color?.point ?? "text-fuchsia-300"}
+                    />
+                  ))}
                   <g className="group/tooltip">
-                    {/* Tooltip Line */}
                     <line
-                      x1={xScale(d.date)}
+                      x1={xScale(processedSeries[0].data[dateIndex].date)}
                       y1={0}
-                      x2={xScale(d.date)}
+                      x2={xScale(processedSeries[0].data[dateIndex].date)}
                       y2={100}
                       stroke="currentColor"
                       strokeWidth={1}
@@ -223,27 +248,30 @@ export function LineChartCurvedDeprecated({
                       vectorEffect="non-scaling-stroke"
                       style={{ pointerEvents: "none" }}
                     />
-                    {/* Invisible area closest to a specific point for the tooltip trigger */}
                     <rect
                       x={(() => {
+                        const data = processedSeries[0].data;
                         const prevX =
-                          index > 0
-                            ? xScale(lineChartData[index - 1].date)
-                            : xScale(d.date);
-                        return (prevX + xScale(d.date)) / 2;
+                          dateIndex > 0
+                            ? xScale(data[dateIndex - 1].date)
+                            : xScale(data[dateIndex].date);
+                        return (prevX + xScale(data[dateIndex].date)) / 2;
                       })()}
                       y={0}
                       width={(() => {
+                        const data = processedSeries[0].data;
                         const prevX =
-                          index > 0
-                            ? xScale(lineChartData[index - 1].date)
-                            : xScale(d.date);
+                          dateIndex > 0
+                            ? xScale(data[dateIndex - 1].date)
+                            : xScale(data[dateIndex].date);
                         const nextX =
-                          index < lineChartData.length - 1
-                            ? xScale(lineChartData[index + 1].date)
-                            : xScale(d.date);
-                        const leftBound = (prevX + xScale(d.date)) / 2;
-                        const rightBound = (xScale(d.date) + nextX) / 2;
+                          dateIndex < data.length - 1
+                            ? xScale(data[dateIndex + 1].date)
+                            : xScale(data[dateIndex].date);
+                        const leftBound =
+                          (prevX + xScale(data[dateIndex].date)) / 2;
+                        const rightBound =
+                          (xScale(data[dateIndex].date) + nextX) / 2;
                         return rightBound - leftBound;
                       })()}
                       height={100}
@@ -253,14 +281,19 @@ export function LineChartCurvedDeprecated({
                 </TooltipTrigger>
                 <TooltipContent>
                   <div>
-                    {d.date.toLocaleDateString("en-US", {
-                      month: "short",
-                      day: "2-digit",
-                    })}
+                    {processedSeries[0].data[dateIndex].date.toLocaleDateString(
+                      "en-US",
+                      {
+                        month: "short",
+                        day: "2-digit",
+                      }
+                    )}
                   </div>
-                  <div className="text-gray-500 text-sm">
-                    {d.value.toLocaleString("en-US")}
-                  </div>
+                  {processedSeries.map((data, i) => (
+                    <div key={i} className="text-gray-500 text-sm">
+                      {data.data[dateIndex].value.toLocaleString("en-US")}
+                    </div>
+                  ))}
                 </TooltipContent>
               </ClientTooltip>
             );
@@ -269,11 +302,12 @@ export function LineChartCurvedDeprecated({
 
         <div className="translate-y-2">
           {/* X Axis */}
-          {lineChartData.map((day, i) => {
+          {processedSeries[0].data.map((day, i) => {
             const isFirst = i === 0;
-            const isLast = i === lineChartData.length - 1;
+            const isLast = i === processedSeries[0].data.length - 1;
             const isMax =
-              day.value === Math.max(...lineChartData.map((d) => d.value));
+              day.value ===
+              Math.max(...processedSeries[0].data.map((d) => d.value));
             if (!isFirst && !isLast && !isMax) return null;
             return (
               <div key={i} className="overflow-visible text-zinc-500">
@@ -284,10 +318,10 @@ export function LineChartCurvedDeprecated({
                     transform: `translateX(${
                       i === 0
                         ? "0%"
-                        : i === lineChartData.length - 1
+                        : i === processedSeries[0].data.length - 1
                         ? "-100%"
                         : "-50%"
-                    })`, // The first and last labels should be within the chart area
+                    })`,
                   }}
                   className="text-xs absolute"
                 >
