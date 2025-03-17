@@ -61,10 +61,10 @@ Before starting, make sure you have the following installed:
 ## Customization
 
 1. **Edit colors**: Update `globals.css` for primary, secondary, background, and accent colors.
-2. **Update site details**: Customize `siteDetails.ts` in `/src/modules/Landing/data` to reflect your brand and site info.
+2. **Update site details**: Customize `siteDetails.ts` in `/modules/Landing/data` to reflect your brand and site info.
 3. **Add new chart types**: Extend the visualization options in the `resencharts-ui` component.
 4. **Modify protected routes**: Update middleware.ts to change authentication requirements.
-5. **Replace favicon**: Add your icon to `/src/app/favicon.ico`.
+5. **Replace favicon**: Add your icon to `/app/favicon.ico`.
 6. **Add images**: Update `public/images` for logos and Open Graph metadata.
 
 ---

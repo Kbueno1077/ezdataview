@@ -1,8 +1,8 @@
-import Container from "./Container";
+import Link from "next/link";
 import { menuItems } from "../modules/landing/data/menuItems";
 import { siteDetails } from "../modules/landing/data/siteDetails";
-import { ChartArea } from "lucide-react";
-import Link from "next/link";
+import Container from "./Container";
+import Image from "next/image";
 
 const Header: React.FC = () => {
   return (
@@ -11,7 +11,12 @@ const Header: React.FC = () => {
         <nav className="shadow-md md:shadow-none bg-white md:bg-transparent mx-auto flex justify-between items-center py-2 px-5 md:py-10">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <ChartArea className="text-foreground min-w-fit w-7 h-7" />
+            <Image
+              src="/ez-charts-logo-nobg.png"
+              alt="logo"
+              width={32}
+              height={32}
+            />
             <span className="manrope text-xl font-semibold text-foreground cursor-pointer">
               {siteDetails.siteName}
             </span>
