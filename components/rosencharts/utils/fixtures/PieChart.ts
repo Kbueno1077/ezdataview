@@ -1,6 +1,6 @@
-import { DonutChartItem, pieChartItem } from "../types";
+import { DonutChartItem, PieChartItem } from "../types";
 
-export const pieChartData: pieChartItem[] = [
+export const pieChartData: PieChartItem[] = [
   {
     name: "Healthcare",
     value: 548,

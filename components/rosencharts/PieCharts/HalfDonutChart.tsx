@@ -1,12 +1,14 @@
 import { pie, arc, PieArcDatum } from "d3";
-import { pieChartItem } from "../utils/types";
+import { PieChartItem } from "../utils/types";
 
 export function HalfDonutChart({
   data,
   className,
+  suffix = "",
 }: {
-  data: pieChartItem[];
+  data: PieChartItem[];
   className?: string;
+  suffix?: string;
 }) {
   if (!data) {
     return null;
@@ -17,7 +19,7 @@ export function HalfDonutChart({
   const lightStrokeEffect = 10; // 3d light effect around the slice
 
   // Modify the pie layout to create a half donut
-  const pieLayout = pie<pieChartItem>()
+  const pieLayout = pie<PieChartItem>()
     .value((d) => d.value)
     .padAngle(gap)
     .startAngle(-Math.PI / 2) // Start at -90 degrees
@@ -25,27 +27,27 @@ export function HalfDonutChart({
 
   // Adjust innerRadius to create a donut shape
   const innerRadius = radius / 1.625;
-  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
+  const arcGenerator = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(innerRadius)
     .outerRadius(radius)
     .cornerRadius(lightStrokeEffect + 2);
 
   // Create an arc generator for the clip path that matches the outer path of the arc
   const arcClip =
-    arc<PieArcDatum<pieChartItem>>()
+    arc<PieArcDatum<PieChartItem>>()
       .innerRadius(innerRadius + lightStrokeEffect / 2)
       .outerRadius(radius)
       .cornerRadius(lightStrokeEffect + 2) || undefined;
 
   const labelRadius = (innerRadius + radius) / 2;
-  const arcLabel = arc<PieArcDatum<pieChartItem>>()
+  const arcLabel = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
 
   // Calculate the angle for each slice
-  function computeAngle(d: PieArcDatum<pieChartItem>) {
+  function computeAngle(d: PieArcDatum<PieChartItem>) {
     return ((d.endAngle - d.startAngle) * 180) / Math.PI;
   }
 
@@ -123,7 +125,8 @@ export function HalfDonutChart({
                   </tspan>
                   {angle > minAngle && (
                     <tspan x={0} y="0.7em" fillOpacity={0.7} fill={"#eee"}>
-                      {d.data.value.toLocaleString("en-US")}%
+                      {d.data.value.toLocaleString("en-US")}
+                      {suffix}
                     </tspan>
                   )}
                 </text>

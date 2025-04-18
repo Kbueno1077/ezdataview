@@ -23,7 +23,6 @@ function PieChartBuilder() {
   const allowColor =
     !chartType.includes("thin") && !chartType.includes("multi");
   const allowImage = chartType.includes("image");
-  const usesTooltip = !chartType.includes("fillable");
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -65,47 +64,43 @@ function PieChartBuilder() {
         <legend className="text-sm font-medium px-2">Chart Properties</legend>
 
         <div className="space-y-2">
-          {usesTooltip && (
-            <div className="flex items-center">
-              <Checkbox
-                id="withTooltip"
-                isSelected={withTooltip}
-                onValueChange={(checked) =>
-                  handleUpdateChartConfig("withTooltip", checked === true)
-                }
-                aria-labelledby="tooltip-label"
-              />
-              <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
-                Show tooltips on hover
-              </label>
-            </div>
-          )}
+          <div className="flex items-center">
+            <Checkbox
+              id="withTooltip"
+              isSelected={withTooltip}
+              onValueChange={(checked) =>
+                handleUpdateChartConfig("withTooltip", checked === true)
+              }
+              aria-labelledby="tooltip-label"
+            />
+            <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
+              Show tooltips on hover
+            </label>
+          </div>
 
-          {!usesTooltip && (
-            <div className="flex flex-col space-y-2 ">
-              <label className="text-sm font-medium">Suffix Options:</label>
-              <div className="flex gap-2">
-                <Button
-                  variant={!suffix ? "solid" : "flat"}
-                  color={!suffix ? "primary" : "default"}
-                  onPress={() => handleUpdateChartConfig("suffix", "")}
-                  className="flex-1"
-                  size="sm"
-                >
-                  No Suffix
-                </Button>
-                <Button
-                  variant={suffix === "%" ? "solid" : "flat"}
-                  color={suffix === "%" ? "primary" : "default"}
-                  onPress={() => handleUpdateChartConfig("suffix", "%")}
-                  className="flex-1"
-                  size="sm"
-                >
-                  Use %
-                </Button>
-              </div>
+          <div className="flex flex-col space-y-2 ">
+            <label className="text-sm font-medium">Suffix Options:</label>
+            <div className="flex gap-2">
+              <Button
+                variant={!suffix ? "solid" : "flat"}
+                color={!suffix ? "primary" : "default"}
+                onPress={() => handleUpdateChartConfig("suffix", "")}
+                className="flex-1"
+                size="sm"
+              >
+                No Suffix
+              </Button>
+              <Button
+                variant={suffix === "%" ? "solid" : "flat"}
+                color={suffix === "%" ? "primary" : "default"}
+                onPress={() => handleUpdateChartConfig("suffix", "%")}
+                className="flex-1"
+                size="sm"
+              >
+                Use %
+              </Button>
             </div>
-          )}
+          </div>
         </div>
       </fieldset>
 

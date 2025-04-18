@@ -1,18 +1,18 @@
-import { CSSProperties } from "react";
 import {
-  scaleTime,
-  scaleLinear,
-  max,
-  line as d3_line,
   curveMonotoneX,
+  line as d3_line,
+  max,
+  scaleLinear,
+  scaleTime,
 } from "d3";
+import { CSSProperties } from "react";
+import { AnimatedLine } from "../Animated/AnimatedLine";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { LineDataSeries } from "../utils/types";
-import { AnimatedLine } from "../Animated/AnimatedLine";
 
 export function LineChartCurved({
   data,
@@ -148,6 +148,9 @@ export function LineChartCurved({
                 d={p.path!}
                 fill="none"
                 className={p?.color?.line ?? "stroke-fuchsia-400"}
+                style={{
+                  stroke: p.color,
+                }}
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"
               />
@@ -159,18 +162,21 @@ export function LineChartCurved({
             if (!withTooltip) {
               return (
                 <g key={dateIndex}>
-                  {processedSeries.map((data, seriesIndex) => (
+                  {processedSeries.map((d, seriesIndex) => (
                     <path
                       key={`${dateIndex}-${seriesIndex}`}
-                      d={`M ${xScale(data.data[dateIndex].date)} ${yScale(
-                        data.data[dateIndex].value
+                      d={`M ${xScale(d.data[dateIndex].date)} ${yScale(
+                        d.data[dateIndex].value
                       )} l 0.0001 0`}
                       vectorEffect="non-scaling-stroke"
                       strokeWidth="7"
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={data?.color?.point ?? "text-fuchsia-300"}
+                      className={d?.color?.point ?? "text-fuchsia-300"}
+                      style={{
+                        stroke: d.color,
+                      }}
                     />
                   ))}
                   <g className="group/tooltip">
@@ -222,18 +228,21 @@ export function LineChartCurved({
             return (
               <ClientTooltip key={dateIndex}>
                 <TooltipTrigger>
-                  {processedSeries.map((data, seriesIndex) => (
+                  {processedSeries.map((d, seriesIndex) => (
                     <path
                       key={`${dateIndex}-${seriesIndex}`}
-                      d={`M ${xScale(data.data[dateIndex].date)} ${yScale(
-                        data.data[dateIndex].value
+                      d={`M ${xScale(d.data[dateIndex].date)} ${yScale(
+                        d.data[dateIndex].value
                       )} l 0.0001 0`}
                       vectorEffect="non-scaling-stroke"
                       strokeWidth="7"
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={data?.color?.point ?? "text-fuchsia-300"}
+                      className={d?.color?.point ?? "text-fuchsia-300"}
+                      style={{
+                        stroke: d.color,
+                      }}
                     />
                   ))}
                   <g className="group/tooltip">
@@ -289,9 +298,9 @@ export function LineChartCurved({
                       }
                     )}
                   </div>
-                  {processedSeries.map((data, i) => (
+                  {processedSeries.map((d, i) => (
                     <div key={i} className="text-gray-500 text-sm">
-                      {data.data[dateIndex].value.toLocaleString("en-US")}
+                      {d.data[dateIndex].value.toLocaleString("en-US")}
                     </div>
                   ))}
                 </TooltipContent>

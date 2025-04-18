@@ -70,13 +70,15 @@ export type DataPoint = {
 
 export type LineDataSeries = {
   data: DataPoint[];
-  color?: {
-    line: string;
-    point: string;
-  };
+  color?:
+    | {
+        line: string;
+        point: string;
+      }
+    | string;
 };
 
-export type pieChartItem = {
+export type PieChartItem = {
   name: string;
   value: number;
   colorFrom: string;

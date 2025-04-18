@@ -5,17 +5,19 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
-import { pieChartItem } from "../utils/types";
+import { PieChartItem } from "../utils/types";
 import Image from "next/image";
 
 export function PieChartImage({
   data,
   withTooltip = true,
   className,
+  suffix = "",
 }: {
-  data: pieChartItem[];
+  data: PieChartItem[];
   withTooltip?: boolean;
   className?: string;
+  suffix?: string;
 }) {
   if (!data) {
     return null;
@@ -53,24 +55,24 @@ export function PieChartImage({
   const gap = 0.02; // Gap between slices
 
   // Pie layout and arc generator
-  const pieLayout = pie<pieChartItem>()
+  const pieLayout = pie<PieChartItem>()
     .value((d) => d.value)
     .padAngle(gap); // Creates a gap between slices
 
-  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
+  const arcGenerator = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(20)
     .outerRadius(radius)
     .cornerRadius(8);
 
   const labelRadius = radius * 0.8;
-  const arcLabel = arc<PieArcDatum<pieChartItem>>()
+  const arcLabel = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
 
   // Calculate the angle for each slice
-  const computeAngle = (d: PieArcDatum<pieChartItem>) => {
+  const computeAngle = (d: PieArcDatum<PieChartItem>) => {
     return ((d.endAngle - d.startAngle) * 180) / Math.PI;
   };
 
@@ -114,7 +116,7 @@ export function PieChartImage({
           })}
 
           {/* Slices */}
-          {arcs.map((d: PieArcDatum<pieChartItem>, i) => {
+          {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
             const isHexColor =
               d.data.colorFrom &&
               /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
@@ -158,6 +160,7 @@ export function PieChartImage({
                   <div>{d.data.name}</div>
                   <div className="text-gray-500 text-sm">
                     {d.data.value.toLocaleString("en-US")}
+                    {suffix}
                   </div>
                 </TooltipContent>
               </ClientTooltip>
@@ -167,7 +170,7 @@ export function PieChartImage({
 
         {/* Labels as absolutely positioned divs */}
         <div className="absolute inset-0 pointer-events-none">
-          {arcs.map((d: PieArcDatum<pieChartItem>, i) => {
+          {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
             const angle = computeAngle(d);
 
             // Get pie center position
@@ -188,6 +191,7 @@ export function PieChartImage({
                   style={{ left: valueLeft, top: valueTop }}
                 >
                   {d.data.value}
+                  {suffix}
                 </div>
                 {angle >= MIN_ANGLE && (
                   <div

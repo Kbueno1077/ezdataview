@@ -1,17 +1,17 @@
 "use client";
 
+import { PaintRoller, Palette, Plus, Trash, TrashIcon } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
-import { PaintRoller, Palette, Trash, TrashIcon, Plus } from "lucide-react";
 import { ChartDataItem } from "../../../stores/builder-store";
 
+import { format } from "@formkit/tempo";
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
+import { DatePicker } from "@heroui/date-picker";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
-import { DatePicker } from "@heroui/date-picker";
 import { parseDate } from "@internationalized/date";
-import { format } from "@formkit/tempo";
 
 function LineChartBuilder() {
   const {
@@ -27,10 +27,7 @@ function LineChartBuilder() {
   const chartType = workspaceCharts[currentChartIndex].chartType;
   const currentData = workspaceCharts[currentChartIndex].data;
 
-  const allowColor =
-    !chartType.includes("thin") && !chartType.includes("multi");
-  const allowMulti =
-    chartType.includes("multi") || chartType.includes("curved");
+  const allowColor = !chartType.includes("thin");
 
   const handleAddLine = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -271,7 +268,7 @@ function LineChartBuilder() {
             size="sm"
             variant="flat"
             onPress={handleAddDate}
-            className="mt-2"
+            className="mt-2 w-full"
             startContent={<Plus size={14} />}
           >
             Add Date ({sharedDates.length})
@@ -286,8 +283,7 @@ function LineChartBuilder() {
         variant="solid"
         startContent={<Plus className="h-4 w-4" />}
       >
-        Add {allowMulti ? "Grouped Bars" : "Line"} (
-        {workspaceCharts[currentChartIndex].data.length})
+        Add Line ({workspaceCharts[currentChartIndex].data.length})
       </Button>
 
       <div className="space-y-2 mt-4">
@@ -304,12 +300,8 @@ function LineChartBuilder() {
             return (
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
-                  aria-label={`${allowMulti ? "Grouped Line" : "Line"} ${
-                    index + 1
-                  }`}
-                  title={`${allowMulti ? "Multiple Lines" : "Line"} ${
-                    index + 1
-                  }`}
+                  aria-label={`"Line"} ${index + 1}`}
+                  title={`Line ${index + 1}`}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
@@ -472,11 +464,7 @@ function LineChartBuilder() {
                         )}
                       </div>
 
-                      <Tooltip
-                        content={`Delete ${
-                          allowMulti ? "grouped line" : "line"
-                        }`}
-                      >
+                      <Tooltip content={`Delete line`}>
                         <Button
                           isIconOnly
                           variant="solid"

@@ -1,12 +1,12 @@
 import { pie, arc, PieArcDatum } from "d3";
-import { pieChartItem } from "../utils/types";
+import { PieChartItem } from "../utils/types";
 
 export function FillableChart({
   data,
   className,
   suffix,
 }: {
-  data: pieChartItem[];
+  data: PieChartItem[];
   className?: string;
   suffix?: string;
 }) {
@@ -29,7 +29,7 @@ export function FillableChart({
   // Update the data order to fill clockwise
 
   // Modify the pie layout to create a half donut filling clockwise from left to right
-  const pieLayout = pie<pieChartItem>()
+  const pieLayout = pie<PieChartItem>()
     .value((d) => d.value)
     .startAngle(-Math.PI / 2) // Start at -90 degrees (9 o'clock)
     .endAngle(Math.PI / 2)
@@ -38,13 +38,13 @@ export function FillableChart({
 
   // Adjust innerRadius to create a donut shape
   const innerRadius = radius / 1.625;
-  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
+  const arcGenerator = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(innerRadius)
     .outerRadius(radius);
 
   // Create an arc generator for the clip path that matches the outer path of the arc
   const arcClip =
-    arc<PieArcDatum<pieChartItem>>()
+    arc<PieArcDatum<PieChartItem>>()
       .innerRadius(innerRadius + lightStrokeEffect / 2)
       .outerRadius(radius)
       .cornerRadius(lightStrokeEffect + 2) || undefined;

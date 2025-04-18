@@ -23,13 +23,12 @@ import {
   GradientBarData,
   HorizontalBarData,
   ImageBarData,
-  Item,
   LineChartCurvedData,
   LineChartData,
   LineChartDataPoint,
   LineDataSeries,
   MultiBarData,
-  pieChartItem,
+  PieChartItem,
   SVGBarData,
   VerticalBarData,
   VerticalMultiBarData,
@@ -46,7 +45,7 @@ export const getChartTypeByName = (
     | VerticalMultiBarData[]
     | LineChartData[]
     | LineChartCurvedData[]
-    | pieChartItem[]
+    | PieChartItem[]
     | DonutChartItem[]
     | LineDataSeries[]
     | LineChartDataPoint[]
@@ -189,37 +188,46 @@ export const getChartTypeByName = (
     case "pie": {
       return (
         <PieChart
-          data={data as pieChartItem[]}
+          data={data as PieChartItem[]}
           withTooltip={withTooltip}
           className={className}
+          suffix={suffix}
         />
       );
     }
     case "pie-image": {
       return (
         <PieChartImage
-          data={data as pieChartItem[]}
+          data={data as PieChartItem[]}
           withTooltip={withTooltip}
           className={className}
+          suffix={suffix}
         />
       );
     }
     case "half-donut": {
-      return <HalfDonutChart data={data as Item[]} className={className} />;
+      return (
+        <HalfDonutChart
+          data={data as PieChartItem[]}
+          className={className}
+          suffix={suffix}
+        />
+      );
     }
     case "donut": {
       return (
         <DonutChart
-          data={data as DonutChartItem[]}
+          data={data as PieChartItem[]}
           withTooltip={withTooltip}
           className={className}
+          suffix={suffix}
         />
       );
     }
     case "fillable": {
       return (
         <FillableChart
-          data={data as Item[]}
+          data={data as PieChartItem[]}
           className={className}
           suffix={suffix}
         />
@@ -228,7 +236,7 @@ export const getChartTypeByName = (
     case "fillable-donut": {
       return (
         <FillableDonutChart
-          data={data as Item[]}
+          data={data as PieChartItem[]}
           className={className}
           suffix={suffix}
         />
