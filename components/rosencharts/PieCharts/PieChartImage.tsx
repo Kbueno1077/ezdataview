@@ -89,6 +89,9 @@ export function PieChartImage({
             const [labelX, labelY] = arcLabel.centroid(d);
             const [arcX, arcY] = arcGenerator.centroid(d);
             const LINE_LENGTH = 1.35;
+            const isHexColor =
+              d.data.colorFrom &&
+              /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
 
             return (
               <g key={`line-${i}`} className="pointer-events-none">
@@ -97,9 +100,12 @@ export function PieChartImage({
                   y1={arcY}
                   x2={labelX * LINE_LENGTH}
                   y2={labelY * LINE_LENGTH}
-                  stroke={`currentColor`}
+                  stroke={isHexColor ? d.data.colorFrom : "currentColor"}
                   className={
-                    d.data.colorFrom || defaultColors[i % data.length].colorFrom
+                    !isHexColor
+                      ? d.data.colorFrom ||
+                        defaultColors[i % data.length].colorFrom
+                      : ""
                   }
                   strokeWidth={4}
                 />
@@ -109,15 +115,24 @@ export function PieChartImage({
 
           {/* Slices */}
           {arcs.map((d: PieArcDatum<pieChartItem>, i) => {
+            const isHexColor =
+              d.data.colorFrom &&
+              /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
+
             if (!withTooltip) {
               return (
                 <path
                   key={i}
-                  fill={"currentColor"}
+                  fill={isHexColor ? d.data.colorFrom : "currentColor"}
                   d={arcGenerator(d)!}
-                  className={`${
-                    d.data.colorFrom || defaultColors[i % data.length].colorFrom
-                  }`}
+                  className={
+                    !isHexColor
+                      ? `${
+                          d.data.colorFrom ||
+                          defaultColors[i % data.length].colorFrom
+                        }`
+                      : ""
+                  }
                 />
               );
             }
@@ -127,12 +142,16 @@ export function PieChartImage({
                 <TooltipTrigger>
                   <path
                     key={i}
-                    fill={"currentColor"}
+                    fill={isHexColor ? d.data.colorFrom : "currentColor"}
                     d={arcGenerator(d)!}
-                    className={`${
-                      d.data.colorFrom ||
-                      defaultColors[i % data.length].colorFrom
-                    }`}
+                    className={
+                      !isHexColor
+                        ? `${
+                            d.data.colorFrom ||
+                            defaultColors[i % data.length].colorFrom
+                          }`
+                        : ""
+                    }
                   />
                 </TooltipTrigger>
                 <TooltipContent>

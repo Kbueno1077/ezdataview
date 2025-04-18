@@ -1,10 +1,10 @@
-import { ChartArea } from "lucide-react";
 import Link from "next/link";
 import React from "react";
 
+import Image from "next/image";
+import { footerDetails } from "../modules/landing/data/footer";
 import { siteDetails } from "../modules/landing/data/siteDetails";
 import { getPlatformIconByName } from "../modules/landing/utils";
-import { footerDetails } from "../modules/landing/data/footer";
 
 const Footer: React.FC = () => {
   return (
@@ -12,7 +12,12 @@ const Footer: React.FC = () => {
       <div className="max-w-7xl w-full mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-10">
         <div>
           <Link href="/" className="flex items-center gap-2">
-            <ChartArea className="min-w-fit w-5 h-5 md:w-7 md:h-7" />
+            <Image
+              src="/ez-charts-logo-nobg.png"
+              alt="logo"
+              width={64}
+              height={64}
+            />
             <h3 className="manrope text-xl font-semibold cursor-pointer">
               {siteDetails.siteName}
             </h3>

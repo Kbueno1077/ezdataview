@@ -1,12 +1,10 @@
-import React from "react";
-import { pie, arc, PieArcDatum } from "d3";
+import { arc, pie, PieArcDatum } from "d3";
 import {
   ClientTooltip,
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
 import { pieChartItem } from "../utils/types";
-import { gradientFromHex } from "../utils/utils";
 
 export function PieChart({
   data,
@@ -104,31 +102,34 @@ export function PieChart({
                       (midAngle * 180) / Math.PI - 90
                     }, 0.5, 0.5)`}
                   >
-                    <stop
-                      offset="0%"
-                      stopColor={"currentColor"}
-                      className={
-                        d.data.colorFrom ||
-                        defaultColors[i % data.length].colorFrom
-                      }
-                      style={{
-                        ...(isHexColor
-                          ? gradientFromHex(d.data.colorFrom)
-                          : {}),
-                      }}
-                    />
-                    <stop
-                      offset="100%"
-                      stopColor={"currentColor"}
-                      className={
-                        d.data.colorTo || defaultColors[i % data.length].colorTo
-                      }
-                      style={{
-                        ...(isHexColor
-                          ? gradientFromHex(d.data.colorFrom)
-                          : {}),
-                      }}
-                    />
+                    {isHexColor ? (
+                      <>
+                        <stop offset="0%" stopColor={d.data.colorFrom} />
+                        <stop
+                          offset="100%"
+                          stopColor={d.data.colorTo || d.data.colorFrom}
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <stop
+                          offset="0%"
+                          stopColor="currentColor"
+                          className={
+                            d.data.colorFrom ||
+                            defaultColors[i % defaultColors.length].colorFrom
+                          }
+                        />
+                        <stop
+                          offset="100%"
+                          stopColor="currentColor"
+                          className={
+                            d.data.colorTo ||
+                            defaultColors[i % defaultColors.length].colorTo
+                          }
+                        />
+                      </>
+                    )}
                   </linearGradient>
                 </g>
               );
@@ -149,35 +150,38 @@ export function PieChart({
                         (midAngle * 180) / Math.PI - 90
                       }, 0.5, 0.5)`}
                     >
-                      <stop
-                        offset="0%"
-                        stopColor={"currentColor"}
-                        className={
-                          d.data.colorFrom ||
-                          defaultColors[i % data.length].colorFrom
-                        }
-                        style={{
-                          ...(isHexColor
-                            ? gradientFromHex(d.data.colorFrom)
-                            : {}),
-                        }}
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor={"currentColor"}
-                        className={
-                          d.data.colorTo ||
-                          defaultColors[i % data.length].colorTo
-                        }
-                        style={{
-                          ...(isHexColor
-                            ? gradientFromHex(d.data.colorFrom)
-                            : {}),
-                        }}
-                      />
+                      {isHexColor ? (
+                        <>
+                          <stop offset="0%" stopColor={d.data.colorFrom} />
+                          <stop
+                            offset="100%"
+                            stopColor={d.data.colorTo || d.data.colorFrom}
+                          />
+                        </>
+                      ) : (
+                        <>
+                          <stop
+                            offset="0%"
+                            stopColor="currentColor"
+                            className={
+                              d.data.colorFrom ||
+                              defaultColors[i % defaultColors.length].colorFrom
+                            }
+                          />
+                          <stop
+                            offset="100%"
+                            stopColor="currentColor"
+                            className={
+                              d.data.colorTo ||
+                              defaultColors[i % defaultColors.length].colorTo
+                            }
+                          />
+                        </>
+                      )}
                     </linearGradient>
                   </g>
                 </TooltipTrigger>
+
                 <TooltipContent>
                   <div>{d.data.name}</div>
                   <div className="text-gray-500 text-sm">

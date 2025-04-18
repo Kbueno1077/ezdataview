@@ -4,7 +4,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from "../Tooltip/Tooltip";
-import { DonutChartItem } from "../utils/types";
+import { pieChartItem } from "../utils/types";
 
 export function DonutChart({
   data,
@@ -12,7 +12,7 @@ export function DonutChart({
   innerContent = false,
   className,
 }: {
-  data: DonutChartItem[];
+  data: pieChartItem[];
   withTooltip?: boolean;
   innerContent?: boolean;
   className?: string;
@@ -22,40 +22,40 @@ export function DonutChart({
   const lightStrokeEffect = 10; // 3d light effect around the slice
 
   // Pie layout and arc generator
-  const pieLayout = pie<DonutChartItem>()
+  const pieLayout = pie<pieChartItem>()
     .value((d) => d.value)
     .padAngle(gap); // Creates a gap between slices
 
   // Adjust innerRadius to create a donut shape
   const innerRadius = radius / 1.625;
-  const arcGenerator = arc<PieArcDatum<DonutChartItem>>()
+  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(innerRadius)
     .outerRadius(radius)
     .cornerRadius(lightStrokeEffect + 2);
 
   // Create an arc generator for the clip path that matches the outer path of the arc
   const arcClip =
-    arc<PieArcDatum<DonutChartItem>>()
+    arc<PieArcDatum<pieChartItem>>()
       .innerRadius(innerRadius + lightStrokeEffect / 2)
       .outerRadius(radius)
       .cornerRadius(lightStrokeEffect + 2) || undefined;
 
   const labelRadius = radius * 0.825;
-  const arcLabel = arc<PieArcDatum<DonutChartItem>>()
+  const arcLabel = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
 
   // Calculate the angle for each slice
-  function computeAngle(d: PieArcDatum<DonutChartItem>) {
+  function computeAngle(d: PieArcDatum<pieChartItem>) {
     return ((d.endAngle - d.startAngle) * 180) / Math.PI;
   }
 
   // Minimum angle to display text
   const minAngle = 20; // Adjust this value as needed
 
-  const colors = [
+  const defaultColors = [
     "#7e4cfe",
     "#895cfc",
     "#956bff",
@@ -87,10 +87,19 @@ export function DonutChart({
           {arcs.map((d, i) => (
             <clipPath key={`donut-c0-clip-${i}`} id={`donut-c0-clip-${i}`}>
               <path d={arcClip(d) || undefined} />
-              <linearGradient key={i} id={`donut-c0-gradient-${i}`}>
-                <stop offset="55%" stopColor={colors[i]} stopOpacity={0.95} />
-              </linearGradient>
             </clipPath>
+          ))}
+
+          {arcs.map((d, i) => (
+            <linearGradient key={i} id={`donut-c0-gradient-${i}`}>
+              <stop
+                offset="55%"
+                stopColor={
+                  d.data.colorFrom || defaultColors[i % defaultColors.length]
+                }
+                stopOpacity={0.95}
+              />
+            </linearGradient>
           ))}
         </defs>
 

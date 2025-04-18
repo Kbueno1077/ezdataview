@@ -1,11 +1,11 @@
 import { pie, arc, PieArcDatum } from "d3";
-import { Item } from "../utils/types";
+import { pieChartItem } from "../utils/types";
 
 export function HalfDonutChart({
   data,
   className,
 }: {
-  data: Item[];
+  data: pieChartItem[];
   className?: string;
 }) {
   if (!data) {
@@ -17,7 +17,7 @@ export function HalfDonutChart({
   const lightStrokeEffect = 10; // 3d light effect around the slice
 
   // Modify the pie layout to create a half donut
-  const pieLayout = pie<Item>()
+  const pieLayout = pie<pieChartItem>()
     .value((d) => d.value)
     .padAngle(gap)
     .startAngle(-Math.PI / 2) // Start at -90 degrees
@@ -25,34 +25,34 @@ export function HalfDonutChart({
 
   // Adjust innerRadius to create a donut shape
   const innerRadius = radius / 1.625;
-  const arcGenerator = arc<PieArcDatum<Item>>()
+  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(innerRadius)
     .outerRadius(radius)
     .cornerRadius(lightStrokeEffect + 2);
 
   // Create an arc generator for the clip path that matches the outer path of the arc
   const arcClip =
-    arc<PieArcDatum<Item>>()
+    arc<PieArcDatum<pieChartItem>>()
       .innerRadius(innerRadius + lightStrokeEffect / 2)
       .outerRadius(radius)
       .cornerRadius(lightStrokeEffect + 2) || undefined;
 
   const labelRadius = (innerRadius + radius) / 2;
-  const arcLabel = arc<PieArcDatum<Item>>()
+  const arcLabel = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
 
   // Calculate the angle for each slice
-  function computeAngle(d: PieArcDatum<Item>) {
+  function computeAngle(d: PieArcDatum<pieChartItem>) {
     return ((d.endAngle - d.startAngle) * 180) / Math.PI;
   }
 
   // Minimum angle to display text
   const minAngle = 18; // Adjust this value as needed
 
-  const colors = [
+  const defaultColors = [
     "#7e4cfe",
     "#895cfc",
     "#956bff",
@@ -72,10 +72,19 @@ export function HalfDonutChart({
           {arcs.map((d, i) => (
             <clipPath key={`half-donut-clip-${i}`} id={`half-donut-clip-${i}`}>
               <path d={arcClip(d) || undefined} />
-              <linearGradient key={i} id={`half-donut-gradient-${i}`}>
-                <stop offset="55%" stopColor={colors[i]} stopOpacity={0.95} />
-              </linearGradient>
             </clipPath>
+          ))}
+
+          {arcs.map((d, i) => (
+            <linearGradient key={i} id={`half-donut-gradient-${i}`}>
+              <stop
+                offset="55%"
+                stopColor={
+                  d.data.colorFrom || defaultColors[i % defaultColors.length]
+                }
+                stopOpacity={0.95}
+              />
+            </linearGradient>
           ))}
         </defs>
 
@@ -90,6 +99,7 @@ export function HalfDonutChart({
             centroid[0] += 10;
             centroid[1] -= 0;
           }
+
           return (
             <g key={i}>
               {/* Use the clip path on this group or individual path */}

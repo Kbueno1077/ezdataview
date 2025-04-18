@@ -1,13 +1,12 @@
 import { pie, arc, PieArcDatum } from "d3";
-
-type Item = { name: string; value: number };
+import { pieChartItem } from "../utils/types";
 
 export function FillableDonutChart({
   data,
   className,
   suffix,
 }: {
-  data: Item[];
+  data: pieChartItem[];
   className?: string;
   suffix?: string;
 }) {
@@ -15,11 +14,20 @@ export function FillableDonutChart({
     return null;
   }
 
+  const defaultColors = [
+    "#7e4cfe",
+    "#e0e0e0",
+    "#956bff",
+    "#a37fff",
+    "#b291fd",
+    "#b597ff",
+  ];
+
   const radius = 420; // Chart base dimensions
   const lightStrokeEffect = 10; // 3d light effect around the slice
 
   // Modify the pie layout to create a full donut filling clockwise from 12 o'clock
-  const pieLayout = pie<Item>()
+  const pieLayout = pie<pieChartItem>()
     .value((d) => d.value)
     .startAngle(0) // Start at 0 degrees (12 o'clock)
     .endAngle(2 * Math.PI) // End at 360 degrees (12 o'clock again)
@@ -28,23 +36,18 @@ export function FillableDonutChart({
 
   // Adjust innerRadius to create a donut shape
   const innerRadius = radius / 1.625;
-  const arcGenerator = arc<PieArcDatum<Item>>()
+  const arcGenerator = arc<PieArcDatum<pieChartItem>>()
     .innerRadius(innerRadius)
     .outerRadius(radius);
 
   // Create an arc generator for the clip path that matches the outer path of the arc
   const arcClip =
-    arc<PieArcDatum<Item>>()
+    arc<PieArcDatum<pieChartItem>>()
       .innerRadius(innerRadius + lightStrokeEffect / 2)
       .outerRadius(radius)
       .cornerRadius(lightStrokeEffect + 2) || undefined;
 
   const arcs = pieLayout(data);
-
-  const colors = {
-    purple: "fill-violet-600 dark:fill-violet-500",
-    gray: "fill-[#e0e0e0] dark:fill-zinc-700",
-  };
 
   return (
     <div className="p-6 w-full h-full">
@@ -68,9 +71,13 @@ export function FillableDonutChart({
             {arcs.map((d, i) => (
               <g key={i} clipPath={`url(#fillable-donut-clip-${i})`}>
                 <path
-                  className={`stroke-white/30 dark:stroke-zinc-400/10 ${
-                    i === 1 ? colors.gray : colors.purple
-                  }`}
+                  className="stroke-white/30 dark:stroke-zinc-400/10"
+                  style={{
+                    fill:
+                      d.data.colorFrom && d.data.colorFrom.startsWith("#")
+                        ? d.data.colorFrom
+                        : defaultColors[i % defaultColors.length],
+                  }}
                   strokeWidth={lightStrokeEffect}
                   d={arcGenerator(d) || undefined}
                 />
