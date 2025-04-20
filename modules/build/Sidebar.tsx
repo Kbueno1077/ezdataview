@@ -1,14 +1,20 @@
 "use client";
 
-import { useBuildStore } from "../../providers/store-provider";
-import { Info, Lock, Unlock } from "lucide-react";
+import { Info, Lock, Settings, Unlock } from "lucide-react";
 import { useState } from "react";
+import { useBuildStore } from "../../providers/store-provider";
 import { chartTypes, getChartUIBuilder } from "./utils/builder-ui";
 
 import { Button } from "@heroui/button";
 import { Select, SelectItem, SharedSelection } from "@heroui/react";
 
-export function Sidebar() {
+export function Sidebar({
+  isOpen,
+  onClose,
+}: {
+  isOpen: boolean;
+  onClose: () => void;
+}) {
   const [isChartLocked, setIsChartLocked] = useState(true);
   const [showWarning, setShowWarning] = useState(false);
 
@@ -31,8 +37,27 @@ export function Sidebar() {
   const currentChartType = workspaceCharts[currentChartIndex].chartType;
 
   return (
-    <aside className="w-1/3 min-w-[300px] max-w-[380px] fixed right-0 top-0 overflow-x-hidden  border-l rounded-lg shadow-md bg-white dark:bg-gray-800 z-10 p-4 h-full overflow-y-auto">
+    <aside
+      className={`w-full min-w-[380px] max-w-[512px] h-full overflow-y-auto border-l rounded-lg shadow-md bg-white dark:bg-gray-800 z-10 p-4
+        lg:relative lg:translate-x-0
+        fixed top-0 right-0 transform transition-transform duration-300 ease-in-out
+        ${isOpen ? "translate-x-0" : "translate-x-full"}`}
+    >
       <div className="flex flex-col gap-4">
+        <div className="flex justify-between items-center">
+          <h2 className="text-lg font-semibold">Chart Settings</h2>
+          <Button
+            variant="flat"
+            size="sm"
+            isIconOnly
+            onPress={onClose}
+            className="lg:hidden"
+            aria-label="Close sidebar"
+          >
+            <Settings className="h-4 w-4" />
+          </Button>
+        </div>
+
         <div className="flex flex-col gap-3">
           <div className="flex flex-col gap-2">
             <label htmlFor="chart-type-select" className="text-sm font-medium">

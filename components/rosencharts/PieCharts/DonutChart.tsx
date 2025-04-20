@@ -188,6 +188,7 @@ export function DonutChart({
                 <div>{d.data.name}</div>
                 <div className="text-gray-500 text-sm">
                   {d.data.value.toLocaleString("en-US")}
+                  {suffix}
                 </div>
               </TooltipContent>
             </ClientTooltip>

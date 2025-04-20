@@ -40,7 +40,7 @@ export const pieChartData: PieChartItem[] = [
 ];
 
 export const filledDonutChartData = [
-  { name: "Filled", value: 31 },
+  { name: "Filled", value: 30 },
   { name: "Empty", value: 70 },
 ];
 

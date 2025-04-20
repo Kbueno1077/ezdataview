@@ -1,14 +1,21 @@
 import { pie, arc, PieArcDatum } from "d3";
 import { PieChartItem } from "../utils/types";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../Tooltip/Tooltip";
 
 export function HalfDonutChart({
   data,
   className,
   suffix = "",
+  withTooltip = true,
 }: {
   data: PieChartItem[];
   className?: string;
   suffix?: string;
+  withTooltip?: boolean;
 }) {
   if (!data) {
     return null;
@@ -102,10 +109,10 @@ export function HalfDonutChart({
             centroid[1] -= 0;
           }
 
-          return (
+          const sliceContent = (
             <g key={i}>
               {/* Use the clip path on this group or individual path */}
-              <g key={i} clipPath={`url(#half-donut-clip-${i})`}>
+              <g clipPath={`url(#half-donut-clip-${i})`}>
                 <path
                   fill={`url(#half-donut-gradient-${i})`}
                   stroke="#ffffff33" // Lighter stroke for a 3D effect
@@ -132,6 +139,23 @@ export function HalfDonutChart({
                 </text>
               </g>
             </g>
+          );
+
+          if (!withTooltip) {
+            return sliceContent;
+          }
+
+          return (
+            <ClientTooltip key={i}>
+              <TooltipTrigger>{sliceContent}</TooltipTrigger>
+              <TooltipContent>
+                <div>{d.data.name}</div>
+                <div className="text-gray-500 text-sm">
+                  {d.data.value.toLocaleString("en-US")}
+                  {suffix}
+                </div>
+              </TooltipContent>
+            </ClientTooltip>
           );
         })}
       </svg>

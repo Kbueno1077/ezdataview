@@ -48,6 +48,7 @@ const HomePage: React.FC = () => {
           <CTA />
         </Container>
       </main>
+
       <Footer />
     </>
   );

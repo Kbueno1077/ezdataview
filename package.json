@@ -13,6 +13,7 @@
     "@formkit/tempo": "^0.1.2",
     "@heroui/react": "^2.7.5",
     "@lottiefiles/dotlottie-react": "^0.13.0",
+    "@radix-ui/react-dialog": "^1.1.10",
     "@tailwindcss/postcss": "^4.0.13",
     "@types/d3": "^7.4.3",
     "babel-plugin-react-compiler": "^19.0.0-beta-bafa41b-20250307",

@@ -1,15 +1,27 @@
+"use client";
+
 import { pie, arc, PieArcDatum } from "d3";
 import { PieChartItem } from "../utils/types";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../Tooltip/Tooltip";
+import { useState } from "react";
 
 export function FillableChart({
   data,
   className,
   suffix,
+  withTooltip = true,
 }: {
   data: PieChartItem[];
   className?: string;
   suffix?: string;
+  withTooltip?: boolean;
 }) {
+  const [selectedSlice, setSelectedSlice] = useState<PieChartItem>(data[0]);
+
   if (!data) {
     return null;
   }
@@ -51,6 +63,10 @@ export function FillableChart({
 
   const arcs = pieLayout(data);
 
+  const handleSliceClick = (sliceData: PieChartItem) => {
+    setSelectedSlice(sliceData);
+  };
+
   return (
     <div className="relative">
       <svg
@@ -69,21 +85,45 @@ export function FillableChart({
         </defs>
         <g>
           {/* Slices */}
-          {arcs.map((d, i) => (
-            <g key={i} clipPath={`url(#fillable-half-donut-clip-${i})`}>
-              <path
-                className="stroke-white/30 dark:stroke-zinc-400/10"
-                strokeWidth={lightStrokeEffect}
-                d={arcGenerator(d) || undefined}
-                style={{
-                  fill:
-                    d.data.colorFrom && d.data.colorFrom.startsWith("#")
-                      ? d.data.colorFrom
-                      : defaultColors[i % defaultColors.length],
-                }}
-              />
-            </g>
-          ))}
+          {arcs.map((d, i) => {
+            const sliceContent = (
+              <g
+                key={i}
+                clipPath={`url(#fillable-half-donut-clip-${i})`}
+                onClick={() => handleSliceClick(d.data)}
+                style={{ cursor: "pointer" }}
+              >
+                <path
+                  className="stroke-white/30 dark:stroke-zinc-400/10"
+                  strokeWidth={lightStrokeEffect}
+                  d={arcGenerator(d) || undefined}
+                  style={{
+                    fill:
+                      d.data.colorFrom && d.data.colorFrom.startsWith("#")
+                        ? d.data.colorFrom
+                        : defaultColors[i % defaultColors.length],
+                  }}
+                />
+              </g>
+            );
+
+            if (!withTooltip) {
+              return sliceContent;
+            }
+
+            return (
+              <ClientTooltip key={i}>
+                <TooltipTrigger>{sliceContent}</TooltipTrigger>
+                <TooltipContent>
+                  <div>{d.data.name}</div>
+                  <div className="text-gray-500 text-sm">
+                    {d.data.value.toLocaleString("en-US")}
+                    {suffix}
+                  </div>
+                </TooltipContent>
+              </ClientTooltip>
+            );
+          })}
         </g>
         <text
           transform={`translate(0, ${-radius / 4})`}
@@ -93,7 +133,7 @@ export function FillableChart({
           fill="currentColor"
           className="text-zinc-700 dark:text-zinc-100"
         >
-          Goal
+          {selectedSlice.name}
         </text>{" "}
         <text
           transform={`translate(0, ${-radius / 12})`}
@@ -103,7 +143,7 @@ export function FillableChart({
           fill="currentColor"
           className="text-zinc-800 dark:text-zinc-300"
         >
-          {data[0].value}
+          {selectedSlice.value.toLocaleString("en-US")}
           {suffix}
         </text>
       </svg>
