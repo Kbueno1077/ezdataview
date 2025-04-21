@@ -17,7 +17,7 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
   const [animationState, setAnimationState] = useState<
     "entering" | "entered" | "exiting" | "exited"
   >(isOpen ? "entering" : "exited");
-  const [isFullyExpanded, setIsFullyExpanded] = useState(false);
+  // const [isFullyExpanded, setIsFullyExpanded] = useState(false);
 
   useEffect(() => {
     if (modalRef.current) {
@@ -31,7 +31,7 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
 
     if (isOpen) {
       // Reset fully expanded state
-      setIsFullyExpanded(false);
+      // setIsFullyExpanded(false);
 
       // Use requestAnimationFrame for more reliable animation timing
       requestAnimationFrame(() => {
@@ -47,13 +47,13 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
           animationTimers.push(enteredTimer);
 
           // Set fully expanded state after animation completes with a slightly longer timeout
-          const expandTimer = setTimeout(() => setIsFullyExpanded(true), 550);
-          animationTimers.push(expandTimer);
+          // const expandTimer = setTimeout(() => setIsFullyExpanded(true), 550);
+          // animationTimers.push(expandTimer);
         });
       });
     } else {
       // Remove fully expanded state first
-      setIsFullyExpanded(false);
+      // setIsFullyExpanded(false);
 
       // Immediately start exiting animation
       setAnimationState("exiting");
