@@ -17,7 +17,6 @@ export function PieChart({
   className?: string;
   suffix?: string;
 }) {
-  console.log("🚀 ~ data:", data);
   if (!data) {
     return null;
   }
@@ -63,12 +62,14 @@ export function PieChart({
     .innerRadius(20)
     .outerRadius(radius)
     .cornerRadius(8);
-  const labelRadius = radius * 0.8;
+
+  const labelRadius = radius * 0.75;
   const arcLabel = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
+
   // Calculate the angle for each slice
   const computeAngle = (d: PieArcDatum<PieChartItem>) => {
     return ((d.endAngle - d.startAngle) * 180) / Math.PI;
@@ -78,11 +79,11 @@ export function PieChart({
   const MIN_ANGLE = 20;
 
   return (
-    <div className="p-6 w-full h-full">
-      <div className="relative w-full h-full">
+    <div className="scale-95">
+      <div className="relative">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`w-full h-full overflow-visible ${className}`}
+          className={`overflow-visible ${className}`}
         >
           {/* Slices */}
           {arcs.map((d, i) => {
@@ -211,13 +212,13 @@ export function PieChart({
             const nameLeft = `${CENTER_PCT + (x / radius) * 40}%`;
             const nameTop = `${CENTER_PCT + (y / radius) * 40}%`;
 
-            const valueLeft = `${CENTER_PCT + (x / radius) * 72}%`;
-            const valueTop = `${CENTER_PCT + (y / radius) * 70}%`;
+            const valueLeft = `${CENTER_PCT + (x / radius) * 74}%`;
+            const valueTop = `${CENTER_PCT + (y / radius) * 72}%`;
 
             return (
               <div key={i}>
                 <div
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2"
+                  className="absolute transform  -translate-x-1/2 -translate-y-1/2 text-center"
                   style={{ left: valueLeft, top: valueTop }}
                 >
                   {d.data.value}

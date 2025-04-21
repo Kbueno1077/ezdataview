@@ -332,7 +332,7 @@ function BarChartBuilder() {
                         />
                         {item.image && (
                           <div className="mt-2 text-xs text-gray-500">
-                            Image will be displayed on the bar
+                            Image will be displayed on the chart
                           </div>
                         )}
                       </div>

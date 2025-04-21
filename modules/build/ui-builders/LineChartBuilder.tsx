@@ -28,6 +28,7 @@ import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
 import { parseDate } from "@internationalized/date";
 import { useState } from "react";
+import { toast } from "sonner";
 
 function LineChartBuilder() {
   const {
@@ -120,6 +121,9 @@ function LineChartBuilder() {
       // Set new date to one day after the latest date
       latestDate = new Date(lastDate);
       latestDate.setDate(latestDate.getDate() + 1);
+    } else {
+      toast.error("No dates added yet");
+      return;
     }
 
     const formattedDate = format(latestDate, "YYYY-MM-DD");

@@ -56,6 +56,7 @@ export function PieChartImage({
 
   // Pie layout and arc generator
   const pieLayout = pie<PieChartItem>()
+    .sort(null)
     .value((d) => d.value)
     .padAngle(gap); // Creates a gap between slices
 
@@ -64,7 +65,7 @@ export function PieChartImage({
     .outerRadius(radius)
     .cornerRadius(8);
 
-  const labelRadius = radius * 0.8;
+  const labelRadius = radius * 0.75;
   const arcLabel = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(labelRadius)
     .outerRadius(labelRadius);
@@ -80,11 +81,11 @@ export function PieChartImage({
   const MIN_ANGLE = 20;
 
   return (
-    <div className="p-6 w-full h-full">
-      <div className="relative w-full h-full">
+    <div className="scale-95">
+      <div className="relative">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`w-full h-full overflow-visible ${className}`}
+          className={` overflow-visible ${className}`}
         >
           {/* Connecting lines */}
           {arcs.map((d, i) => {
