@@ -6,6 +6,15 @@ import { Button } from "@heroui/button";
 import { Checkbox } from "@heroui/checkbox";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 function BarChartBuilder() {
   const {
@@ -24,6 +33,13 @@ function BarChartBuilder() {
     !chartType.includes("thin") && !chartType.includes("multi");
   const allowImage = chartType.includes("image");
   const allowMulti = chartType.includes("multi");
+
+  // State for delete confirmation dialog
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    index: number;
+    name: string;
+  } | null>(null);
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -53,8 +69,15 @@ function BarChartBuilder() {
   };
 
   const handleDeleteItem = (index: number, itemName: string) => {
-    if (confirm(`Are you sure you want to delete ${itemName}?`)) {
-      deleteChartItem(index);
+    setItemToDelete({ index, name: itemName });
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      deleteChartItem(itemToDelete.index);
+      setDeleteDialogOpen(false);
+      setItemToDelete(null);
     }
   };
 
@@ -383,6 +406,27 @@ function BarChartBuilder() {
           }
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete {itemToDelete?.name}? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="danger" onPress={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

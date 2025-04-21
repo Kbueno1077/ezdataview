@@ -5,6 +5,15 @@ import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
+import { useState } from "react";
 
 function BreakdownBuilder() {
   const {
@@ -13,12 +22,16 @@ function BreakdownBuilder() {
     addChartItem,
     deleteChartItem,
     updateChartItem,
-    updateChartConfig,
   } = useBuildStore((state) => state);
 
-  const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
-
   const allowColor = true;
+
+  // State for delete confirmation dialog
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [itemToDelete, setItemToDelete] = useState<{
+    index: number;
+    name: string;
+  } | null>(null);
 
   const handleAddBar = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -41,39 +54,22 @@ function BreakdownBuilder() {
     updateChartItem(index, key, value);
   };
 
-  const handleUpdateChartConfig = (key: string, value: boolean) => {
-    updateChartConfig(key, value);
+  const handleDeleteItem = (index: number, itemName: string) => {
+    setItemToDelete({ index, name: itemName });
+    setDeleteDialogOpen(true);
   };
 
-  const handleDeleteItem = (index: number, itemName: string) => {
-    if (confirm(`Are you sure you want to delete ${itemName}?`)) {
-      deleteChartItem(index);
+  const confirmDelete = () => {
+    if (itemToDelete) {
+      deleteChartItem(itemToDelete.index);
+      setDeleteDialogOpen(false);
+      setItemToDelete(null);
     }
   };
 
   return (
     <div className="">
       <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
-
-      {/* <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
-        <legend className="text-sm font-medium px-2">Chart Properties</legend>
-
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Checkbox
-              id="withTooltip"
-              isSelected={withTooltip}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("withTooltip", checked === true)
-              }
-              aria-labelledby="tooltip-label"
-            />
-            <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
-              Show tooltips on hover
-            </label>
-          </div>
-        </div>
-      </fieldset> */}
 
       <Button
         onPress={handleAddBar}
@@ -241,6 +237,27 @@ function BreakdownBuilder() {
           }
         )}
       </div>
+
+      {/* Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Confirm Deletion</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete {itemToDelete?.name}? This action
+              cannot be undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="danger" onPress={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

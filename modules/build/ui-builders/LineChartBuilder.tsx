@@ -4,6 +4,14 @@ import { PaintRoller, Palette, Plus, Trash, TrashIcon } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
 import { ChartDataItem } from "../../../stores/builder-store";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { format } from "@formkit/tempo";
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
@@ -12,6 +20,9 @@ import { DatePicker } from "@heroui/date-picker";
 import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
 import { parseDate } from "@internationalized/date";
+import { useState } from "react";
+
+import { toast } from "sonner";
 
 function LineChartBuilder() {
   const {
@@ -28,6 +39,14 @@ function LineChartBuilder() {
   const currentData = workspaceCharts[currentChartIndex].data;
 
   const allowColor = !chartType.includes("thin");
+
+  // Combined state for delete confirmation dialog
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const [deleteTarget, setDeleteTarget] = useState<{
+    type: "item" | "date";
+    index: number;
+    name: string;
+  } | null>(null);
 
   const handleAddLine = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
@@ -77,9 +96,8 @@ function LineChartBuilder() {
   };
 
   const handleDeleteItem = (index: number, itemName: string) => {
-    if (confirm(`Are you sure you want to delete ${itemName}?`)) {
-      deleteChartItem(index);
-    }
+    setDeleteTarget({ type: "item", index, name: itemName });
+    setDeleteDialogOpen(true);
   };
 
   // Function to add a new date to all lines
@@ -97,6 +115,8 @@ function LineChartBuilder() {
       // Set new date to one day after the latest date
       latestDate = new Date(lastDate);
       latestDate.setDate(latestDate.getDate() + 1);
+    } else {
+      toast("No data to add date to.");
     }
 
     const formattedDate = format(latestDate, "YYYY-MM-DD");
@@ -147,15 +167,34 @@ function LineChartBuilder() {
   // Function to delete a date point from all lines
   const handleDeleteDate = (valueIndex: number) => {
     if (
-      confirm(`Are you sure you want to delete this date point from all lines?`)
+      currentData.length > 0 &&
+      Array.isArray(currentData[0].data) &&
+      currentData[0].data[valueIndex]
     ) {
-      currentData.forEach((item, itemIndex) => {
-        if (Array.isArray(item.data) && item.data.length > valueIndex) {
-          const newValues = [...item.data];
-          newValues.splice(valueIndex, 1);
-          updateChartItem(itemIndex, "data", newValues);
-        }
-      });
+      const dateToDelete = currentData[0].data[valueIndex].date;
+      setDeleteTarget({ type: "date", index: valueIndex, name: dateToDelete });
+      setDeleteDialogOpen(true);
+    }
+  };
+
+  const confirmDelete = () => {
+    if (deleteTarget) {
+      if (deleteTarget.type === "item") {
+        deleteChartItem(deleteTarget.index);
+      } else if (deleteTarget.type === "date") {
+        currentData.forEach((item, itemIndex) => {
+          if (
+            Array.isArray(item.data) &&
+            item.data.length > deleteTarget.index
+          ) {
+            const newValues = [...item.data];
+            newValues.splice(deleteTarget.index, 1);
+            updateChartItem(itemIndex, "data", newValues);
+          }
+        });
+      }
+      setDeleteDialogOpen(false);
+      setDeleteTarget(null);
     }
   };
 
@@ -248,14 +287,14 @@ function LineChartBuilder() {
                 </div>
                 <Tooltip content="Remove this date from all lines">
                   <Button
-                    size="sm"
+                    size="md"
                     variant="light"
                     isIconOnly
                     onPress={() => handleDeleteDate(valueIndex)}
                     className="text-gray-500"
                     aria-label={`Remove date ${valueIndex + 1}`}
                   >
-                    <Trash size={16} />
+                    <Trash size={18} />
                   </Button>
                 </Tooltip>
               </div>
@@ -265,7 +304,7 @@ function LineChartBuilder() {
           )}
 
           <Button
-            size="sm"
+            size="md"
             variant="flat"
             onPress={handleAddDate}
             className="mt-2 w-full"
@@ -485,6 +524,30 @@ function LineChartBuilder() {
           }
         )}
       </div>
+
+      {/* Combined Delete Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>
+              Confirm {deleteTarget?.type === "date" ? "Date " : ""}Deletion
+            </DialogTitle>
+            <DialogDescription>
+              {deleteTarget?.type === "item"
+                ? `Are you sure you want to delete ${deleteTarget.name}? This action cannot be undone.`
+                : `Are you sure you want to delete the date ${deleteTarget?.name} from all lines? This action cannot be undone.`}
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button color="danger" onPress={confirmDelete}>
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }
