@@ -74,7 +74,7 @@ export function HalfDonutChart({
     <div className="relative">
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius}`}
-        className={`w-full h-full overflow-visible ${className}`}
+        className={`overflow-visible ${className}`}
       >
         {/* Define clip paths and colors for each slice */}
         <defs>

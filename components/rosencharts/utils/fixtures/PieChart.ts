@@ -44,6 +44,17 @@ export const filledDonutChartData = [
   { name: "Empty", value: 70 },
 ];
 
+export const halfDonutChartData = [
+  {
+    name: "Empty",
+    value: 30,
+  },
+  {
+    name: "Filled",
+    value: 70,
+  },
+];
+
 export const donutChartData: DonutChartItem[] = [
   { name: "NVDA", value: 25 },
   { name: "ETH", value: 18 },

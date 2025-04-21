@@ -17,6 +17,7 @@ import {
 import {
   donutChartData,
   filledDonutChartData,
+  halfDonutChartData,
   pieChartData,
   pieChartImageData,
 } from "./PieChart";
@@ -117,13 +118,6 @@ export const data = [
     data: pieChartData,
   },
   {
-    id: "14",
-    name: "Donut Chart",
-    type: "donut",
-    data: donutChartData,
-  },
-
-  {
     id: "15",
     name: "Pie Chart Image",
     type: "pie-image",
@@ -131,15 +125,29 @@ export const data = [
   },
 
   {
-    id: "16",
-    name: "Fillable Chart ",
-    type: "fillable",
-    data: filledDonutChartData,
+    id: "14",
+    name: "Donut Chart",
+    type: "donut",
+    data: donutChartData,
   },
   {
     id: "17",
     name: "Filled Donut Chart ",
     type: "fillable-donut",
+    data: filledDonutChartData,
+  },
+
+  {
+    id: "18",
+    name: "Half Donut Chart ",
+    type: "half-donut",
+    data: halfDonutChartData,
+  },
+
+  {
+    id: "16",
+    name: "Fillable Chart ",
+    type: "fillable",
     data: filledDonutChartData,
   },
 ];
