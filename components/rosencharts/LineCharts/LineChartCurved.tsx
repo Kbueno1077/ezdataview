@@ -147,9 +147,13 @@ export function LineChartCurved({
                 key={i}
                 d={p.path!}
                 fill="none"
-                className={p?.color?.line ?? "stroke-fuchsia-400"}
+                className={
+                  typeof p.color === "object"
+                    ? p.color.line
+                    : "stroke-fuchsia-400"
+                }
                 style={{
-                  stroke: p.color,
+                  stroke: typeof p.color === "string" ? p.color : undefined,
                 }}
                 strokeWidth="2"
                 vectorEffect="non-scaling-stroke"
@@ -173,9 +177,14 @@ export function LineChartCurved({
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={d?.color?.point ?? "text-fuchsia-300"}
+                      className={
+                        typeof d.color === "object"
+                          ? d.color.point
+                          : "text-fuchsia-300"
+                      }
                       style={{
-                        stroke: d.color,
+                        stroke:
+                          typeof d.color === "string" ? d.color : undefined,
                       }}
                     />
                   ))}
@@ -239,9 +248,14 @@ export function LineChartCurved({
                       strokeLinecap="round"
                       fill="none"
                       stroke="currentColor"
-                      className={d?.color?.point ?? "text-fuchsia-300"}
+                      className={
+                        typeof d.color === "object"
+                          ? d.color.point
+                          : "text-fuchsia-300"
+                      }
                       style={{
-                        stroke: d.color,
+                        stroke:
+                          typeof d.color === "object" ? d.color.line : d.color,
                       }}
                     />
                   ))}
