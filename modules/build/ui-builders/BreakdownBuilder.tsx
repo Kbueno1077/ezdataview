@@ -1,5 +1,11 @@
 import { useBuildStore } from "../../../providers/store-provider";
-import { PaintRoller, Palette, Plus, TrashIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  PaintRoller,
+  Palette,
+  Plus,
+  TrashIcon,
+} from "lucide-react";
 
 import { Accordion, AccordionItem } from "@heroui/accordion";
 import { Button } from "@heroui/button";
@@ -97,20 +103,23 @@ function BreakdownBuilder() {
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
                   aria-label={`Section ${index + 1}: ${item.key}`}
-                  title={`Section ${index + 1}`}
-                  subtitle={item.key}
+                  title={`${item.key ? item.key : `Section ${index + 1}`}`}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
                   }}
                   indicator={
                     <div className="flex items-center gap-2">
-                      {item.color && (
+                      {item.color ? (
                         <div
                           className="inline-block w-4 h-4 rounded-full border border-gray-300"
                           style={{ backgroundColor: item.color }}
                           aria-hidden="true"
                         />
+                      ) : (
+                        <div className="ml-1">
+                          <ChevronLeft size={18} />
+                        </div>
                       )}
                     </div>
                   }
@@ -118,7 +127,7 @@ function BreakdownBuilder() {
                   <div className="space-y-4 -mt-4 p-2">
                     <div className="flex flex-col">
                       <label htmlFor={`key-${item.id}`} className="mb-1">
-                        Bar Label
+                        Label
                       </label>
                       <Input
                         id={`key-${item.id}`}

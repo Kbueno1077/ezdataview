@@ -1,6 +1,13 @@
 "use client";
 
-import { PaintRoller, Palette, Plus, Trash, TrashIcon } from "lucide-react";
+import {
+  ChevronLeft,
+  PaintRoller,
+  Palette,
+  Plus,
+  Trash,
+  TrashIcon,
+} from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
 import { ChartDataItem } from "../../../stores/builder-store";
 
@@ -21,8 +28,6 @@ import { Input } from "@heroui/input";
 import { Tooltip } from "@heroui/tooltip";
 import { parseDate } from "@internationalized/date";
 import { useState } from "react";
-
-import { toast } from "sonner";
 
 function LineChartBuilder() {
   const {
@@ -115,8 +120,6 @@ function LineChartBuilder() {
       // Set new date to one day after the latest date
       latestDate = new Date(lastDate);
       latestDate.setDate(latestDate.getDate() + 1);
-    } else {
-      toast("No data to add date to.");
     }
 
     const formattedDate = format(latestDate, "YYYY-MM-DD");
@@ -340,19 +343,23 @@ function LineChartBuilder() {
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
                   aria-label={`"Line"} ${index + 1}`}
-                  title={`Line ${index + 1}`}
+                  title={`${item.key ? item.key : `Line ${index + 1}`}`}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
                   }}
                   indicator={
                     <div className="flex items-center gap-2">
-                      {item.color && (
+                      {item.color ? (
                         <div
                           className="inline-block w-4 h-4 rounded-full border border-gray-300"
                           style={{ backgroundColor: item.color }}
                           aria-hidden="true"
                         />
+                      ) : (
+                        <div className="ml-1">
+                          <ChevronLeft size={18} />
+                        </div>
                       )}
                     </div>
                   }

@@ -1,11 +1,12 @@
+import {
+  ChevronLeft,
+  PaintRoller,
+  Palette,
+  Plus,
+  TrashIcon,
+} from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
-import { PaintRoller, Palette, Plus, TrashIcon } from "lucide-react";
 
-import { Accordion, AccordionItem } from "@heroui/accordion";
-import { Button } from "@heroui/button";
-import { Checkbox } from "@heroui/checkbox";
-import { Input } from "@heroui/input";
-import { Tooltip } from "@heroui/tooltip";
 import {
   Dialog,
   DialogContent,
@@ -14,6 +15,11 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Accordion, AccordionItem } from "@heroui/accordion";
+import { Button } from "@heroui/button";
+import { Checkbox } from "@heroui/checkbox";
+import { Input } from "@heroui/input";
+import { Tooltip } from "@heroui/tooltip";
 import { useState } from "react";
 
 function PieChartBuilder() {
@@ -152,20 +158,23 @@ function PieChartBuilder() {
               <Accordion key={item.id} variant="splitted">
                 <AccordionItem
                   aria-label={`Piece ${index + 1}: ${item.name}`}
-                  title={`Piece ${index + 1}`}
-                  subtitle={item.name}
+                  title={`${item.name ? item.name : `Piece ${index + 1}`}`}
                   classNames={{
                     base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
                     title: "font-medium",
                   }}
                   indicator={
                     <div className="flex items-center gap-2">
-                      {item.color && (
+                      {item.color ? (
                         <div
                           className="inline-block w-4 h-4 rounded-full border border-gray-300"
                           style={{ backgroundColor: item.color }}
                           aria-hidden="true"
                         />
+                      ) : (
+                        <div className="ml-1">
+                          <ChevronLeft size={18} />
+                        </div>
                       )}
                     </div>
                   }
@@ -173,7 +182,7 @@ function PieChartBuilder() {
                   <div className="space-y-4 -mt-4 p-2">
                     <div className="flex flex-col">
                       <label htmlFor={`key-${item.id}`} className="mb-1">
-                        Bar Label
+                        Label
                       </label>
                       <Input
                         id={`key-${item.id}`}

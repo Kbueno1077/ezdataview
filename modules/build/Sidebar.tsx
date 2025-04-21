@@ -1,10 +1,18 @@
 "use client";
 
-import { Info, Lock, Settings, Unlock } from "lucide-react";
+import { Settings } from "lucide-react";
 import { useState } from "react";
 import { useBuildStore } from "../../providers/store-provider";
 import { chartTypes, getChartUIBuilder } from "./utils/builder-ui";
 
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Button } from "@heroui/button";
 import { Select, SelectItem, SharedSelection } from "@heroui/react";
 
@@ -15,23 +23,24 @@ export function Sidebar({
   isOpen: boolean;
   onClose: () => void;
 }) {
-  const [isChartLocked, setIsChartLocked] = useState(true);
-  const [showWarning, setShowWarning] = useState(false);
+  const [confirmDialogOpen, setConfirmDialogOpen] = useState(false);
+  const [pendingChartType, setPendingChartType] = useState<string | null>(null);
 
   const { workspaceCharts, currentChartIndex, changeChartType } = useBuildStore(
     (state) => state
   );
 
   const handleChartTypeChange = (selectedKeys: SharedSelection) => {
-    changeChartType(selectedKeys.currentKey as string);
-    setIsChartLocked(true);
-    setShowWarning(false);
+    const newChartType = selectedKeys.currentKey as string;
+    // Always show confirmation dialog when changing chart type
+    setPendingChartType(newChartType);
+    setConfirmDialogOpen(true);
   };
 
-  const handleToggleLock = () => {
-    const newLockedState = !isChartLocked;
-    setIsChartLocked(newLockedState);
-    setShowWarning(!newLockedState);
+  const applyChartTypeChange = (chartType: string) => {
+    changeChartType(chartType);
+    setConfirmDialogOpen(false);
+    setPendingChartType(null);
   };
 
   const currentChartType = workspaceCharts[currentChartIndex].chartType;
@@ -67,7 +76,6 @@ export function Sidebar({
             <div className="flex items-center gap-2">
               <Select
                 id="chart-type-select"
-                isDisabled={isChartLocked}
                 selectedKeys={currentChartType}
                 placeholder={currentChartType}
                 onSelectionChange={handleChartTypeChange}
@@ -78,48 +86,38 @@ export function Sidebar({
                   <SelectItem key={chart.value}>{chart.title}</SelectItem>
                 ))}
               </Select>
-
-              <Button
-                variant="flat"
-                size="sm"
-                isIconOnly
-                onPress={handleToggleLock}
-                aria-label={
-                  isChartLocked
-                    ? "Unlock chart selection"
-                    : "Lock chart selection"
-                }
-                title={
-                  isChartLocked
-                    ? "Unlock chart selection"
-                    : "Lock chart selection"
-                }
-              >
-                {isChartLocked ? (
-                  <Lock className="h-4 w-4" />
-                ) : (
-                  <Unlock className="h-4 w-4" />
-                )}
-              </Button>
             </div>
           </div>
-
-          {showWarning && (
-            <div
-              role="alert"
-              className="text-sm text-amber-600 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/30 p-3 rounded-md flex items-start gap-2 border border-amber-200 dark:border-amber-800"
-            >
-              <Info className="h-4 w-4 mt-0.5 flex-shrink-0" />
-              <span>
-                Changing the chart type will reset all current chart data. Make
-                sure to save your work before changing.
-              </span>
-            </div>
-          )}
         </div>
 
         <div>{getChartUIBuilder(currentChartType)}</div>
       </div>
+
+      {/* Chart Type Change Confirmation Dialog */}
+      <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Change Chart Type</DialogTitle>
+            <DialogDescription>
+              Changing the chart type will reset all current chart data. Make
+              sure to save your work before proceeding.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button variant="flat" onPress={() => setConfirmDialogOpen(false)}>
+              Cancel
+            </Button>
+            <Button
+              color="primary"
+              onPress={() =>
+                pendingChartType && applyChartTypeChange(pendingChartType)
+              }
+            >
+              Change Chart Type
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </aside>
   );
 }
