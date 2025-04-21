@@ -1,3 +1,4 @@
+import { PieChartItem } from "@/components/rosencharts/utils/types";
 import { BarChartHorizontalImage } from "../../../components/rosencharts/BarChartHorizontal/BarChartHorizontalImage";
 import { BarChartHorizontalMulti } from "../../../components/rosencharts/BarChartHorizontal/BarChartHorizontalMulti";
 import { BarChartVertical } from "../../../components/rosencharts/BarChartVertical/BarChartVertical";
@@ -125,7 +126,7 @@ export const chartShowcases: IChartShowcase[] = [
       "Proportional segment sizing for accurate visual representation",
       "Support for nested hierarchies and drill-down exploration",
     ],
-    chartType: <DonutChart data={donutChartData} />,
+    chartType: <DonutChart data={donutChartData as PieChartItem[]} />,
   },
   {
     title: "Breakdown Chart",
