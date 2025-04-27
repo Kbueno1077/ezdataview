@@ -1,7 +1,7 @@
 "use client";
 
-import { useRef, useState, useEffect } from "react";
 import { ExternalLink } from "lucide-react";
+import { useEffect, useState } from "react";
 import { getChartTypeByName } from "../rosencharts/utils/utils";
 import styles from "./NativeCharts.module.css";
 import NativeModal from "./NativeModal";
@@ -16,8 +16,6 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [headerGradient, setHeaderGradient] = useState("");
-  const chartRef = useRef<HTMLDivElement>(null);
-  const modalChartRef = useRef<HTMLDivElement>(null);
 
   // Generate random gradient colors on component mount
   useEffect(() => {
@@ -55,11 +53,9 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
   };
 
   return (
-    <div className="relative">
+    <div>
       <NativeModal title={title} isOpen={showModal} onClose={handleCloseModal}>
-        <div ref={modalChartRef} className={styles.modalChart}>
-          {previewChartNode}
-        </div>
+        <div className={styles.modalChart}>{previewChartNode}</div>
       </NativeModal>
 
       <div
@@ -67,7 +63,6 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
         onClick={handleChartClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
-        ref={chartRef}
       >
         <div
           className="py-3 px-4 font-semibold text-base flex items-center justify-between"

@@ -70,7 +70,7 @@ export function FillableDonutChart({
       <div className="relative">
         <svg
           viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`overflow-visible ${className}`}
+          className={`overflow-visible h-auto w-full ${className}`}
         >
           <defs>
             {arcs.map((d, i) => (

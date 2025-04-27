@@ -104,17 +104,17 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
 
   const modalContent = (
     <div className={`${styles.modalOverlay} ${styles[animationState]}`}>
-      <div
-        className={`${styles.modal} ${styles[animationState]}`}
-        ref={modalRef}
-      >
+      <div className={`${styles.modal} ${styles[animationState]}`}>
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>{title}</h2>
           <button className={styles.modalClose} onClick={onClose}>
             <X size={24} />
           </button>
         </div>
-        <div className={styles.modalContent}>{children}</div>
+
+        <div className={styles.modalContent}>
+          <div className={styles.modalContentInner}> {children}</div>
+        </div>
 
         <div className={styles.modalFooter}></div>
       </div>

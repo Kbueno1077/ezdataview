@@ -4,6 +4,7 @@
   left: 0;
   right: 0;
   bottom: 0;
+
   background-color: rgba(0, 0, 0, 0.6);
   display: flex;
   align-items: center;
@@ -32,8 +33,8 @@
   border-radius: 8px;
   padding: 1.5rem;
   width: 90vw;
-  height: 100%;
-  overflow-y: hidden;
+  height: 90vh;
+  overflow: hidden;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
   transform-origin: center;
   transform: scale(0.5);
@@ -49,9 +50,14 @@
 .modalContent {
   flex: 1;
   display: flex;
-  max-height: 100%;
   flex-direction: column;
   justify-content: center;
+  overflow: hidden;
+  position: relative;
+}
+
+.modalContentInner {
+  height: 100%;
 }
 
 .modal.entering {
