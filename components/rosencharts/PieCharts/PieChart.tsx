@@ -48,8 +48,8 @@ export function PieChart({
     },
   ];
 
-  // Chart dimensions - using full available space
-  const radius = 100;
+  // Chart dimensions - using more contained dimensions
+  const radius = 50; // Reduced from 100
   const gap = 0.02; // Gap between slices
 
   // Pie layout and arc generator
@@ -59,14 +59,9 @@ export function PieChart({
     .padAngle(gap); // Creates a gap between slices
 
   const arcGenerator = arc<PieArcDatum<PieChartItem>>()
-    .innerRadius(20)
+    .innerRadius(10) // Reduced from 20
     .outerRadius(radius)
-    .cornerRadius(8);
-
-  const labelRadius = radius * 0.75;
-  const arcLabel = arc<PieArcDatum<PieChartItem>>()
-    .innerRadius(labelRadius)
-    .outerRadius(labelRadius);
+    .cornerRadius(4); // Reduced from 8
 
   const arcs = pieLayout(data);
 
@@ -78,22 +73,80 @@ export function PieChart({
   // Minimum angle to display text
   const MIN_ANGLE = 20;
 
-  return (
-    <div className="scale-95">
-      <div className="relative">
-        <svg
-          viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`overflow-visible ${className}`}
-        >
-          {/* Slices */}
-          {arcs.map((d, i) => {
-            const midAngle = (d.startAngle + d.endAngle) / 2;
-            const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
-              d.data.colorFrom
-            );
+  // Function to determine optimal label position based on slice size
+  const getLabelPosition = (d: PieArcDatum<PieChartItem>) => {
+    const angle = computeAngle(d);
+    // For larger slices, position more outward, for smaller slices, position more inward
+    const positionRadius = angle > 45 ? radius * 0.7 : radius * 0.6;
+    const labelArc = arc<PieArcDatum<PieChartItem>>()
+      .innerRadius(positionRadius)
+      .outerRadius(positionRadius);
+    return labelArc.centroid(d);
+  };
 
-            if (!withTooltip) {
-              return (
+  return (
+    <div className="relative flex items-center justify-center scale-95">
+      <svg
+        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+        className={`w-full h-full max-w-full max-h-full ${className}`}
+      >
+        {/* Slices */}
+        {arcs.map((d, i) => {
+          const midAngle = (d.startAngle + d.endAngle) / 2;
+          const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
+            d.data.colorFrom
+          );
+
+          if (!withTooltip) {
+            return (
+              <g key={i}>
+                <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
+                <linearGradient
+                  id={`pieColors-${i}`}
+                  x1="0"
+                  y1="0"
+                  x2="1"
+                  y2="0"
+                  gradientTransform={`rotate(${
+                    (midAngle * 180) / Math.PI - 90
+                  }, 0.5, 0.5)`}
+                >
+                  {isHexColor ? (
+                    <>
+                      <stop offset="0%" stopColor={d.data.colorFrom} />
+                      <stop
+                        offset="100%"
+                        stopColor={d.data.colorTo || d.data.colorFrom}
+                      />
+                    </>
+                  ) : (
+                    <>
+                      <stop
+                        offset="0%"
+                        stopColor="currentColor"
+                        className={
+                          d.data.colorFrom ||
+                          defaultColors[i % defaultColors.length].colorFrom
+                        }
+                      />
+                      <stop
+                        offset="100%"
+                        stopColor="currentColor"
+                        className={
+                          d.data.colorTo ||
+                          defaultColors[i % defaultColors.length].colorTo
+                        }
+                      />
+                    </>
+                  )}
+                </linearGradient>
+              </g>
+            );
+          }
+
+          return (
+            <ClientTooltip key={i}>
+              <TooltipTrigger>
                 <g key={i}>
                   <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
                   <linearGradient
@@ -136,111 +189,64 @@ export function PieChart({
                     )}
                   </linearGradient>
                 </g>
-              );
-            }
+              </TooltipTrigger>
 
-            return (
-              <ClientTooltip key={i}>
-                <TooltipTrigger>
-                  <g key={i}>
-                    <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
-                    <linearGradient
-                      id={`pieColors-${i}`}
-                      x1="0"
-                      y1="0"
-                      x2="1"
-                      y2="0"
-                      gradientTransform={`rotate(${
-                        (midAngle * 180) / Math.PI - 90
-                      }, 0.5, 0.5)`}
-                    >
-                      {isHexColor ? (
-                        <>
-                          <stop offset="0%" stopColor={d.data.colorFrom} />
-                          <stop
-                            offset="100%"
-                            stopColor={d.data.colorTo || d.data.colorFrom}
-                          />
-                        </>
-                      ) : (
-                        <>
-                          <stop
-                            offset="0%"
-                            stopColor="currentColor"
-                            className={
-                              d.data.colorFrom ||
-                              defaultColors[i % defaultColors.length].colorFrom
-                            }
-                          />
-                          <stop
-                            offset="100%"
-                            stopColor="currentColor"
-                            className={
-                              d.data.colorTo ||
-                              defaultColors[i % defaultColors.length].colorTo
-                            }
-                          />
-                        </>
-                      )}
-                    </linearGradient>
-                  </g>
-                </TooltipTrigger>
-
-                <TooltipContent>
-                  <div>{d.data.name}</div>
-                  <div className="text-gray-500 text-sm">
-                    {d.data.value.toLocaleString("en-US")}
-                    {suffix}
-                  </div>
-                </TooltipContent>
-              </ClientTooltip>
-            );
-          })}
-        </svg>
-
-        {/* Labels as absolutely positioned divs */}
-        <div className="absolute inset-0 pointer-events-none">
-          {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
-            const angle = computeAngle(d);
-            if (angle <= MIN_ANGLE) return null;
-
-            // Get pie center position
-            const [x, y] = arcLabel.centroid(d);
-            const CENTER_PCT = 50;
-
-            // Convert to percentage positions. Adjust magic numbers to move the labels around
-            const nameLeft = `${CENTER_PCT + (x / radius) * 40}%`;
-            const nameTop = `${CENTER_PCT + (y / radius) * 40}%`;
-
-            const valueLeft = `${CENTER_PCT + (x / radius) * 74}%`;
-            const valueTop = `${CENTER_PCT + (y / radius) * 72}%`;
-
-            return (
-              <div key={i}>
-                <div
-                  className="absolute transform  -translate-x-1/2 -translate-y-1/2 text-center"
-                  style={{ left: valueLeft, top: valueTop }}
-                >
-                  {d.data.value}
+              <TooltipContent>
+                <div>{d.data.name}</div>
+                <div className="text-gray-500 text-sm">
+                  {d.data.value.toLocaleString("en-US")}
                   {suffix}
                 </div>
-                <div
-                  className="absolute text-white truncate text-center font-medium w-full text-sm"
-                  style={{
-                    left: nameLeft,
-                    top: nameTop,
-                    transform: "translate(-50%, -50%)",
-                    marginLeft: x > 0 ? "2px" : "-2px",
-                    marginTop: y > 0 ? "2px" : "-2px",
-                  }}
-                >
-                  {d.data.name}
-                </div>
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              </TooltipContent>
+            </ClientTooltip>
+          );
+        })}
+
+        {/* SVG Text Labels */}
+        {arcs.map((d, i) => {
+          const angle = computeAngle(d);
+          if (angle <= MIN_ANGLE) return null;
+
+          // Get the centroid of the arc for label positioning using the new function
+          const [x, y] = getLabelPosition(d);
+
+          // Calculate font size based on the angle of the slice
+          // Larger slices get larger text, smaller slices get smaller text
+          const fontSize = Math.min(5, Math.max(3.5, angle / 15));
+
+          // Calculate the midpoint between inner and outer radius for better centering
+          const midAngle = (d.startAngle + d.endAngle) / 2;
+          const xAdjust = Math.cos(midAngle) * 2; // Small adjustment to center text better
+          const yAdjust = Math.sin(midAngle) * 2;
+
+          return (
+            <g key={i} className="pointer-events-none">
+              <text
+                x={x + xAdjust}
+                y={y + yAdjust - fontSize * 0.6}
+                textAnchor="middle"
+                fontSize={fontSize}
+                fill="white"
+                fontWeight="500"
+                className="select-none"
+              >
+                {d.data.name}
+              </text>
+              <text
+                x={x + xAdjust}
+                y={y + yAdjust + fontSize * 0.6}
+                textAnchor="middle"
+                fontSize={fontSize}
+                fill="white"
+                className="select-none"
+              >
+                {d.data.value}
+                {suffix}
+              </text>
+            </g>
+          );
+        })}
+      </svg>
     </div>
   );
 }

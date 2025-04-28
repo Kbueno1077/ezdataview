@@ -66,80 +66,78 @@ export function FillableDonutChart({
   };
 
   return (
-    <div className="scale-95">
-      <div className="relative">
-        <svg
-          viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={`overflow-visible h-auto w-full ${className}`}
-        >
-          <defs>
-            {arcs.map((d, i) => (
-              <clipPath
-                key={`fillable-donut-clip-${i}`}
-                id={`fillable-donut-clip-${i}`}
+    <div className="relative flex items-center justify-center scale-95">
+      <svg
+        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+        className={`w-full h-full max-w-full max-h-full ${className}`}
+      >
+        <defs>
+          {arcs.map((d, i) => (
+            <clipPath
+              key={`fillable-donut-clip-${i}`}
+              id={`fillable-donut-clip-${i}`}
+            >
+              <path d={arcClip(d) || undefined} />
+            </clipPath>
+          ))}
+        </defs>
+        <g>
+          {/* Slices */}
+          {arcs.map((d, i) => {
+            const sliceContent = (
+              <g
+                key={i}
+                clipPath={`url(#fillable-donut-clip-${i})`}
+                onClick={() => handleSliceClick(d.data)}
+                style={{ cursor: "pointer" }}
               >
-                <path d={arcClip(d) || undefined} />
-              </clipPath>
-            ))}
-          </defs>
-          <g>
-            {/* Slices */}
-            {arcs.map((d, i) => {
-              const sliceContent = (
-                <g
-                  key={i}
-                  clipPath={`url(#fillable-donut-clip-${i})`}
-                  onClick={() => handleSliceClick(d.data)}
-                  style={{ cursor: "pointer" }}
-                >
-                  <path
-                    className="stroke-white/30 dark:stroke-zinc-400/10"
-                    strokeWidth={lightStrokeEffect}
-                    d={arcGenerator(d) || undefined}
-                    style={{
-                      fill:
-                        d.data.colorFrom && d.data.colorFrom.startsWith("#")
-                          ? d.data.colorFrom
-                          : defaultColors[i % defaultColors.length],
-                    }}
-                  />
-                </g>
-              );
+                <path
+                  className="stroke-white/30 dark:stroke-zinc-400/10"
+                  strokeWidth={lightStrokeEffect}
+                  d={arcGenerator(d) || undefined}
+                  style={{
+                    fill:
+                      d.data.colorFrom && d.data.colorFrom.startsWith("#")
+                        ? d.data.colorFrom
+                        : defaultColors[i % defaultColors.length],
+                  }}
+                />
+              </g>
+            );
 
-              if (!withTooltip) {
-                return sliceContent;
-              }
+            if (!withTooltip) {
+              return sliceContent;
+            }
 
-              return (
-                <ClientTooltip key={i}>
-                  <TooltipTrigger>{sliceContent}</TooltipTrigger>
-                  <TooltipContent>
-                    <div>{d.data.name}</div>
-                    <div className="text-gray-500 text-sm">
-                      {d.data.value.toLocaleString("en-US")}
-                      {suffix}
-                    </div>
-                  </TooltipContent>
-                </ClientTooltip>
-              );
-            })}
-          </g>
-        </svg>
-        {/* Centered value display */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center">
-          <span className="text-lg font-semibold leading-5">
-            {selectedSlice.name}
+            return (
+              <ClientTooltip key={i}>
+                <TooltipTrigger>{sliceContent}</TooltipTrigger>
+                <TooltipContent>
+                  <div>{d.data.name}</div>
+                  <div className="text-gray-500 text-sm">
+                    {d.data.value.toLocaleString("en-US")}
+                    {suffix}
+                  </div>
+                </TooltipContent>
+              </ClientTooltip>
+            );
+          })}
+        </g>
+      </svg>
+      {/* Centered value display */}
+      <div className="absolute inset-0 flex flex-col items-center justify-center">
+        <span className="text-lg font-semibold leading-5">
+          {selectedSlice.name}
+        </span>
+        <div className="text-xl font-bold">
+          <span className="text-violet-600 dark:text-violet-400">
+            {selectedSlice.value.toLocaleString("en-US")}
+            {suffix}
           </span>
-          <div className="text-xl font-bold">
-            <span className="text-violet-600 dark:text-violet-400">
-              {selectedSlice.value.toLocaleString("en-US")}
-              {suffix}
-            </span>
-            <span className="text-zinc-400 dark:text-zinc-600">
-              {" "}
-              / 100 {suffix}
-            </span>
-          </div>
+          <span className="text-zinc-400 dark:text-zinc-600">
+            {" "}
+            / 100 {suffix}
+          </span>
         </div>
       </div>
     </div>

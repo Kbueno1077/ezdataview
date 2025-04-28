@@ -67,61 +67,93 @@ export function DonutChart({
   ];
 
   return (
-    <div className="scale-95">
-      <div className="relative">
-        {/* Add a new div for centered text */}
-        {innerContent && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center">
-              <p className={`text-lg text-zinc-500`}>Total</p>
-              <p
-                className={`text-4xl transition-colors duration-300 font-bold`}
-              >
-                184
-              </p>
-            </div>
+    <div className="relative flex items-center justify-center scale-95">
+      {/* Add a new div for centered text */}
+      {innerContent && (
+        <div className="absolute inset-0 flex items-center justify-center">
+          <div className="text-center">
+            <p className={`text-lg text-zinc-500`}>Total</p>
+            <p className={`text-4xl transition-colors duration-300 font-bold`}>
+              184
+            </p>
           </div>
-        )}
+        </div>
+      )}
 
-        <svg
-          viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={` overflow-visible ${className}`}
-        >
-          {/* Define clip paths and colors for each slice */}
-          <defs>
-            {arcs.map((d, i) => (
-              <clipPath key={`donut-c0-clip-${i}`} id={`donut-c0-clip-${i}`}>
-                <path d={arcClip(d) || undefined} />
-              </clipPath>
-            ))}
+      <svg
+        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+        className={`w-full h-full max-w-full max-h-full ${className}`}
+      >
+        {/* Define clip paths and colors for each slice */}
+        <defs>
+          {arcs.map((d, i) => (
+            <clipPath key={`donut-c0-clip-${i}`} id={`donut-c0-clip-${i}`}>
+              <path d={arcClip(d) || undefined} />
+            </clipPath>
+          ))}
 
-            {arcs.map((d, i) => (
-              <linearGradient key={i} id={`donut-c0-gradient-${i}`}>
-                <stop
-                  offset="55%"
-                  stopColor={
-                    d.data.colorFrom || defaultColors[i % defaultColors.length]
-                  }
-                  stopOpacity={0.95}
-                />
-              </linearGradient>
-            ))}
-          </defs>
+          {arcs.map((d, i) => (
+            <linearGradient key={i} id={`donut-c0-gradient-${i}`}>
+              <stop
+                offset="55%"
+                stopColor={
+                  d.data.colorFrom || defaultColors[i % defaultColors.length]
+                }
+                stopOpacity={0.95}
+              />
+            </linearGradient>
+          ))}
+        </defs>
 
-          {/* Slices */}
-          {arcs.map((d, i) => {
-            const angle = computeAngle(d);
-            const centroid = arcLabel.centroid(d);
-            if (d.endAngle > Math.PI) {
-              centroid[0] += 10;
-              centroid[1] += 10;
-            } else {
-              centroid[0] -= 10;
-              centroid[1] -= 0;
-            }
+        {/* Slices */}
+        {arcs.map((d, i) => {
+          const angle = computeAngle(d);
+          const centroid = arcLabel.centroid(d);
+          if (d.endAngle > Math.PI) {
+            centroid[0] += 10;
+            centroid[1] += 10;
+          } else {
+            centroid[0] -= 10;
+            centroid[1] -= 0;
+          }
 
-            if (!withTooltip) {
-              return (
+          if (!withTooltip) {
+            return (
+              <g key={i}>
+                {/* Use the clip path on this group or individual path */}
+                <g clipPath={`url(#donut-c0-clip-${i})`}>
+                  <path
+                    fill={`url(#donut-c0-gradient-${i})`}
+                    stroke="#ffffff33" // Lighter stroke for a 3D effect
+                    strokeWidth={lightStrokeEffect} // Adjust stroke width for the desired effect
+                    d={arcGenerator(d) || undefined}
+                  />
+                </g>
+                {/* Labels with conditional rendering */}
+                <g opacity={angle > minAngle ? 1 : 0}>
+                  <text
+                    transform={`translate(${centroid})`}
+                    textAnchor="middle"
+                    fontSize={38}
+                  >
+                    <tspan y="-0.4em" fontWeight="600" fill={"#eee"}>
+                      {d.data.name}
+                    </tspan>
+                    {angle > minAngle && (
+                      <tspan x={0} y="0.7em" fillOpacity={0.7} fill={"#eee"}>
+                        {d.data.value.toLocaleString("en-US")}
+                        {suffix}
+                      </tspan>
+                    )}
+                  </text>
+                </g>
+              </g>
+            );
+          }
+
+          return (
+            <ClientTooltip key={i}>
+              <TooltipTrigger>
                 <g key={i}>
                   {/* Use the clip path on this group or individual path */}
                   <g clipPath={`url(#donut-c0-clip-${i})`}>
@@ -151,59 +183,18 @@ export function DonutChart({
                     </text>
                   </g>
                 </g>
-              );
-            }
-
-            return (
-              <ClientTooltip key={i}>
-                <TooltipTrigger>
-                  <g key={i}>
-                    {/* Use the clip path on this group or individual path */}
-                    <g clipPath={`url(#donut-c0-clip-${i})`}>
-                      <path
-                        fill={`url(#donut-c0-gradient-${i})`}
-                        stroke="#ffffff33" // Lighter stroke for a 3D effect
-                        strokeWidth={lightStrokeEffect} // Adjust stroke width for the desired effect
-                        d={arcGenerator(d) || undefined}
-                      />
-                    </g>
-                    {/* Labels with conditional rendering */}
-                    <g opacity={angle > minAngle ? 1 : 0}>
-                      <text
-                        transform={`translate(${centroid})`}
-                        textAnchor="middle"
-                        fontSize={38}
-                      >
-                        <tspan y="-0.4em" fontWeight="600" fill={"#eee"}>
-                          {d.data.name}
-                        </tspan>
-                        {angle > minAngle && (
-                          <tspan
-                            x={0}
-                            y="0.7em"
-                            fillOpacity={0.7}
-                            fill={"#eee"}
-                          >
-                            {d.data.value.toLocaleString("en-US")}
-                            {suffix}
-                          </tspan>
-                        )}
-                      </text>
-                    </g>
-                  </g>
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div>{d.data.name}</div>
-                  <div className="text-gray-500 text-sm">
-                    {d.data.value.toLocaleString("en-US")}
-                    {suffix}
-                  </div>
-                </TooltipContent>
-              </ClientTooltip>
-            );
-          })}
-        </svg>
-      </div>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>{d.data.name}</div>
+                <div className="text-gray-500 text-sm">
+                  {d.data.value.toLocaleString("en-US")}
+                  {suffix}
+                </div>
+              </TooltipContent>
+            </ClientTooltip>
+          );
+        })}
+      </svg>
     </div>
   );
 }

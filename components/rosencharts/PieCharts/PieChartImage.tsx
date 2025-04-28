@@ -58,17 +58,12 @@ export function PieChartImage({
   const pieLayout = pie<PieChartItem>()
     .sort(null)
     .value((d) => d.value)
-    .padAngle(gap); // Creates a gap between slices
+    .padAngle(gap);
 
   const arcGenerator = arc<PieArcDatum<PieChartItem>>()
     .innerRadius(20)
     .outerRadius(radius)
     .cornerRadius(8);
-
-  const labelRadius = radius * 0.75;
-  const arcLabel = arc<PieArcDatum<PieChartItem>>()
-    .innerRadius(labelRadius)
-    .outerRadius(labelRadius);
 
   const arcs = pieLayout(data);
 
@@ -81,51 +76,25 @@ export function PieChartImage({
   const MIN_ANGLE = 20;
 
   return (
-    <div className="scale-95">
-      <div className="relative">
-        <svg
-          viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-          className={` overflow-visible ${className}`}
-        >
-          {/* Connecting lines */}
-          {arcs.map((d, i) => {
-            const [labelX, labelY] = arcLabel.centroid(d);
-            const [arcX, arcY] = arcGenerator.centroid(d);
-            const LINE_LENGTH = 1.35;
-            const isHexColor =
-              d.data.colorFrom &&
-              /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
+    <div className="relative flex items-center justify-center scale-95">
+      <svg
+        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+        className={`w-full h-full max-w-full max-h-full ${className}`}
+      >
+        {/* Slices */}
+        {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
+          const isHexColor =
+            d.data.colorFrom &&
+            /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
+          const angle = computeAngle(d);
+          const midAngle = (d.startAngle + d.endAngle) / 2;
+          const [x, y] = arcGenerator.centroid(d);
+          const scale = Math.min(1.2, angle / 45); // Increased base scale and adjusted angle divisor
 
+          if (!withTooltip) {
             return (
-              <g key={`line-${i}`} className="pointer-events-none">
-                <line
-                  x1={arcX}
-                  y1={arcY}
-                  x2={labelX * LINE_LENGTH}
-                  y2={labelY * LINE_LENGTH}
-                  stroke={isHexColor ? d.data.colorFrom : "currentColor"}
-                  className={
-                    !isHexColor
-                      ? d.data.colorFrom ||
-                        defaultColors[i % data.length].colorFrom
-                      : ""
-                  }
-                  strokeWidth={4}
-                />
-              </g>
-            );
-          })}
-
-          {/* Slices */}
-          {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
-            const isHexColor =
-              d.data.colorFrom &&
-              /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(d.data.colorFrom);
-
-            if (!withTooltip) {
-              return (
+              <g key={i}>
                 <path
-                  key={i}
                   fill={isHexColor ? d.data.colorFrom : "currentColor"}
                   d={arcGenerator(d)!}
                   className={
@@ -137,14 +106,48 @@ export function PieChartImage({
                       : ""
                   }
                 />
-              );
-            }
+                {angle >= MIN_ANGLE && d.data.logo && (
+                  <g transform={`translate(${x}, ${y})`}>
+                    <foreignObject
+                      x={-40 * scale}
+                      y={-40 * scale}
+                      width={80 * scale}
+                      height={80 * scale}
+                    >
+                      <div className="w-full h-full flex items-center justify-center">
+                        <Image
+                          src={d.data.logo}
+                          alt={d.data.name}
+                          width={440}
+                          height={440}
+                          className="w-full h-full object-contain"
+                        />
+                      </div>
+                    </foreignObject>
+                  </g>
+                )}
+                {angle >= MIN_ANGLE && (
+                  <text
+                    x={x}
+                    y={y + 50 * scale}
+                    textAnchor="middle"
+                    fontSize={20 * scale}
+                    fill="white"
+                    className="select-none font-medium"
+                  >
+                    {d.data.value}
+                    {suffix}
+                  </text>
+                )}
+              </g>
+            );
+          }
 
-            return (
-              <ClientTooltip key={i}>
-                <TooltipTrigger>
+          return (
+            <ClientTooltip key={i}>
+              <TooltipTrigger>
+                <g>
                   <path
-                    key={i}
                     fill={isHexColor ? d.data.colorFrom : "currentColor"}
                     d={arcGenerator(d)!}
                     className={
@@ -156,70 +159,52 @@ export function PieChartImage({
                         : ""
                     }
                   />
-                </TooltipTrigger>
-                <TooltipContent>
-                  <div>{d.data.name}</div>
-                  <div className="text-gray-500 text-sm">
-                    {d.data.value.toLocaleString("en-US")}
-                    {suffix}
-                  </div>
-                </TooltipContent>
-              </ClientTooltip>
-            );
-          })}
-        </svg>
-
-        {/* Labels as absolutely positioned divs */}
-        <div className="absolute inset-0 pointer-events-none">
-          {arcs.map((d: PieArcDatum<PieChartItem>, i) => {
-            const angle = computeAngle(d);
-
-            // Get pie center position
-            const [x, y] = arcLabel.centroid(d);
-            const CENTER_PCT = 50;
-
-            // Convert to percentage positions. Adjust magic numbers to move the labels around
-            const logoLeft = `${CENTER_PCT + (x / radius) * 40}%`;
-            const logoTop = `${CENTER_PCT + (y / radius) * 40}%`;
-
-            const valueLeft = `${CENTER_PCT + (x / radius) * 74}%`;
-            const valueTop = `${CENTER_PCT + (y / radius) * 72}%`;
-
-            return (
-              <div key={i}>
-                <div
-                  className="absolute transform -translate-x-1/2 -translate-y-1/2 text-center"
-                  style={{ left: valueLeft, top: valueTop }}
-                >
-                  {d.data.value}
+                  {angle >= MIN_ANGLE && d.data.logo && (
+                    <g transform={`translate(${x}, ${y})`}>
+                      <foreignObject
+                        x={-40 * scale}
+                        y={-40 * scale}
+                        width={80 * scale}
+                        height={80 * scale}
+                      >
+                        <div className="w-full h-full flex items-center justify-center">
+                          <Image
+                            src={d.data.logo}
+                            alt={d.data.name}
+                            width={440}
+                            height={440}
+                            className="w-full h-full object-contain"
+                          />
+                        </div>
+                      </foreignObject>
+                    </g>
+                  )}
+                  {angle >= MIN_ANGLE && (
+                    <text
+                      x={x}
+                      y={y + 50 * scale}
+                      textAnchor="middle"
+                      fontSize={20 * scale}
+                      fill="white"
+                      className="select-none font-medium"
+                    >
+                      {d.data.value}
+                      {suffix}
+                    </text>
+                  )}
+                </g>
+              </TooltipTrigger>
+              <TooltipContent>
+                <div>{d.data.name}</div>
+                <div className="text-gray-500 text-sm">
+                  {d.data.value.toLocaleString("en-US")}
                   {suffix}
                 </div>
-                {angle >= MIN_ANGLE && (
-                  <div
-                    className="absolute -translate-x-1/2 -translate-y-1/2"
-                    style={{
-                      left: logoLeft,
-                      top: logoTop,
-                      width: "15%",
-                      height: "15%",
-                    }}
-                  >
-                    {d.data.logo && (
-                      <Image
-                        src={d.data.logo}
-                        alt={d.data.name}
-                        width={440}
-                        height={440}
-                        className="w-full h-full object-contain"
-                      />
-                    )}
-                  </div>
-                )}
-              </div>
-            );
-          })}
-        </div>
-      </div>
+              </TooltipContent>
+            </ClientTooltip>
+          );
+        })}
+      </svg>
     </div>
   );
 }
