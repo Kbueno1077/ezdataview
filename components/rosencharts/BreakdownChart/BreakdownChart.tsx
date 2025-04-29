@@ -31,7 +31,7 @@ export function BreakdownChart({
 
   return (
     <div
-      className={`relative h-[var(--height)] mb-1.5 ${className}`}
+      className={`relative h-[var(--height)] mb-1.5 w-full ${className}`}
       style={
         {
           "--marginTop": "0px",

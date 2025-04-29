@@ -30,7 +30,7 @@ export function BreakdownChartThin({
 
   return (
     <div
-      className={`relative h-[var(--height)] mt-4 mb-8 ${className}`}
+      className={`relative h-[var(--height)] mt-4 mb-8 w-full ${className}`}
       style={
         {
           "--marginTop": "0px",

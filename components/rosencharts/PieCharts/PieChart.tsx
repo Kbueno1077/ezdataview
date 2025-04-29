@@ -85,20 +85,67 @@ export function PieChart({
   };
 
   return (
-    <div className="relative flex items-center justify-center scale-95">
-      <svg
-        viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`w-full h-full max-w-full max-h-full ${className}`}
-      >
-        {/* Slices */}
-        {arcs.map((d, i) => {
-          const midAngle = (d.startAngle + d.endAngle) / 2;
-          const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
-            d.data.colorFrom
-          );
+    <svg
+      viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
+      className={`w-full h-full max-w-full max-h-full scale-95 ${className}`}
+    >
+      {/* Slices */}
+      {arcs.map((d, i) => {
+        const midAngle = (d.startAngle + d.endAngle) / 2;
+        const isHexColor = /^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$/.test(
+          d.data.colorFrom
+        );
 
-          if (!withTooltip) {
-            return (
+        if (!withTooltip) {
+          return (
+            <g key={i}>
+              <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
+              <linearGradient
+                id={`pieColors-${i}`}
+                x1="0"
+                y1="0"
+                x2="1"
+                y2="0"
+                gradientTransform={`rotate(${
+                  (midAngle * 180) / Math.PI - 90
+                }, 0.5, 0.5)`}
+              >
+                {isHexColor ? (
+                  <>
+                    <stop offset="0%" stopColor={d.data.colorFrom} />
+                    <stop
+                      offset="100%"
+                      stopColor={d.data.colorTo || d.data.colorFrom}
+                    />
+                  </>
+                ) : (
+                  <>
+                    <stop
+                      offset="0%"
+                      stopColor="currentColor"
+                      className={
+                        d.data.colorFrom ||
+                        defaultColors[i % defaultColors.length].colorFrom
+                      }
+                    />
+                    <stop
+                      offset="100%"
+                      stopColor="currentColor"
+                      className={
+                        d.data.colorTo ||
+                        defaultColors[i % defaultColors.length].colorTo
+                      }
+                    />
+                  </>
+                )}
+              </linearGradient>
+            </g>
+          );
+        }
+
+        return (
+          <ClientTooltip key={i}>
+            <TooltipTrigger>
               <g key={i}>
                 <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
                 <linearGradient
@@ -141,112 +188,63 @@ export function PieChart({
                   )}
                 </linearGradient>
               </g>
-            );
-          }
+            </TooltipTrigger>
 
-          return (
-            <ClientTooltip key={i}>
-              <TooltipTrigger>
-                <g key={i}>
-                  <path fill={`url(#pieColors-${i})`} d={arcGenerator(d)!} />
-                  <linearGradient
-                    id={`pieColors-${i}`}
-                    x1="0"
-                    y1="0"
-                    x2="1"
-                    y2="0"
-                    gradientTransform={`rotate(${
-                      (midAngle * 180) / Math.PI - 90
-                    }, 0.5, 0.5)`}
-                  >
-                    {isHexColor ? (
-                      <>
-                        <stop offset="0%" stopColor={d.data.colorFrom} />
-                        <stop
-                          offset="100%"
-                          stopColor={d.data.colorTo || d.data.colorFrom}
-                        />
-                      </>
-                    ) : (
-                      <>
-                        <stop
-                          offset="0%"
-                          stopColor="currentColor"
-                          className={
-                            d.data.colorFrom ||
-                            defaultColors[i % defaultColors.length].colorFrom
-                          }
-                        />
-                        <stop
-                          offset="100%"
-                          stopColor="currentColor"
-                          className={
-                            d.data.colorTo ||
-                            defaultColors[i % defaultColors.length].colorTo
-                          }
-                        />
-                      </>
-                    )}
-                  </linearGradient>
-                </g>
-              </TooltipTrigger>
-
-              <TooltipContent>
-                <div>{d.data.name}</div>
-                <div className="text-gray-500 text-sm">
-                  {d.data.value.toLocaleString("en-US")}
-                  {suffix}
-                </div>
-              </TooltipContent>
-            </ClientTooltip>
-          );
-        })}
-
-        {/* SVG Text Labels */}
-        {arcs.map((d, i) => {
-          const angle = computeAngle(d);
-          if (angle <= MIN_ANGLE) return null;
-
-          // Get the centroid of the arc for label positioning using the new function
-          const [x, y] = getLabelPosition(d);
-
-          // Calculate font size based on the angle of the slice
-          // Larger slices get larger text, smaller slices get smaller text
-          const fontSize = Math.min(5, Math.max(3.5, angle / 15));
-
-          // Calculate the midpoint between inner and outer radius for better centering
-          const midAngle = (d.startAngle + d.endAngle) / 2;
-          const xAdjust = Math.cos(midAngle) * 2; // Small adjustment to center text better
-          const yAdjust = Math.sin(midAngle) * 2;
-
-          return (
-            <g key={i} className="pointer-events-none">
-              <text
-                x={x + xAdjust}
-                y={y + yAdjust - fontSize * 0.6}
-                textAnchor="middle"
-                fontSize={fontSize}
-                fill="white"
-                fontWeight="500"
-                className="select-none"
-              >
-                {d.data.name}
-              </text>
-              <text
-                x={x + xAdjust}
-                y={y + yAdjust + fontSize * 0.6}
-                textAnchor="middle"
-                fontSize={fontSize}
-                fill="white"
-                className="select-none"
-              >
-                {d.data.value}
+            <TooltipContent>
+              <div>{d.data.name}</div>
+              <div className="text-gray-500 text-sm">
+                {d.data.value.toLocaleString("en-US")}
                 {suffix}
-              </text>
-            </g>
-          );
-        })}
-      </svg>
-    </div>
+              </div>
+            </TooltipContent>
+          </ClientTooltip>
+        );
+      })}
+
+      {/* SVG Text Labels */}
+      {arcs.map((d, i) => {
+        const angle = computeAngle(d);
+        if (angle <= MIN_ANGLE) return null;
+
+        // Get the centroid of the arc for label positioning using the new function
+        const [x, y] = getLabelPosition(d);
+
+        // Calculate font size based on the angle of the slice
+        // Larger slices get larger text, smaller slices get smaller text
+        const fontSize = Math.min(5, Math.max(3.5, angle / 15));
+
+        // Calculate the midpoint between inner and outer radius for better centering
+        const midAngle = (d.startAngle + d.endAngle) / 2;
+        const xAdjust = Math.cos(midAngle) * 2; // Small adjustment to center text better
+        const yAdjust = Math.sin(midAngle) * 2;
+
+        return (
+          <g key={i} className="pointer-events-none">
+            <text
+              x={x + xAdjust}
+              y={y + yAdjust - fontSize * 0.6}
+              textAnchor="middle"
+              fontSize={fontSize}
+              fill="white"
+              fontWeight="500"
+              className="select-none"
+            >
+              {d.data.name}
+            </text>
+            <text
+              x={x + xAdjust}
+              y={y + yAdjust + fontSize * 0.6}
+              textAnchor="middle"
+              fontSize={fontSize}
+              fill="white"
+              className="select-none"
+            >
+              {d.data.value}
+              {suffix}
+            </text>
+          </g>
+        );
+      })}
+    </svg>
   );
 }

@@ -9,13 +9,11 @@ import { PieChartItem } from "../utils/types";
 export function DonutChart({
   data,
   withTooltip = true,
-  innerContent = false,
   suffix = "",
   className,
 }: {
   data: PieChartItem[];
   withTooltip?: boolean;
-  innerContent?: boolean;
   className?: string;
   suffix?: string;
 }) {
@@ -67,22 +65,10 @@ export function DonutChart({
   ];
 
   return (
-    <div className="relative flex items-center justify-center scale-95">
-      {/* Add a new div for centered text */}
-      {innerContent && (
-        <div className="absolute inset-0 flex items-center justify-center">
-          <div className="text-center">
-            <p className={`text-lg text-zinc-500`}>Total</p>
-            <p className={`text-4xl transition-colors duration-300 font-bold`}>
-              184
-            </p>
-          </div>
-        </div>
-      )}
-
+    <>
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`w-full h-full max-w-full max-h-full ${className}`}
+        className={`w-full h-full max-w-full max-h-full scale-95 ${className}`}
       >
         {/* Define clip paths and colors for each slice */}
         <defs>
@@ -195,6 +181,6 @@ export function DonutChart({
           );
         })}
       </svg>
-    </div>
+    </>
   );
 }

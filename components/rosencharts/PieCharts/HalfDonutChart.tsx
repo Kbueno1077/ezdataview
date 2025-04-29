@@ -71,7 +71,7 @@ export function HalfDonutChart({
   ];
 
   return (
-    <div className="relative">
+    <div className="relative w-full">
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius}`}
         className={`overflow-visible ${className}`}

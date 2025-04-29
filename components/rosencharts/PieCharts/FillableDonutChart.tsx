@@ -66,10 +66,12 @@ export function FillableDonutChart({
   };
 
   return (
-    <div className="relative flex items-center justify-center scale-95">
+    <div
+      className={`w-full h-full max-w-full max-h-full  scale-95 ${className}`}
+    >
       <svg
         viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
-        className={`w-full h-full max-w-full max-h-full ${className}`}
+        className={`w-full h-full max-w-full max-h-full  ${className}`}
       >
         <defs>
           {arcs.map((d, i) => (

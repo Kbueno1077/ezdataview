@@ -108,7 +108,7 @@ const ChartShowcaseSection: React.FC<Props> = ({
             })}
           >
             <div className="relative w-[calc(100vw-40px)] sm:w-[480px] md:w-[520px] lg:w-[520px] xl:w-[520px] h-[384px] flex items-center px-5 justify-center overflow-hidden rounded-xl shadow-lg">
-              <div className="w-full">{chartType}</div>
+              {chartType}
             </div>
           </div>
         </div>
