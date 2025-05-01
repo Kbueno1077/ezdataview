@@ -43,6 +43,13 @@ export default function RootLayout({
   return (
     <ClerkProvider>
       <html lang="en">
+        <head>
+          <script
+            crossOrigin="anonymous"
+            src="//unpkg.com/react-scan/dist/auto.global.js"
+          />
+          {/* rest of your scripts go under */}
+        </head>
         <body
           className={`${manrope.className} ${sourceSans.className} antialiased`}
         >

@@ -1,13 +1,20 @@
 import React, { CSSProperties } from "react";
 import { BreakdownChartItem } from "../utils/types";
 import { gradientFromHex } from "../utils/utils";
+import {
+  ClientTooltip,
+  TooltipContent,
+  TooltipTrigger,
+} from "../Tooltip/Tooltip";
 
 export function BreakdownChart({
   data,
   className,
+  withTooltip = true,
 }: {
   data: BreakdownChartItem[];
   className?: string;
+  withTooltip?: boolean;
 }) {
   if (!data) {
     return null;
@@ -45,12 +52,12 @@ export function BreakdownChart({
       {/* Chart Area */}
       <div
         className="absolute inset-0 
-          h-[calc(100%-var(--marginTop)-var(--marginBottom))]
-          w-[calc(100%-var(--marginLeft)-var(--marginRight))]
-          translate-x-[var(--marginLeft)]
-          translate-y-[var(--marginTop)]
-          overflow-visible
-        "
+            h-[calc(100%-var(--marginTop)-var(--marginBottom))]
+            w-[calc(100%-var(--marginLeft)-var(--marginRight))]
+            translate-x-[var(--marginLeft)]
+            translate-y-[var(--marginTop)]
+            overflow-visible
+          "
       >
         {/* Bars with Gradient Fill */}
         {data.map((d, index) => {
@@ -61,57 +68,81 @@ export function BreakdownChart({
           const gradient = isHexColor ? gradientFromHex(d.color) : d.color;
 
           return (
-            <div
-              key={index}
-              className="relative"
-              style={{
-                width: `${barWidth}%`,
-                height: `${barHeight}px`,
-                left: `${xPosition}%`,
-                position: "absolute",
-              }}
-            >
-              <div
-                className={`bg-gradient-to-b ${
-                  gradient || defaulColors[index % defaulColors.length]
-                }`}
-                style={{
-                  width: "100%",
-                  height: "100%",
-                  borderRadius: `${cornerRadius}px`,
-                  ...(isHexColor ? gradientFromHex(d.color) : {}),
-                }}
-              />
-              <div
-                style={{
-                  position: "absolute",
-                  top: `${barHeight / 5}px`,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  color: "white",
-                  fontSize: "14px",
-                  fontWeight: "600",
-                  textAlign: "center",
-                }}
-              >
-                {d.key}
-              </div>
-              <div
-                style={{
-                  position: "absolute",
-                  top: `${barHeight / 2}px`,
-                  left: "50%",
-                  transform: "translateX(-50%)",
-                  color: "white",
-                  fontSize: "12px",
-                  fontWeight: "bold",
-                  textAlign: "center",
-                  fontFamily: "monospace",
-                }}
-              >
-                {d.value}
-              </div>
-            </div>
+            <ClientTooltip key={index}>
+              <TooltipTrigger>
+                <div
+                  className="relative"
+                  style={{
+                    width: `${barWidth}%`,
+                    height: `${barHeight}px`,
+                    left: `${xPosition}%`,
+                    position: "absolute",
+                  }}
+                >
+                  <div
+                    className={`bg-gradient-to-b ${
+                      gradient || defaulColors[index % defaulColors.length]
+                    }`}
+                    style={{
+                      width: "100%",
+                      height: "100%",
+                      borderRadius: `${cornerRadius}px`,
+                      ...(isHexColor ? gradientFromHex(d.color) : {}),
+                    }}
+                  />
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: `${barHeight / 5}px`,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      color: "white",
+                      fontSize: "14px",
+                      fontWeight: "600",
+                      textAlign: "center",
+                    }}
+                  >
+                    {d.key}
+                  </div>
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: `${barHeight / 2}px`,
+                      left: "50%",
+                      transform: "translateX(-50%)",
+                      color: "white",
+                      fontSize: "12px",
+                      fontWeight: "bold",
+                      textAlign: "center",
+                      fontFamily: "monospace",
+                    }}
+                  >
+                    {d.value}
+                  </div>
+                </div>
+
+                {withTooltip && (
+                  <TooltipContent>
+                    <div className="flex gap-2.5 items-center">
+                      <div
+                        className={`w-1 h-8 rounded-full ${
+                          d.color
+                            ? d.color
+                            : defaulColors[index % defaulColors.length]
+                        }`}
+                        style={{
+                          backgroundColor: d.color,
+                        }}
+                      ></div>
+                      <div>
+                        <div>{d.key}</div>
+                        <div className="text-gray-500 text-sm/5">{d.value}</div>
+                      </div>
+                    </div>
+                  </TooltipContent>
+                )}
+              </TooltipTrigger>
+            </ClientTooltip>
           );
         })}
       </div>

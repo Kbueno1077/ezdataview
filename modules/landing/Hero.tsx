@@ -34,7 +34,7 @@ const Hero: React.FC = () => {
           <ExampleBuildButton dark />
         </div>
 
-        <LottieReact url="https://lottie.host/f803e348-bab4-4def-87e6-1b6362fc3759/lIMzlZ318Y.lottie" />
+        <LottieReact url="/herolottie.lottie" />
       </div>
     </section>
   );
