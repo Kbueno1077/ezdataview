@@ -45,7 +45,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
 
   return (
     <div>
-      <div className="flex items-center justify-between  ">
+      <div className="flex items-center justify-between">
         <Input
           placeholder="Title for this Workspace"
           className="border-none outline-none shadow-none max-w-[250px]"
@@ -141,6 +141,8 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
             {getChartTypeByName(currentChart.data, currentChart.chartType, {
               withTooltip: currentChart.withTooltip,
               withAnimation: currentChart.useAnimation,
+              className:
+                "mx-auto w-full h-[calc(100vh-100px)] max-h-[calc(100vh-100px)]",
               suffix: currentChart.suffix,
             })}
           </div>

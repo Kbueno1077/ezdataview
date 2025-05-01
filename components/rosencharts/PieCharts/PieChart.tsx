@@ -84,6 +84,7 @@ export function PieChart({
     return labelArc.centroid(d);
   };
 
+  console.log(className);
   return (
     <svg
       viewBox={`-${radius} -${radius} ${radius * 2} ${radius * 2}`}
