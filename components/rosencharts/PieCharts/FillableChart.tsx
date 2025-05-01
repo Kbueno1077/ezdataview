@@ -92,6 +92,7 @@ export function FillableChart({
                 clipPath={`url(#fillable-half-donut-clip-${i})`}
                 onClick={() => handleSliceClick(d.data)}
                 style={{ cursor: "pointer" }}
+                className="hover:opacity-90" // Add hover
               >
                 <path
                   className="stroke-white/30 dark:stroke-zinc-400/10"

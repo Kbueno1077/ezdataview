@@ -22,6 +22,8 @@ export function FillableDonutChart({
 }) {
   const [selectedSlice, setSelectedSlice] = useState<PieChartItem>(data[0]);
 
+  const valueSum = data.reduce((acc, d) => acc + d.value, 0);
+
   if (!data) {
     return null;
   }
@@ -92,6 +94,7 @@ export function FillableDonutChart({
                 clipPath={`url(#fillable-donut-clip-${i})`}
                 onClick={() => handleSliceClick(d.data)}
                 style={{ cursor: "pointer" }}
+                className="hover:opacity-90" // Add hover effect
               >
                 <path
                   className="stroke-white/30 dark:stroke-zinc-400/10"
@@ -125,23 +128,32 @@ export function FillableDonutChart({
             );
           })}
         </g>
-      </svg>
-      {/* Centered value display */}
-      <div className="absolute inset-0 flex flex-col items-center justify-center">
-        <span className="text-lg font-semibold leading-5">
-          {selectedSlice.name}
-        </span>
-        <div className="text-xl font-bold">
-          <span className="text-violet-600 dark:text-violet-400">
+        {/* Center text display - moved inside SVG like in the working chart */}
+        <g transform={`translate(0, 0)`}>
+          <text
+            textAnchor="middle"
+            fontSize={24}
+            fontWeight="semibold"
+            fill="currentColor"
+            className="text-zinc-700 dark:text-zinc-100"
+            y="-20"
+          >
+            {selectedSlice.name}
+          </text>
+
+          <text
+            textAnchor="middle"
+            fontSize={28}
+            fontWeight="bold"
+            className="text-violet-600 dark:text-violet-400"
+            y="20"
+          >
             {selectedSlice.value.toLocaleString("en-US")}
+            {suffix} / {valueSum}
             {suffix}
-          </span>
-          <span className="text-zinc-400 dark:text-zinc-600">
-            {" "}
-            / 100 {suffix}
-          </span>
-        </div>
-      </div>
+          </text>
+        </g>
+      </svg>
     </div>
   );
 }

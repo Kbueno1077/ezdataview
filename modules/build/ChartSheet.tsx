@@ -141,7 +141,6 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
             {getChartTypeByName(currentChart.data, currentChart.chartType, {
               withTooltip: currentChart.withTooltip,
               withAnimation: currentChart.useAnimation,
-              className: "mx-auto w-full h-[calc(100vh-100px)]",
               suffix: currentChart.suffix,
             })}
           </div>
