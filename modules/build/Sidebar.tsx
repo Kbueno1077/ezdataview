@@ -3,7 +3,11 @@
 import { Settings } from "lucide-react";
 import { useState } from "react";
 import { useBuildStore } from "../../providers/store-provider";
-import { chartTypes, getChartUIBuilder } from "./utils/builder-ui";
+import {
+  chartTypes,
+  getChartTypeIcon,
+  getChartUIBuilder,
+} from "./utils/builder-ui";
 
 import {
   Dialog,
@@ -13,8 +17,21 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Button } from "@heroui/button";
-import { Select, SelectItem, SharedSelection } from "@heroui/react";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
+
+import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 
 export function Sidebar({
   isOpen,
@@ -30,10 +47,8 @@ export function Sidebar({
     (state) => state
   );
 
-  const handleChartTypeChange = (selectedKeys: SharedSelection) => {
-    const newChartType = selectedKeys.currentKey as string;
-    // Always show confirmation dialog when changing chart type
-    setPendingChartType(newChartType);
+  const handleChartTypeChange = (selectedChartType: string) => {
+    setPendingChartType(selectedChartType);
     setConfirmDialogOpen(true);
   };
 
@@ -52,46 +67,65 @@ export function Sidebar({
         fixed top-0 right-0 transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
-      <div className="flex flex-col gap-4">
-        <div className="flex justify-between items-center">
-          <h2 className="text-lg font-semibold">Chart Settings</h2>
-          <Button
-            variant="flat"
-            size="sm"
-            isIconOnly
-            onPress={onClose}
-            className="lg:hidden"
-            aria-label="Close sidebar"
-          >
-            <Settings className="h-4 w-4" />
-          </Button>
+      <div className="flex items-center justify-between p-2">
+        <h2 className="text-xl font-semibold">Chart Settings</h2>
+        <div className="flex items-center gap-2">
+          <DropdownMenu>
+            <TooltipProvider>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <DropdownMenuTrigger asChild>
+                    <Button className="h-8 w-8" size="icon">
+                      {getChartTypeIcon(currentChartType)}
+                    </Button>
+                  </DropdownMenuTrigger>
+                </TooltipTrigger>
+                <TooltipContent>
+                  <p>Chart Type</p>
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <DropdownMenuContent align="end" className="w-[260px]">
+              {chartTypes.map((chart) => (
+                <DropdownMenuItem
+                  key={chart.value}
+                  onClick={() => handleChartTypeChange(chart.value)}
+                  className="flex justify-between items-center gap-2 cursor-pointer"
+                >
+                  <div className="flex items-center gap-2">
+                    {getChartTypeIcon(chart.value)}
+                    <span>{chart.title}</span>
+                  </div>
+                  {currentChartType === chart.value && (
+                    <Badge className="ml-2">Active</Badge>
+                  )}
+                </DropdownMenuItem>
+              ))}
+            </DropdownMenuContent>
+          </DropdownMenu>
+
+          <TooltipProvider>
+            <Tooltip>
+              <TooltipTrigger asChild>
+                <Button
+                  size="sm"
+                  onClick={onClose}
+                  className="lg:hidden"
+                  aria-label="Close sidebar"
+                >
+                  <Settings className="h-4 w-4" />
+                </Button>
+              </TooltipTrigger>
+              <TooltipContent>
+                <p>Sidebar Settings</p>
+              </TooltipContent>
+            </Tooltip>
+          </TooltipProvider>
         </div>
-
-        <div className="flex flex-col gap-3">
-          <div className="flex flex-col gap-2">
-            <label htmlFor="chart-type-select" className="text-sm font-medium">
-              Chart Type
-            </label>
-
-            <div className="flex items-center gap-2">
-              <Select
-                id="chart-type-select"
-                selectedKeys={currentChartType}
-                placeholder={currentChartType}
-                onSelectionChange={handleChartTypeChange}
-                aria-label="Select chart type"
-                className="flex-1"
-              >
-                {chartTypes.map((chart) => (
-                  <SelectItem key={chart.value}>{chart.title}</SelectItem>
-                ))}
-              </Select>
-            </div>
-          </div>
-        </div>
-
-        <div>{getChartUIBuilder(currentChartType)}</div>
       </div>
+
+      <div className="p-2">{getChartUIBuilder(currentChartType)}</div>
 
       {/* Chart Type Change Confirmation Dialog */}
       <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
@@ -104,12 +138,18 @@ export function Sidebar({
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
-            <Button variant="flat" onPress={() => setConfirmDialogOpen(false)}>
+            <Button
+              variant="outline"
+              color="default"
+              className="hover:bg-gray-100 hover:text-foreground"
+              onClick={() => setConfirmDialogOpen(false)}
+            >
               Cancel
             </Button>
             <Button
+              variant="default"
               color="primary"
-              onPress={() =>
+              onClick={() =>
                 pendingChartType && applyChartTypeChange(pendingChartType)
               }
             >

@@ -18,6 +18,8 @@ const config = {
       colors: {
         background: "var(--background)",
         foreground: "var(--foreground)",
+        popover: "var(--popover)",
+        popoverForeground: "var(--popover-foreground)",
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",
@@ -46,6 +48,7 @@ const config = {
           5: "var(--chart-5)",
           6: "var(--chart-6)",
         },
+        input: "var(--input)",
       },
     },
   },
@@ -54,6 +57,20 @@ const config = {
       "0%": { transform: "translateY(100%)" },
       "100%": { transform: "translateY(0)" },
     },
+    "accordion-down": {
+      from: { height: "0" },
+      to: { height: "var(--radix-accordion-content-height)" },
+    },
+    "accordion-up": {
+      from: { height: "var(--radix-accordion-content-height)" },
+      to: { height: "0" },
+    },
+  },
+  animation: {
+    "accordion-down": "accordion-down 0.2s ease-out",
+    "accordion-up": "accordion-up 0.2s ease-out",
+    slideUp: "slideUp 0.2s ease-out",
+    slideDown: "slideDown 0.2s ease-out",
   },
   darkMode: "class",
   plugins: [heroui()],

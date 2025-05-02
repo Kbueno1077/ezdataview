@@ -1,7 +1,8 @@
+import { BarChart3, ChartBarStacked, LineChart, PieChart } from "lucide-react";
 import type { JSX } from "react";
 import BarChartBuilder from "../ui-builders/BarChartBuilder";
-import LineChartBuilder from "../ui-builders/LineChartBuilder";
 import BreakdownBuilder from "../ui-builders/BreakdownBuilder";
+import LineChartBuilder from "../ui-builders/LineChartBuilder";
 import PieChartBuilder from "../ui-builders/PieChartBuilder";
 
 export const getChartUIBuilder = (
@@ -75,3 +76,38 @@ export const chartTypes: ChartType[] = [
   { title: "Fillable", value: "fillable" },
   { title: "Fillable Donut", value: "fillable-donut" },
 ];
+
+export const getChartTypeIcon = (chartType: string) => {
+  switch (chartType) {
+    case "horizontal-bar":
+    case "horizontal-bar-gradient":
+    case "horizontal-bar-image":
+    case "horizontal-bar-multi":
+    case "horizontal-bar-thin":
+      return <BarChart3 className="h-4 w-4 rotate-90 hover:text-white" />;
+
+    case "vertical-bar":
+    case "vertical-bar-multi":
+      return <BarChart3 className="h-4 w-4 hover:text-white" />;
+
+    case "line":
+    case "line-multi":
+    case "line-curved":
+      return <LineChart className="h-4 w-4 hover:text-white" />;
+
+    case "breakdown":
+    case "breakdown-thin":
+      return <ChartBarStacked className="h-4 w-4 hover:text-white" />;
+
+    case "pie":
+    case "pie-image":
+    case "half-donut":
+    case "donut":
+    case "fillable":
+    case "fillable-donut":
+      return <PieChart className="h-4 w-4 hover:text-white" />;
+
+    default:
+      return <BarChart3 className="h-4 w-4 hover:text-white" />;
+  }
+};
