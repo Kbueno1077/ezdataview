@@ -44,7 +44,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   };
 
   return (
-    <div>
+    <>
       <div className="flex items-center justify-between">
         <Input
           placeholder="Title for this Workspace"
@@ -137,18 +137,18 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
             transition: "transform 0.2s ease",
           }}
         >
-          <div className="flex justify-center items-center w-full px-4 py-4 max-h-[calc(100vh-100px)]">
+          <div className="flex justify-center items-center w-full px-4 py-4 h-[calc(100vh-100px)] max-h-[calc(100vh-100px)]">
             {getChartTypeByName(currentChart.data, currentChart.chartType, {
               withTooltip: currentChart.withTooltip,
               withAnimation: currentChart.useAnimation,
               className:
-                "mx-auto w-full h-[calc(100vh-100px)] max-h-[calc(100vh-100px)]",
+                "mx-auto w-full h-[calc(100vh-200px)] max-h-[calc(100vh-100px)]",
               suffix: currentChart.suffix,
             })}
           </div>
         </div>
       ) : (
-        <div className="flex justify-center items-center w-full h-[calc(100vh-200px)] px-4">
+        <div className="flex justify-center items-center w-full h-[calc(100vh-100px)] px-4">
           <div className="text-center">
             <p className="text-lg text-gray-500 mb-2">
               No chart data available
@@ -159,7 +159,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
