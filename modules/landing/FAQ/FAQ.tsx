@@ -3,7 +3,12 @@
 import SectionTitle from "../../../components/SectionTitle";
 import { IFAQ } from "../types";
 import { siteDetails } from "../data/siteDetails";
-import { Accordion, AccordionItem } from "@heroui/react";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
 
 export const faqs: IFAQ[] = [
   {
@@ -57,14 +62,11 @@ const FAQ: React.FC = () => {
           </div>
 
           <div className="w-full lg:w-2/3 divide-y divide-gray-200">
-            <Accordion>
+            <Accordion type="single" collapsible className="w-full">
               {faqs.map((faq, index) => (
-                <AccordionItem
-                  key={index + 1}
-                  aria-label={faq.question}
-                  title={faq.question}
-                >
-                  {faq.answer}
+                <AccordionItem key={index + 1} value={`item-${index + 1}`}>
+                  <AccordionTrigger>{faq.question}</AccordionTrigger>
+                  <AccordionContent>{faq.answer}</AccordionContent>
                 </AccordionItem>
               ))}
             </Accordion>

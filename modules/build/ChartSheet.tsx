@@ -3,8 +3,6 @@
 
 "use client";
 
-import { Button } from "@heroui/button";
-import { Input, Textarea } from "@heroui/input";
 import { ListFilterPlus, Settings, ZoomIn, ZoomOut } from "lucide-react";
 import { useState } from "react";
 import { getChartTypeByName } from "../../components/rosencharts/utils/utils";
@@ -18,6 +16,9 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { useBuildStore } from "../../providers/store-provider";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Input } from "@/components/ui/input";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const { workspaceCharts, currentChartIndex, updateChartItem } = useBuildStore(
@@ -48,13 +49,13 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
       <div className="flex items-center justify-between">
         <Input
           placeholder="Title for this Workspace"
-          className="border-none outline-none shadow-none max-w-[250px]"
+          className="border-none outline-none shadow-none bg-gray-100 dark:bg-gray-800 max-w-[250px]"
         />
 
         <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 rounded-lg p-1.5 shadow-sm border border-gray-200 dark:border-gray-700">
           <Drawer>
             <DrawerTrigger asChild>
-              <Button isIconOnly size="sm" variant="flat">
+              <Button size="icon" variant="ghost">
                 <ListFilterPlus className="h-4 w-4" />
               </Button>
             </DrawerTrigger>
@@ -67,7 +68,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
                 <DrawerDescription className="flex flex-col justify-center items-center gap-4 mt-2">
                   <Input
                     placeholder="Name for the Chart"
-                    className="border-none outline-none shadow-none"
+                    className="w-full"
                     value={currentChart.chartName}
                     onChange={handleTitleChange}
                   />
@@ -75,7 +76,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
                   <Textarea
                     className="w-full"
                     label="Description"
-                    minRows={5}
+                    rows={5}
                     placeholder="Description for the Chart"
                     value={currentChart.description}
                     onChange={handleDescriptionChange}
@@ -89,10 +90,9 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           {currentChart.data.length > 0 && (
             <>
               <Button
-                variant="flat"
-                size="sm"
-                isIconOnly
-                onPress={handleZoomOut}
+                size="icon"
+                variant="ghost"
+                onClick={handleZoomOut}
                 disabled={zoomLevel <= 10}
                 aria-label="Zoom out"
               >
@@ -100,10 +100,9 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
               </Button>
 
               <Button
-                size="sm"
-                variant="flat"
-                isIconOnly
-                onPress={handleZoomIn}
+                size="icon"
+                variant="ghost"
+                onClick={handleZoomIn}
                 disabled={zoomLevel >= 100}
                 aria-label="Zoom in"
               >
@@ -117,11 +116,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           )}
 
           <Button
-            variant="flat"
-            size="sm"
-            isIconOnly
-            onPress={openSidebar}
-            className="lg:hidden "
+            variant="ghost"
+            size="icon"
+            onClick={openSidebar}
+            className="lg:hidden"
             aria-label="Open chart settings"
           >
             <Settings className="h-4 w-4" />
