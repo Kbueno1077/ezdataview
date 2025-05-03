@@ -20,13 +20,13 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useState } from "react";
 import {
   Tooltip,
   TooltipContent,
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { useState } from "react";
 function BarChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
 
@@ -61,6 +61,7 @@ function BarChartBuilder() {
       key: `Bar ${workspaceCharts[currentChartIndex].data.length + 1}`,
       value: 0,
       color: "",
+      multipleColors: [],
       image: "",
       values: [],
     };
@@ -74,6 +75,25 @@ function BarChartBuilder() {
     value: string | number | string[] | number[]
   ) => {
     updateChartItem(index, key, value);
+  };
+
+  const handleUpdateMultipleColors = (
+    index: number,
+    valueIndex: number,
+    value: string
+  ) => {
+    const multipleColors =
+      workspaceCharts[currentChartIndex].data[index].multipleColors || [];
+    const newMultipleColors = [...multipleColors];
+    newMultipleColors[valueIndex] = value;
+
+    // Update all bars to have the same colors for consistent grouping
+    workspaceCharts[currentChartIndex].data.forEach((item, itemIndex) => {
+      const itemColors = item.multipleColors || [];
+      const updatedColors = [...itemColors];
+      updatedColors[valueIndex] = value;
+      updateChartItem(itemIndex, "multipleColors", updatedColors);
+    });
   };
 
   const handleUpdateChartConfig = (key: string, value: boolean) => {
@@ -129,9 +149,8 @@ function BarChartBuilder() {
                   </p>
                 </div>
               )}
-
               {workspaceCharts[currentChartIndex].data.map(
-                (item: any, index: number) => {
+                (item, index: number) => {
                   return (
                     <Accordion
                       type="single"
@@ -262,6 +281,102 @@ function BarChartBuilder() {
                                           key={valueIndex}
                                           className="flex gap-2 items-center"
                                         >
+                                          <input
+                                            type="color"
+                                            value={
+                                              item.multipleColors?.[
+                                                valueIndex
+                                              ] || "#000000"
+                                            }
+                                            onChange={(e) =>
+                                              handleUpdateMultipleColors(
+                                                index,
+                                                valueIndex,
+                                                e.target.value
+                                              )
+                                            }
+                                            className="sr-only"
+                                            id={`color-${item.id}-${valueIndex}`}
+                                          />
+
+                                          <TooltipProvider>
+                                            <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                <Label
+                                                  htmlFor={`color-${item.id}-${valueIndex}`}
+                                                  className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                                  style={{
+                                                    backgroundColor:
+                                                      item.multipleColors?.[
+                                                        valueIndex
+                                                      ] || "#000000",
+                                                  }}
+                                                />
+                                              </TooltipTrigger>
+                                              <TooltipContent>
+                                                {item.multipleColors?.[
+                                                  valueIndex
+                                                ] || "Select a color"}
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+
+                                          <TooltipProvider>
+                                            <Tooltip>
+                                              <TooltipTrigger asChild>
+                                                <Button
+                                                  size="icon"
+                                                  variant="outline"
+                                                  onClick={() => {
+                                                    const multipleColors = [
+                                                      ...(item.multipleColors ||
+                                                        []),
+                                                    ];
+                                                    if (
+                                                      multipleColors[valueIndex]
+                                                    ) {
+                                                      multipleColors[
+                                                        valueIndex
+                                                      ] = "";
+                                                    } else {
+                                                      multipleColors[
+                                                        valueIndex
+                                                      ] = "#3b82f6";
+                                                    }
+                                                    handleUpdateBar(
+                                                      index,
+                                                      "multipleColors",
+                                                      multipleColors
+                                                    );
+                                                  }}
+                                                  aria-label={
+                                                    item.multipleColors?.[
+                                                      valueIndex
+                                                    ]
+                                                      ? "Use default color"
+                                                      : "Use custom color"
+                                                  }
+                                                  className="h-7 w-7"
+                                                >
+                                                  {item.multipleColors?.[
+                                                    valueIndex
+                                                  ] ? (
+                                                    <Palette className="h-3.5 w-3.5" />
+                                                  ) : (
+                                                    <PaintRoller className="h-3.5 w-3.5" />
+                                                  )}
+                                                </Button>
+                                              </TooltipTrigger>
+                                              <TooltipContent>
+                                                {item.multipleColors?.[
+                                                  valueIndex
+                                                ]
+                                                  ? "Use default color"
+                                                  : "Use custom color"}
+                                              </TooltipContent>
+                                            </Tooltip>
+                                          </TooltipProvider>
+
                                           <Input
                                             id={`value-${item.id}-${valueIndex}`}
                                             type="number"
@@ -279,7 +394,7 @@ function BarChartBuilder() {
                                                 newValue
                                               );
                                               const newValues = [
-                                                ...item.values,
+                                                ...(item.values || []),
                                               ];
                                               newValues[valueIndex] =
                                                 nonNegativeValue;
@@ -303,7 +418,7 @@ function BarChartBuilder() {
                                                   variant="ghost"
                                                   onClick={() => {
                                                     const newValues = [
-                                                      ...item.values,
+                                                      ...(item.values || []),
                                                     ];
                                                     newValues.splice(
                                                       valueIndex,
@@ -389,6 +504,7 @@ function BarChartBuilder() {
                                         className="sr-only"
                                         id={`color-${item.id}`}
                                       />
+
                                       <TooltipProvider>
                                         <Tooltip>
                                           <TooltipTrigger asChild>
@@ -451,10 +567,10 @@ function BarChartBuilder() {
                                       variant="ghost"
                                       size="icon"
                                       onClick={() =>
-                                        handleDeleteItem(index, item.key)
+                                        handleDeleteItem(index, item.key || "")
                                       }
                                       className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                                      aria-label={`Delete ${item.key}`}
+                                      aria-label={`Delete ${item.key || ""}`}
                                     >
                                       <Trash2 className="h-3.5 w-3.5" />
                                     </Button>

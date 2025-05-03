@@ -28,6 +28,7 @@ export interface ChartDataItem {
     value: number;
   }>;
   color?: string;
+  multipleColors?: string[];
   key?: string;
   value?: number;
   image?: string;

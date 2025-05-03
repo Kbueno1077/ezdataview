@@ -6,8 +6,10 @@ import {
   TooltipTrigger,
 } from "../Tooltip/Tooltip"; // Or wherever you pasted Tooltip.tsx
 import { AnimatedVerticalBar } from "../Animated/AnimatedVerticalBar";
+import { MultiBarData } from "../utils/types";
 
 const PX_BETWEEN_BARS = 5;
+const defaultBarColors = ["#B89DFB", "#e7deff"];
 
 export function BarChartVerticalMulti({
   data,
@@ -15,7 +17,7 @@ export function BarChartVerticalMulti({
   withAnimation = false,
   className,
 }: {
-  data: { key: string; values: number[] }[];
+  data: MultiBarData[];
   withTooltip?: boolean;
   withAnimation?: boolean;
   className?: string;
@@ -35,9 +37,6 @@ export function BarChartVerticalMulti({
   const yScale = scaleLinear()
     .domain([0, max(data.flatMap((d) => d.values)) ?? 0])
     .range([100, 0]);
-
-  // Generate an array of colors for the bars
-  const colors = ["#B89DFB", "#e7deff"];
 
   return (
     <div
@@ -135,6 +134,10 @@ export function BarChartVerticalMulti({
                       (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
                     const barXPosition =
                       barIndex * (barWidth + PX_BETWEEN_BARS);
+                    const barColor =
+                      d.multipleColors && d.multipleColors[barIndex]
+                        ? d.multipleColors[barIndex]
+                        : defaultBarColors[barIndex % defaultBarColors.length];
 
                     return (
                       <div
@@ -144,7 +147,7 @@ export function BarChartVerticalMulti({
                           left: `${barXPosition}%`,
                           width: `${barWidth}%`,
                           height: `${barHeight}%`,
-                          backgroundColor: colors[barIndex % colors.length],
+                          backgroundColor: barColor,
                           border: `1px solid #a07dff22`,
                         }}
                       />
@@ -174,6 +177,12 @@ export function BarChartVerticalMulti({
                         (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
                       const barXPosition =
                         barIndex * (barWidth + PX_BETWEEN_BARS);
+                      const barColor =
+                        d.multipleColors && d.multipleColors[barIndex]
+                          ? d.multipleColors[barIndex]
+                          : defaultBarColors[
+                              barIndex % defaultBarColors.length
+                            ];
 
                       return (
                         <div
@@ -183,7 +192,7 @@ export function BarChartVerticalMulti({
                             left: `${barXPosition}%`,
                             width: `${barWidth}%`,
                             height: `${barHeight}%`,
-                            backgroundColor: colors[barIndex % colors.length],
+                            backgroundColor: barColor,
                             border: `1px solid #a07dff22`,
                           }}
                         />
@@ -196,20 +205,26 @@ export function BarChartVerticalMulti({
                     {d.key}
                   </div>
                   <div className="flex flex-col gap-2">
-                    {d.values.map((value, index) => (
-                      <div
-                        key={index}
-                        className="flex gap-1.5 items-center text-sm"
-                      >
+                    {d.values.map((value, index) => {
+                      const barColor =
+                        d.multipleColors && d.multipleColors[index]
+                          ? d.multipleColors[index]
+                          : defaultBarColors[index % defaultBarColors.length];
+                      return (
                         <div
-                          className="h-3.5 w-1 rounded-full"
-                          style={{
-                            backgroundColor: colors[index % colors.length],
-                          }}
-                        />
-                        <span>{value}</span>
-                      </div>
-                    ))}
+                          key={index}
+                          className="flex gap-1.5 items-center text-sm"
+                        >
+                          <div
+                            className="h-3.5 w-1 rounded-full"
+                            style={{
+                              backgroundColor: barColor,
+                            }}
+                          />
+                          <span>{value}</span>
+                        </div>
+                      );
+                    })}
                   </div>
                 </TooltipContent>
               </ClientTooltip>

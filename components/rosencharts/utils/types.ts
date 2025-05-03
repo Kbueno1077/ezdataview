@@ -14,6 +14,7 @@ export type MultiBarData = {
   key: string;
   values: number[];
   image?: string;
+  multipleColors?: string[];
 };
 
 export type SVGBarData = {

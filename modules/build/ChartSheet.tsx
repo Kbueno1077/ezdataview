@@ -48,7 +48,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
     <>
       <div className="flex items-center justify-between">
         <Input
-          placeholder="Title for this Workspace"
+          placeholder="Title for this workspace"
           className="border-none outline-none shadow-none bg-gray-100 dark:bg-gray-800 max-w-[250px]"
         />
 

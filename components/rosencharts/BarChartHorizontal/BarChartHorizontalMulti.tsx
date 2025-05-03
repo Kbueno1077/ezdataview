@@ -10,7 +10,7 @@ import {
 import { MultiBarData } from "../utils/types";
 import { isValidUrl } from "../utils/utils";
 
-const barColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
+const defaultBarColors = ["#F8ED53", "#E7E7F5", "#EEBA6B"];
 const PX_BETWEEN_BARS = 0.2;
 
 export function BarChartHorizontalMulti({
@@ -143,6 +143,12 @@ export function BarChartHorizontalMulti({
                         (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
                       const barYPosition =
                         barIndex * (barHeight + PX_BETWEEN_BARS);
+                      const barColor =
+                        d.multipleColors && d.multipleColors[barIndex]
+                          ? d.multipleColors[barIndex]
+                          : defaultBarColors[
+                              barIndex % defaultBarColors.length
+                            ];
                       return (
                         <div
                           key={barIndex}
@@ -151,8 +157,7 @@ export function BarChartHorizontalMulti({
                             top: `${barYPosition}%`,
                             width: `${xScale(value)}%`,
                             height: `${barHeight}%`,
-                            backgroundColor:
-                              barColors[barIndex % barColors.length],
+                            backgroundColor: barColor,
                           }}
                         />
                       );
@@ -182,6 +187,12 @@ export function BarChartHorizontalMulti({
                           (100 - PX_BETWEEN_BARS * (numBars - 1)) / numBars;
                         const barYPosition =
                           barIndex * (barHeight + PX_BETWEEN_BARS);
+                        const barColor =
+                          d.multipleColors && d.multipleColors[barIndex]
+                            ? d.multipleColors[barIndex]
+                            : defaultBarColors[
+                                barIndex % defaultBarColors.length
+                              ];
                         return (
                           <div
                             key={barIndex}
@@ -190,8 +201,7 @@ export function BarChartHorizontalMulti({
                               top: `${barYPosition}%`,
                               width: `${xScale(value)}%`,
                               height: `${barHeight}%`,
-                              backgroundColor:
-                                barColors[barIndex % barColors.length],
+                              backgroundColor: barColor,
                             }}
                           />
                         );
@@ -202,21 +212,26 @@ export function BarChartHorizontalMulti({
                 <TooltipContent>
                   <div className="text-sm text-gray-400">{d.key}</div>
                   <div className="flex gap-4">
-                    {d.values.map((value, index) => (
-                      <div
-                        key={index}
-                        className="flex gap-1.5 items-center text-sm"
-                      >
+                    {d.values.map((value, index) => {
+                      const barColor =
+                        d.multipleColors && d.multipleColors[index]
+                          ? d.multipleColors[index]
+                          : defaultBarColors[index % defaultBarColors.length];
+                      return (
                         <div
-                          className="h-3.5 w-1 rounded-full"
-                          style={{
-                            backgroundColor:
-                              barColors[index % barColors.length],
-                          }}
-                        ></div>
-                        <div>{value}</div>
-                      </div>
-                    ))}
+                          key={index}
+                          className="flex gap-1.5 items-center text-sm"
+                        >
+                          <div
+                            className="h-3.5 w-1 rounded-full"
+                            style={{
+                              backgroundColor: barColor,
+                            }}
+                          ></div>
+                          <div>{value}</div>
+                        </div>
+                      );
+                    })}
                   </div>
                 </TooltipContent>
               </ClientTooltip>
