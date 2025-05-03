@@ -1,16 +1,17 @@
 "use client";
 
-import {
-  ChevronLeft,
-  PaintRoller,
-  Palette,
-  Plus,
-  Trash,
-  TrashIcon,
-} from "lucide-react";
+import { PaintRoller, Palette, Plus, Trash2 } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
 import { ChartDataItem } from "../../../stores/builder-store";
 
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
+import { Calendar } from "@/components/ui/calendar";
 import {
   Dialog,
   DialogContent,
@@ -19,18 +20,25 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { format } from "@formkit/tempo";
-import { Accordion, AccordionItem } from "@heroui/accordion";
-import { Button } from "@heroui/button";
-import { Checkbox } from "@heroui/checkbox";
-import { DatePicker } from "@heroui/date-picker";
-import { Input } from "@heroui/input";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { cn } from "@/lib/utils";
 import { Tooltip } from "@heroui/tooltip";
-import { parseDate } from "@internationalized/date";
+import { format as formatDate } from "date-fns";
+import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 
 function LineChartBuilder() {
+  const [activeTab, setActiveTab] = useState("data");
+
   const {
     workspaceCharts,
     currentChartIndex,
@@ -51,7 +59,7 @@ function LineChartBuilder() {
   const [deleteTarget, setDeleteTarget] = useState<{
     type: "item" | "date";
     index: number;
-    name: string;
+    name: string | Date;
   } | null>(null);
 
   const handleAddLine = () => {
@@ -72,8 +80,7 @@ function LineChartBuilder() {
     } else {
       // Create a default date if no lines exist yet
       const newDate = new Date();
-      const formattedDate = format(newDate, "YYYY-MM-DD");
-      initialData = [{ date: formattedDate, value: 0 }];
+      initialData = [{ date: newDate, value: 0 }];
     }
 
     const newItem: ChartDataItem = {
@@ -92,12 +99,12 @@ function LineChartBuilder() {
       | number
       | string[]
       | number[]
-      | { date: string; value: number }[]
+      | { date: Date; value: number }[]
   ) => {
     updateChartItem(index, key, value);
   };
 
-  const handleUpdateChartConfig = (key: string, value: boolean) => {
+  const handleUpdateChartConfig = (key: string, value: boolean | string) => {
     updateChartConfig(key, value);
   };
 
@@ -126,19 +133,14 @@ function LineChartBuilder() {
       return;
     }
 
-    const formattedDate = format(latestDate, "YYYY-MM-DD");
-
     currentData.forEach((item, itemIndex) => {
-      const newValues = [
-        ...(item.data || []),
-        { date: formattedDate, value: 0 },
-      ];
+      const newValues = [...(item.data || []), { date: latestDate, value: 0 }];
       updateChartItem(itemIndex, "data", newValues);
     });
   };
 
   // Function to update date across all line series
-  const handleDateChange = (newDate: string, valueIndex: number) => {
+  const handleDateChange = (newDate: Date, valueIndex: number) => {
     if (currentData.length > 0 && Array.isArray(currentData[0].data)) {
       // If all checks pass, update the date
       currentData.forEach((item, itemIndex) => {
@@ -223,318 +225,390 @@ function LineChartBuilder() {
     const minDate = index > 0 ? dates[index - 1] : undefined;
 
     return {
-      minValue: minDate ? parseDate(format(minDate, "YYYY-MM-DD")) : undefined,
+      minValue: minDate ? minDate : undefined,
     };
   };
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
-
-      <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
-        <legend className="text-sm font-medium px-2">Chart Properties</legend>
-
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Checkbox
-              id="withTooltip"
-              isSelected={withTooltip}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("withTooltip", checked === true)
-              }
-              aria-labelledby="tooltip-label"
-            />
-            <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
-              Show tooltips on hover
-            </label>
-          </div>
-
-          <div className="flex items-center">
-            <Checkbox
-              id="useAnimation"
-              isSelected={useAnimation}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("useAnimation", checked === true)
-              }
-              aria-labelledby="animation-label"
-            />
-            <label id="animation-label" htmlFor="useAnimation" className="ml-2">
-              Enable animations
-            </label>
-          </div>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="pt-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="data">Data</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
         </div>
-      </fieldset>
 
-      {/* Shared dates section */}
-      <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
-        <legend className="text-sm font-medium px-2">Shared Dates</legend>
+        <TabsContent value="data" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Data Points
+              </Label>
+              <Button
+                size="sm"
+                onClick={handleAddLine}
+                className="h-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
+              >
+                <Plus className="mr-1 h-3.5 w-3.5" /> Add Line (
+                {workspaceCharts[currentChartIndex].data.length})
+              </Button>
+            </div>
 
-        <div className="space-y-3">
-          {sharedDates.length > 0 ? (
-            sharedDates.map((date, valueIndex) => (
-              <div key={valueIndex} className="flex gap-2 items-center">
-                <div className="flex-1">
-                  <DatePicker
-                    id={`shared-date-${valueIndex}`}
-                    name={`shared-date-${valueIndex}`}
-                    value={parseDate(date)}
-                    label="Select date"
-                    size="sm"
-                    onChange={(e) => {
-                      const formattedDate = format(
-                        e?.toString() || "",
-                        "YYYY-MM-DD"
-                      );
-                      handleDateChange(formattedDate, valueIndex);
-                    }}
-                    aria-label={`Date ${valueIndex + 1}`}
-                    className="w-full"
-                    {...getDateConstraints(valueIndex)}
-                  />
-                </div>
-                <Tooltip content="Remove this date from all lines">
-                  <Button
-                    size="md"
-                    variant="light"
-                    isIconOnly
-                    onPress={() => handleDeleteDate(valueIndex)}
-                    className="text-gray-500"
-                    aria-label={`Remove date ${valueIndex + 1}`}
-                  >
-                    <Trash size={18} />
-                  </Button>
-                </Tooltip>
-              </div>
-            ))
-          ) : (
-            <p className="text-sm text-gray-500">No dates added yet</p>
-          )}
+            {/* Shared dates section */}
+            <div className="">
+              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                Shared Dates
+              </Label>
 
-          <Button
-            size="md"
-            variant="flat"
-            onPress={handleAddDate}
-            className="mt-2 w-full"
-            startContent={<Plus size={14} />}
-          >
-            Add Date ({sharedDates.length})
-          </Button>
-        </div>
-      </fieldset>
-
-      <Button
-        onPress={handleAddLine}
-        className="w-full rounded-md gap-2"
-        color="primary"
-        variant="solid"
-        startContent={<Plus className="h-4 w-4" />}
-      >
-        Add Line ({workspaceCharts[currentChartIndex].data.length})
-      </Button>
-
-      <div className="space-y-2 mt-4">
-        {workspaceCharts[currentChartIndex].data.length === 0 && (
-          <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
-            <p className="text-gray-500">
-              No lines added yet. Click the button above to add your first line.
-            </p>
-          </div>
-        )}
-
-        {workspaceCharts[currentChartIndex].data.map(
-          (item: ChartDataItem, index: number) => {
-            return (
-              <Accordion key={item.id} variant="splitted">
-                <AccordionItem
-                  aria-label={`"Line"} ${index + 1}`}
-                  title={`${item.key ? item.key : `Line ${index + 1}`}`}
-                  classNames={{
-                    base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
-                    title: "font-medium",
-                  }}
-                  indicator={
-                    <div className="flex items-center gap-2">
-                      {item.color ? (
-                        <div
-                          className="inline-block w-4 h-4 rounded-full border border-gray-300"
-                          style={{ backgroundColor: item.color }}
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <div className="ml-1">
-                          <ChevronLeft size={18} />
-                        </div>
-                      )}
-                    </div>
-                  }
-                >
-                  <div className="space-y-4 -mt-4 p-2">
-                    <fieldset className="border border-gray-200 dark:border-gray-700 rounded-md p-3">
-                      <legend className="text-sm font-medium px-2">
-                        Values
-                      </legend>
-                      <div className="flex flex-col gap-2">
-                        {Array.isArray(item.data) && item.data.length > 0 ? (
-                          item.data.map((dateValue, valueIndex) => (
-                            <div
-                              key={valueIndex}
-                              className="flex gap-2 items-center"
+              <div className="space-y-3">
+                {sharedDates.length > 0 ? (
+                  sharedDates.map((date, valueIndex) => (
+                    <div key={valueIndex} className="flex gap-2 items-center">
+                      <div className="flex-1">
+                        <Popover>
+                          <PopoverTrigger asChild>
+                            <Button
+                              variant={"outline"}
+                              className={cn(
+                                "w-full justify-start text-left font-normal",
+                                !date && "text-muted-foreground"
+                              )}
+                              size="sm"
                             >
-                              <div className="flex-1">
-                                <label
-                                  htmlFor={`date-display-${item.id}-${valueIndex}`}
-                                  className="text-sm text-gray-500 mb-1 block"
-                                >
-                                  {dateValue.date}
-                                </label>
-                              </div>
-                              <div className="flex-1">
-                                <label
-                                  htmlFor={`value-${item.id}-${valueIndex}`}
-                                  className="sr-only"
-                                >
-                                  Value {valueIndex + 1}
-                                </label>
-                                <Input
-                                  id={`value-${item.id}-${valueIndex}`}
-                                  type="number"
-                                  name={`value-${valueIndex}`}
-                                  value={dateValue.value.toString()}
-                                  placeholder={`Value ${valueIndex + 1}`}
-                                  min={0}
-                                  step="any"
-                                  size="lg"
-                                  onChange={(e) => {
-                                    // Handle empty input or invalid input
-                                    let newValue = 0;
-                                    try {
-                                      newValue = e.target.value
-                                        ? parseFloat(e.target.value)
-                                        : 0;
-                                    } catch (error) {
-                                      console.error(
-                                        "Invalid number input:",
-                                        error
-                                      );
-                                    }
-
-                                    // Ensure non-negative value
-                                    const nonNegativeValue = Math.max(
-                                      0,
-                                      newValue
-                                    );
-
-                                    if (Array.isArray(item.data)) {
-                                      const newValues = [...item.data];
-                                      newValues[valueIndex] = {
-                                        ...newValues[valueIndex],
-                                        value: nonNegativeValue,
-                                      };
-                                      handleUpdateLine(
-                                        index,
-                                        "data",
-                                        newValues
-                                      );
-                                    }
-                                  }}
-                                  className="w-full"
-                                  aria-label={`Value ${valueIndex + 1}`}
-                                />
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <p className="text-sm text-gray-500">
-                            No values added yet
-                          </p>
-                        )}
+                              <CalendarIcon className="mr-2 h-4 w-4" />
+                              {date ? (
+                                formatDate(new Date(date), "MMM d, yyyy")
+                              ) : (
+                                <span>Pick a date</span>
+                              )}
+                            </Button>
+                          </PopoverTrigger>
+                          <PopoverContent className="w-auto p-0" align="start">
+                            <Calendar
+                              mode="single"
+                              selected={date}
+                              onSelect={(selectedDate) => {
+                                if (selectedDate) {
+                                  handleDateChange(selectedDate, valueIndex);
+                                }
+                              }}
+                              disabled={(date) => {
+                                const constraints =
+                                  getDateConstraints(valueIndex);
+                                if (constraints.minValue) {
+                                  return date < constraints.minValue;
+                                }
+                                return false;
+                              }}
+                              initialFocus
+                            />
+                          </PopoverContent>
+                        </Popover>
                       </div>
-                    </fieldset>
-
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div>
-                        {allowColor && (
-                          <div className="flex items-center gap-2">
-                            <label
-                              htmlFor={`color-${item.id}`}
-                              className="sr-only"
-                            >
-                              Line Color
-                            </label>
-                            <Tooltip content={item.color || "Select a color"}>
-                              <input
-                                id={`color-${item.id}`}
-                                type="color"
-                                name="color"
-                                value={item.color || "#000000"}
-                                onChange={(e) =>
-                                  handleUpdateLine(
-                                    index,
-                                    "color",
-                                    e.target.value
-                                  )
-                                }
-                                className="rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md cursor-pointer"
-                                aria-label="Line color"
-                              />
-                            </Tooltip>
-
-                            <Tooltip
-                              content={
-                                item.color
-                                  ? "Use default color"
-                                  : "Use custom color"
-                              }
-                            >
-                              <Button
-                                isIconOnly
-                                size="sm"
-                                variant="flat"
-                                onPress={() =>
-                                  handleUpdateLine(
-                                    index,
-                                    "color",
-                                    item.color ? "" : "#3b82f6"
-                                  )
-                                }
-                                aria-label={
-                                  item.color
-                                    ? "Use default color"
-                                    : "Use custom color"
-                                }
-                              >
-                                {item.color ? (
-                                  <Palette size={16} />
-                                ) : (
-                                  <PaintRoller size={16} />
-                                )}
-                              </Button>
-                            </Tooltip>
-                          </div>
-                        )}
-                      </div>
-
-                      <Tooltip content={`Delete line`}>
+                      <Tooltip content="Remove this date from all lines">
                         <Button
-                          isIconOnly
-                          variant="solid"
-                          color="danger"
-                          onPress={() =>
-                            handleDeleteItem(index, `Line ${index + 1}`)
-                          }
-                          aria-label={`Delete Line ${index + 1}`}
+                          variant="ghost"
+                          size="icon"
+                          onClick={() => handleDeleteDate(valueIndex)}
+                          className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                          aria-label={`Remove date ${valueIndex + 1}`}
                         >
-                          <TrashIcon size={16} />
+                          <Trash2 className="h-4 w-4" />
                         </Button>
                       </Tooltip>
                     </div>
+                  ))
+                ) : (
+                  <p className="text-sm text-gray-500">No dates added yet</p>
+                )}
+
+                <div className="flex items-center justify-end">
+                  <Button
+                    size="sm"
+                    onClick={handleAddDate}
+                    className="h-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white mt-2"
+                  >
+                    <Plus className="mr-1 h-3.5 w-3.5" /> Add Date (
+                    {sharedDates.length})
+                  </Button>
+                </div>
+              </div>
+            </div>
+
+            <div className="space-y-2 mt-4">
+              {workspaceCharts[currentChartIndex].data.length === 0 && (
+                <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
+                  <p className="text-gray-500">
+                    No lines added yet. Click the button above to add your first
+                    line.
+                  </p>
+                </div>
+              )}
+
+              {workspaceCharts[currentChartIndex].data.map(
+                (item: ChartDataItem, index: number) => {
+                  return (
+                    <Accordion
+                      type="single"
+                      collapsible
+                      key={item.id}
+                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                    >
+                      <AccordionItem
+                        value={item.id}
+                        className="shadow-[0_2px_4px_-1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06)]"
+                      >
+                        <AccordionTrigger className="px-4 py-2 font-medium h-[60px] flex items-center justify-between text-md">
+                          <div className="flex items-center">
+                            <div
+                              className={`w-2.5 h-8 rounded-sm mr-3 transition-all`}
+                              style={{
+                                backgroundColor: item.color
+                                  ? item.color
+                                  : "#f3f3f3",
+                              }}
+                            />
+                            <span>
+                              {item.key ? item.key : `Line ${index + 1}`}
+                            </span>
+                          </div>
+                        </AccordionTrigger>
+
+                        <AccordionContent>
+                          <div className="space-y-4 px-4">
+                            <div className="p-1 py-3">
+                              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400 mb-2">
+                                Values
+                              </Label>
+                              <div className="flex flex-col gap-2">
+                                {Array.isArray(item.data) &&
+                                item.data.length > 0 ? (
+                                  item.data.map((dateValue, valueIndex) => (
+                                    <div
+                                      key={valueIndex}
+                                      className="flex gap-2 items-center"
+                                    >
+                                      <div className="flex-1 pl-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-md">
+                                        <Label
+                                          htmlFor={`date-display-${item.id}-${valueIndex}`}
+                                          className="text-md mt-1 text-gray-500 mb-1 block"
+                                        >
+                                          {formatDate(
+                                            new Date(dateValue.date),
+                                            "MMM d, yyyy"
+                                          )}
+                                        </Label>
+                                      </div>
+                                      <div className="flex-1">
+                                        <Label
+                                          htmlFor={`value-${item.id}-${valueIndex}`}
+                                          className="sr-only"
+                                        >
+                                          Value {valueIndex + 1}
+                                        </Label>
+                                        <Input
+                                          id={`value-${item.id}-${valueIndex}`}
+                                          type="number"
+                                          name={`value-${valueIndex}`}
+                                          value={dateValue.value.toString()}
+                                          placeholder={`Value ${
+                                            valueIndex + 1
+                                          }`}
+                                          min={0}
+                                          step="any"
+                                          onChange={(e) => {
+                                            // Handle empty input or invalid input
+                                            let newValue = 0;
+                                            try {
+                                              newValue = e.target.value
+                                                ? parseFloat(e.target.value)
+                                                : 0;
+                                            } catch (error) {
+                                              console.error(
+                                                "Invalid number input:",
+                                                error
+                                              );
+                                            }
+
+                                            // Ensure non-negative value
+                                            const nonNegativeValue = Math.max(
+                                              0,
+                                              newValue
+                                            );
+
+                                            if (Array.isArray(item.data)) {
+                                              const newValues = [...item.data];
+                                              newValues[valueIndex] = {
+                                                ...newValues[valueIndex],
+                                                value: nonNegativeValue,
+                                              };
+                                              handleUpdateLine(
+                                                index,
+                                                "data",
+                                                newValues
+                                              );
+                                            }
+                                          }}
+                                          className="w-full"
+                                          aria-label={`Value ${valueIndex + 1}`}
+                                        />
+                                      </div>
+                                    </div>
+                                  ))
+                                ) : (
+                                  <p className="text-sm text-gray-500">
+                                    No values added yet
+                                  </p>
+                                )}
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between items-center pt-2">
+                              <div>
+                                {allowColor && (
+                                  <div className="flex items-center gap-2">
+                                    <Label
+                                      htmlFor={`color-${item.id}`}
+                                      className="sr-only"
+                                    >
+                                      Bar Color
+                                    </Label>
+                                    <Tooltip
+                                      content={item.color || "Select a color"}
+                                    >
+                                      <div className="relative">
+                                        <input
+                                          type="color"
+                                          value={item.color || "#000000"}
+                                          onChange={(e) =>
+                                            handleUpdateLine(
+                                              index,
+                                              "color",
+                                              e.target.value
+                                            )
+                                          }
+                                          className="sr-only"
+                                          id={`color-${item.id}`}
+                                        />
+                                        <Label
+                                          htmlFor={`color-${item.id}`}
+                                          className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                          style={{
+                                            backgroundColor: item.color,
+                                          }}
+                                        />
+                                      </div>
+                                    </Tooltip>
+
+                                    <Tooltip
+                                      content={
+                                        item.color
+                                          ? "Use default color"
+                                          : "Use custom color"
+                                      }
+                                    >
+                                      <Button
+                                        size="icon"
+                                        variant="outline"
+                                        onClick={() =>
+                                          handleUpdateLine(
+                                            index,
+                                            "color",
+                                            item.color ? "" : "#3b82f6"
+                                          )
+                                        }
+                                        aria-label={
+                                          item.color
+                                            ? "Use default color"
+                                            : "Use custom color"
+                                        }
+                                      >
+                                        {item.color ? (
+                                          <Palette className="h-3.5 w-3.5" />
+                                        ) : (
+                                          <PaintRoller className="h-3.5 w-3.5" />
+                                        )}
+                                      </Button>
+                                    </Tooltip>
+                                  </div>
+                                )}
+                              </div>
+
+                              <Tooltip content={`Delete line`}>
+                                <Button
+                                  variant="ghost"
+                                  size="sm"
+                                  onClick={() =>
+                                    handleDeleteItem(index, `Line ${index + 1}`)
+                                  }
+                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                  aria-label={`Delete Line ${index + 1}`}
+                                >
+                                  <Trash2 size={16} />
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Chart Properties
+              </h3>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="tooltips" className="text-sm">
+                      Show tooltips on hover
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Display additional information when hovering over data
+                      points
+                    </p>
                   </div>
-                </AccordionItem>
-              </Accordion>
-            );
-          }
-        )}
-      </div>
+                  <Switch
+                    id="tooltips"
+                    checked={withTooltip}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("withTooltip", checked === true)
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="animations" className="text-sm">
+                      Enable animations
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Animate chart elements when data changes
+                    </p>
+                  </div>
+                  <Switch
+                    id="animations"
+                    checked={useAnimation}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("useAnimation", checked === true)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Combined Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -546,14 +620,22 @@ function LineChartBuilder() {
             <DialogDescription>
               {deleteTarget?.type === "item"
                 ? `Are you sure you want to delete ${deleteTarget.name}? This action cannot be undone.`
-                : `Are you sure you want to delete the date ${deleteTarget?.name} from all lines? This action cannot be undone.`}
+                : `Are you sure you want to delete the date ${
+                    deleteTarget?.name instanceof Date
+                      ? formatDate(deleteTarget.name as Date, "MMM d, yyyy")
+                      : deleteTarget?.name
+                  } from all lines? This action cannot be undone.`}
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
-            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              onClick={() => setDeleteDialogOpen(false)}
+              className="hover:bg-gray-100 hover:text-foreground"
+            >
               Cancel
             </Button>
-            <Button color="danger" onPress={confirmDelete}>
+            <Button variant="destructive" onClick={confirmDelete}>
               Delete
             </Button>
           </DialogFooter>

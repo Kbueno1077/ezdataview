@@ -101,9 +101,9 @@ function BarChartBuilder() {
         <TabsContent value="data" className="p-0 mt-0">
           <div className="py-5 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
                 Data Points
-              </h3>
+              </Label>
               <Button
                 size="sm"
                 onClick={handleAddBar}

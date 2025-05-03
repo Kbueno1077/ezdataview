@@ -1,12 +1,20 @@
-import {
-  ChevronLeft,
-  PaintRoller,
-  Palette,
-  Plus,
-  TrashIcon,
-} from "lucide-react";
+import { PaintRoller, Palette, Plus, Trash2 } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
+import { ChartDataItem } from "../../../stores/builder-store";
 
+interface PieChartDataItem extends ChartDataItem {
+  name?: string;
+  colorFrom?: string;
+  colorTo?: string;
+}
+
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -15,14 +23,16 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Accordion, AccordionItem } from "@heroui/accordion";
-import { Button } from "@heroui/button";
-import { Checkbox } from "@heroui/checkbox";
-import { Input } from "@heroui/input";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Tooltip } from "@heroui/tooltip";
 import { useState } from "react";
 
 function PieChartBuilder() {
+  const [activeTab, setActiveTab] = useState("data");
+
   const {
     workspaceCharts,
     currentChartIndex,
@@ -32,21 +42,21 @@ function PieChartBuilder() {
     updateChartConfig,
   } = useBuildStore((state) => state);
 
-  const { withTooltip, suffix } = workspaceCharts[currentChartIndex];
+  const { withTooltip, useAnimation, suffix } =
+    workspaceCharts[currentChartIndex];
   const chartType = workspaceCharts[currentChartIndex].chartType;
 
   const allowColor =
     !chartType.includes("thin") && !chartType.includes("multi");
   const allowImage = chartType.includes("image");
 
-  // State for delete confirmation dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{
     index: number;
     name: string;
   } | null>(null);
 
-  const handleAddBar = () => {
+  const handleAddPie = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
 
     const newItem = {
@@ -88,256 +98,347 @@ function PieChartBuilder() {
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
-      <fieldset className="mb-6 border border-gray-200 dark:border-gray-700 rounded-md p-4">
-        <legend className="text-sm font-medium px-2">Chart Properties</legend>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="pt-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="data">Data</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </div>
 
-        <div className="space-y-2">
-          <div className="flex items-center">
-            <Checkbox
-              id="withTooltip"
-              isSelected={withTooltip}
-              onValueChange={(checked) =>
-                handleUpdateChartConfig("withTooltip", checked === true)
-              }
-              aria-labelledby="tooltip-label"
-            />
-            <label id="tooltip-label" htmlFor="withTooltip" className="ml-2">
-              Show tooltips on hover
-            </label>
-          </div>
-
-          <div className="flex flex-col space-y-2 ">
-            <label className="text-sm font-medium">Suffix Options:</label>
-            <div className="flex gap-2">
+        <TabsContent value="data" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Data Points
+              </Label>
               <Button
-                variant={!suffix ? "solid" : "flat"}
-                color={!suffix ? "primary" : "default"}
-                onPress={() => handleUpdateChartConfig("suffix", "")}
-                className="flex-1"
                 size="sm"
+                onClick={handleAddPie}
+                className="h-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
               >
-                No Suffix
-              </Button>
-              <Button
-                variant={suffix === "%" ? "solid" : "flat"}
-                color={suffix === "%" ? "primary" : "default"}
-                onPress={() => handleUpdateChartConfig("suffix", "%")}
-                className="flex-1"
-                size="sm"
-              >
-                Use %
+                <Plus className="mr-1 h-3.5 w-3.5" /> Add Piece (
+                {workspaceCharts[currentChartIndex].data.length})
               </Button>
             </div>
-          </div>
-        </div>
-      </fieldset>
 
-      <Button
-        onPress={handleAddBar}
-        className="w-full rounded-md gap-2"
-        color="primary"
-        variant="solid"
-        startContent={<Plus className="h-4 w-4" />}
-      >
-        Add Piece ({workspaceCharts[currentChartIndex].data.length})
-      </Button>
+            <div className="space-y-2 mt-4">
+              {workspaceCharts[currentChartIndex].data.length === 0 && (
+                <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
+                  <p className="text-gray-500">
+                    No pieces added yet. Click the button above to add your
+                    first piece.
+                  </p>
+                </div>
+              )}
 
-      <div className="space-y-2 mt-4">
-        {workspaceCharts[currentChartIndex].data.length === 0 && (
-          <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
-            <p className="text-gray-500">
-              No bars added yet. Click the button above to add your first bar.
-            </p>
-          </div>
-        )}
+              {workspaceCharts[currentChartIndex].data.map(
+                (item: PieChartDataItem, index: number) => {
+                  return (
+                    <Accordion
+                      type="single"
+                      collapsible
+                      key={item.id}
+                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                    >
+                      <AccordionItem
+                        value={item.id}
+                        className="shadow-[0_2px_4px_-1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06)]"
+                      >
+                        <AccordionTrigger className="px-4 py-2 font-medium h-[60px] flex items-center justify-between text-md">
+                          <div className="flex items-center">
+                            <div
+                              className={`w-2.5 h-8 rounded-sm mr-3 transition-all`}
+                              style={{
+                                backgroundColor: item.colorFrom
+                                  ? item.colorFrom
+                                  : "#f3f3f3",
+                              }}
+                            />
 
-        {workspaceCharts[currentChartIndex].data.map(
-          (item: any, index: number) => {
-            return (
-              <Accordion key={item.id} variant="splitted">
-                <AccordionItem
-                  aria-label={`Piece ${index + 1}: ${item.name}`}
-                  title={`${item.name ? item.name : `Piece ${index + 1}`}`}
-                  classNames={{
-                    base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
-                    title: "font-medium",
-                  }}
-                  indicator={
-                    <div className="flex items-center gap-2">
-                      {item.color ? (
-                        <div
-                          className="inline-block w-4 h-4 rounded-full border border-gray-300"
-                          style={{ backgroundColor: item.color }}
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <div className="ml-1">
-                          <ChevronLeft size={18} />
-                        </div>
-                      )}
-                    </div>
-                  }
-                >
-                  <div className="space-y-4 -mt-4 p-2">
-                    <div className="flex flex-col">
-                      <label htmlFor={`key-${item.id}`} className="mb-1">
-                        Label
-                      </label>
-                      <Input
-                        id={`key-${item.id}`}
-                        type="text"
-                        name="name"
-                        value={item.name}
-                        placeholder="Enter bar label"
-                        onChange={(e) =>
-                          handleUpdatePie(index, "name", e.target.value)
-                        }
-                        aria-label="Bar label"
-                      />
-                    </div>
-
-                    <div className="flex flex-col">
-                      <label htmlFor={`value-${item.id}`} className="mb-1">
-                        Value
-                      </label>
-                      <Input
-                        id={`value-${item.id}`}
-                        type="number"
-                        name="value"
-                        value={item.value}
-                        placeholder="Enter value"
-                        min={0}
-                        onChange={(e) => {
-                          const value = e.target.value
-                            ? parseFloat(e.target.value)
-                            : 0;
-                          const nonNegativeValue = Math.max(0, value);
-                          handleUpdatePie(index, "value", nonNegativeValue);
-                        }}
-                        aria-label="Bar value"
-                      />
-                    </div>
-
-                    {allowImage && (
-                      <div className="flex flex-col">
-                        <label htmlFor={`image-${item.id}`} className="mb-1">
-                          Image URL
-                        </label>
-                        <Input
-                          id={`image-${item.id}`}
-                          type="text"
-                          name="image"
-                          value={item.image}
-                          placeholder="Enter image URL"
-                          onChange={(e) =>
-                            handleUpdatePie(index, "image", e.target.value)
-                          }
-                          aria-label="Image URL"
-                        />
-                        {item.image && (
-                          <div className="mt-2 text-xs text-gray-500">
-                            Image will be displayed on the chart
+                            <span>{item.name || `Piece ${index + 1}`}</span>
                           </div>
-                        )}
-                      </div>
-                    )}
+                        </AccordionTrigger>
 
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div>
-                        {allowColor && (
-                          <div className="flex items-center gap-2">
-                            <label
-                              htmlFor={`colorFrom-${item.id}`}
-                              className="sr-only"
-                            >
-                              From Color
-                            </label>
-                            <Tooltip
-                              content={item.colorFrom || "Select from color"}
-                            >
-                              <input
-                                id={`colorFrom-${item.id}`}
-                                type="color"
-                                name="colorFrom"
-                                value={item.colorFrom || "#000000"}
-                                onChange={(e) => {
-                                  handleUpdatePie(
-                                    index,
-                                    "colorFrom",
-                                    e.target.value
-                                  );
+                        <AccordionContent>
+                          <div className="space-y-4 px-4">
+                            <div className="flex flex-row items-center w-full gap-2 mt-2">
+                              <div className="flex flex-col flex-1">
+                                <Label
+                                  htmlFor={`name-${item.id}`}
+                                  className="mb-1"
+                                >
+                                  Label
+                                </Label>
+                                <Input
+                                  id={`name-${item.id}`}
+                                  type="text"
+                                  name="name"
+                                  value={item.name}
+                                  placeholder="Enter piece label"
+                                  onChange={(e) =>
+                                    handleUpdatePie(
+                                      index,
+                                      "name",
+                                      e.target.value
+                                    )
+                                  }
+                                  aria-label="Piece label"
+                                />
+                              </div>
 
-                                  handleUpdatePie(
-                                    index,
-                                    "colorTo",
-                                    e.target.value
-                                  );
-                                }}
-                                className="rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md cursor-pointer"
-                                aria-label="From color"
-                              />
-                            </Tooltip>
+                              <div className="flex flex-col">
+                                <Label
+                                  htmlFor={`value-${item.id}`}
+                                  className="mb-1"
+                                >
+                                  Value
+                                </Label>
+                                <Input
+                                  id={`value-${item.id}`}
+                                  type="number"
+                                  name="value"
+                                  value={item.value}
+                                  placeholder="Enter value"
+                                  min={0}
+                                  onChange={(e) => {
+                                    const value = e.target.value
+                                      ? parseFloat(e.target.value)
+                                      : 0;
+                                    const nonNegativeValue = Math.max(0, value);
+                                    handleUpdatePie(
+                                      index,
+                                      "value",
+                                      nonNegativeValue
+                                    );
+                                  }}
+                                  aria-label="Piece value"
+                                />
+                              </div>
+                            </div>
 
-                            <Tooltip
-                              content={
-                                item.colorFrom
-                                  ? "Use default colors"
-                                  : "Use custom colors"
-                              }
-                            >
-                              <Button
-                                isIconOnly
-                                size="sm"
-                                variant="flat"
-                                onPress={() => {
-                                  handleUpdatePie(
-                                    index,
-                                    "colorFrom",
-                                    item.colorFrom ? "" : "#3b82f6"
-                                  );
-                                  handleUpdatePie(
-                                    index,
-                                    "colorTo",
-                                    item.colorTo ? "" : "#3b82f6"
-                                  );
-                                }}
-                                aria-label={
-                                  item.colorFrom
-                                    ? "Use default colors"
-                                    : "Use custom colors"
-                                }
-                              >
-                                {item.colorFrom ? (
-                                  <Palette size={16} />
-                                ) : (
-                                  <PaintRoller size={16} />
+                            {allowImage && (
+                              <div className="flex flex-col">
+                                <Label
+                                  htmlFor={`image-${item.id}`}
+                                  className="mb-1"
+                                >
+                                  Image URL
+                                </Label>
+                                <Input
+                                  id={`image-${item.id}`}
+                                  type="text"
+                                  name="image"
+                                  value={item.image}
+                                  placeholder="Enter image URL"
+                                  onChange={(e) =>
+                                    handleUpdatePie(
+                                      index,
+                                      "image",
+                                      e.target.value
+                                    )
+                                  }
+                                  aria-label="Image URL"
+                                />
+                                {item.image && (
+                                  <div className="mt-2 text-xs text-gray-500">
+                                    Image will be displayed on the chart
+                                  </div>
                                 )}
-                              </Button>
-                            </Tooltip>
-                          </div>
-                        )}
-                      </div>
+                              </div>
+                            )}
 
-                      <Tooltip content={`Delete Piece`}>
-                        <Button
-                          isIconOnly
-                          variant="solid"
-                          color="danger"
-                          onPress={() => handleDeleteItem(index, item.name)}
-                          aria-label={`Delete ${item.name}`}
-                        >
-                          <TrashIcon size={16} />
-                        </Button>
-                      </Tooltip>
-                    </div>
+                            <div className="flex justify-between items-center pt-2">
+                              <div>
+                                {allowColor && (
+                                  <div className="flex items-center gap-2">
+                                    <Label
+                                      htmlFor={`colorFrom-${item.id}`}
+                                      className="sr-only"
+                                    >
+                                      From Color
+                                    </Label>
+                                    <Tooltip
+                                      content={
+                                        item.colorFrom || "Select from color"
+                                      }
+                                    >
+                                      <div className="relative">
+                                        <input
+                                          type="color"
+                                          value={item.colorFrom || "#000000"}
+                                          onChange={(e) => {
+                                            handleUpdatePie(
+                                              index,
+                                              "colorFrom",
+                                              e.target.value
+                                            );
+                                            handleUpdatePie(
+                                              index,
+                                              "colorTo",
+                                              e.target.value
+                                            );
+                                          }}
+                                          className="sr-only"
+                                          id={`colorFrom-${item.id}`}
+                                        />
+                                        <Label
+                                          htmlFor={`colorFrom-${item.id}`}
+                                          className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                          style={{
+                                            backgroundColor: item.colorFrom,
+                                          }}
+                                        />
+                                      </div>
+                                    </Tooltip>
+
+                                    <Tooltip
+                                      content={
+                                        item.colorFrom
+                                          ? "Use default colors"
+                                          : "Use custom colors"
+                                      }
+                                    >
+                                      <Button
+                                        size="icon"
+                                        variant="outline"
+                                        onClick={() => {
+                                          handleUpdatePie(
+                                            index,
+                                            "colorFrom",
+                                            item.colorFrom ? "" : "#3b82f6"
+                                          );
+                                          handleUpdatePie(
+                                            index,
+                                            "colorTo",
+                                            item.colorTo ? "" : "#3b82f6"
+                                          );
+                                        }}
+                                        aria-label={
+                                          item.colorFrom
+                                            ? "Use default colors"
+                                            : "Use custom colors"
+                                        }
+                                      >
+                                        {item.colorFrom ? (
+                                          <Palette className="h-3.5 w-3.5" />
+                                        ) : (
+                                          <PaintRoller className="h-3.5 w-3.5" />
+                                        )}
+                                      </Button>
+                                    </Tooltip>
+                                  </div>
+                                )}
+                              </div>
+
+                              <Tooltip content="Delete piece">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() =>
+                                    handleDeleteItem(
+                                      index,
+                                      item.name || `Piece ${index + 1}`
+                                    )
+                                  }
+                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                  aria-label={`Delete ${
+                                    item.name || `Piece ${index + 1}`
+                                  }`}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Chart Properties
+              </h3>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="tooltips" className="text-sm">
+                      Show tooltips on hover
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Display additional information when hovering over data
+                      points
+                    </p>
                   </div>
-                </AccordionItem>
-              </Accordion>
-            );
-          }
-        )}
-      </div>
+                  <Switch
+                    id="tooltips"
+                    checked={withTooltip}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("withTooltip", checked === true)
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="animations" className="text-sm">
+                      Enable animations
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Animate chart elements when data changes
+                    </p>
+                  </div>
+                  <Switch
+                    id="animations"
+                    checked={useAnimation}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("useAnimation", checked === true)
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="suffix" className="text-sm">
+                      Suffix Options
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Add a suffix to the values (e.g. %)
+                    </p>
+                  </div>
+                  <div className="flex gap-2">
+                    <Button
+                      variant={!suffix ? "default" : "outline"}
+                      onClick={() => handleUpdateChartConfig("suffix", "")}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      No Suffix
+                    </Button>
+                    <Button
+                      variant={suffix === "%" ? "default" : "outline"}
+                      onClick={() => handleUpdateChartConfig("suffix", "%")}
+                      className="flex-1"
+                      size="sm"
+                    >
+                      Use %
+                    </Button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -350,10 +451,14 @@ function PieChartBuilder() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
-            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              className="hover:bg-gray-100 hover:text-foreground"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button color="danger" onPress={confirmDelete}>
+            <Button variant="destructive" onClick={confirmDelete}>
               Delete
             </Button>
           </DialogFooter>

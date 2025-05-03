@@ -1,16 +1,14 @@
+import { PaintRoller, Palette, Plus, Trash2 } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
-import {
-  ChevronLeft,
-  PaintRoller,
-  Palette,
-  Plus,
-  TrashIcon,
-} from "lucide-react";
+import { ChartDataItem } from "../../../stores/builder-store";
 
-import { Accordion, AccordionItem } from "@heroui/accordion";
-import { Button } from "@heroui/button";
-import { Input } from "@heroui/input";
-import { Tooltip } from "@heroui/tooltip";
+import {
+  Accordion,
+  AccordionContent,
+  AccordionItem,
+  AccordionTrigger,
+} from "@/components/ui/accordion";
+import { Button } from "@/components/ui/button";
 import {
   Dialog,
   DialogContent,
@@ -19,27 +17,34 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Switch } from "@/components/ui/switch";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { Tooltip } from "@heroui/tooltip";
 import { useState } from "react";
 
 function BreakdownBuilder() {
+  const [activeTab, setActiveTab] = useState("data");
+
   const {
     workspaceCharts,
     currentChartIndex,
     addChartItem,
     deleteChartItem,
     updateChartItem,
+    updateChartConfig,
   } = useBuildStore((state) => state);
 
-  const allowColor = true;
+  const { withTooltip, useAnimation } = workspaceCharts[currentChartIndex];
 
-  // State for delete confirmation dialog
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [itemToDelete, setItemToDelete] = useState<{
     index: number;
     name: string;
   } | null>(null);
 
-  const handleAddBar = () => {
+  const handleAddSection = () => {
     const newItemId = Math.random().toString(36).substring(2, 8);
 
     const newItem = {
@@ -60,6 +65,10 @@ function BreakdownBuilder() {
     updateChartItem(index, key, value);
   };
 
+  const handleUpdateChartConfig = (key: string, value: boolean) => {
+    updateChartConfig(key, value);
+  };
+
   const handleDeleteItem = (index: number, itemName: string) => {
     setItemToDelete({ index, name: itemName });
     setDeleteDialogOpen(true);
@@ -75,177 +84,273 @@ function BreakdownBuilder() {
 
   return (
     <div className="">
-      <h2 className="text-lg font-semibold mb-4">Chart Builder</h2>
+      <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
+        <div className="pt-4">
+          <TabsList className="grid w-full grid-cols-2">
+            <TabsTrigger value="data">Data</TabsTrigger>
+            <TabsTrigger value="settings">Settings</TabsTrigger>
+          </TabsList>
+        </div>
 
-      <Button
-        onPress={handleAddBar}
-        className="w-full rounded-md gap-2"
-        color="primary"
-        variant="solid"
-        startContent={<Plus className="h-4 w-4" />}
-      >
-        Add Section ({workspaceCharts[currentChartIndex].data.length})
-      </Button>
+        <TabsContent value="data" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="flex items-center justify-between">
+              <Label className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Data Points
+              </Label>
+              <Button
+                size="sm"
+                onClick={handleAddSection}
+                className="h-8 bg-gradient-to-r from-indigo-500 to-purple-500 hover:from-indigo-600 hover:to-purple-600 text-white"
+              >
+                <Plus className="mr-1 h-3.5 w-3.5" /> Add Section (
+                {workspaceCharts[currentChartIndex].data.length})
+              </Button>
+            </div>
 
-      <div className="space-y-2 mt-4">
-        {workspaceCharts[currentChartIndex].data.length === 0 && (
-          <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
-            <p className="text-gray-500">
-              No sections added yet. Click the button above to add your first
-              bar.
-            </p>
-          </div>
-        )}
+            <div className="space-y-2 mt-4">
+              {workspaceCharts[currentChartIndex].data.length === 0 && (
+                <div className="text-center p-4 border border-dashed border-gray-300 dark:border-gray-700 rounded-md">
+                  <p className="text-gray-500">
+                    No sections added yet. Click the button above to add your
+                    first section.
+                  </p>
+                </div>
+              )}
 
-        {workspaceCharts[currentChartIndex].data.map(
-          (item: any, index: number) => {
-            return (
-              <Accordion key={item.id} variant="splitted">
-                <AccordionItem
-                  aria-label={`Section ${index + 1}: ${item.key}`}
-                  title={`${item.key ? item.key : `Section ${index + 1}`}`}
-                  classNames={{
-                    base: "-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md",
-                    title: "font-medium",
-                  }}
-                  indicator={
-                    <div className="flex items-center gap-2">
-                      {item.color ? (
-                        <div
-                          className="inline-block w-4 h-4 rounded-full border border-gray-300"
-                          style={{ backgroundColor: item.color }}
-                          aria-hidden="true"
-                        />
-                      ) : (
-                        <div className="ml-1">
-                          <ChevronLeft size={18} />
-                        </div>
-                      )}
-                    </div>
-                  }
-                >
-                  <div className="space-y-4 -mt-4 p-2">
-                    <div className="flex flex-col">
-                      <label htmlFor={`key-${item.id}`} className="mb-1">
-                        Label
-                      </label>
-                      <Input
-                        id={`key-${item.id}`}
-                        type="text"
-                        name="key"
-                        value={item.key}
-                        placeholder="Enter bar label"
-                        onChange={(e) =>
-                          handleUpdateSection(index, "key", e.target.value)
-                        }
-                        aria-label="Bar label"
-                      />
-                    </div>
+              {workspaceCharts[currentChartIndex].data.map(
+                (item: ChartDataItem, index: number) => {
+                  return (
+                    <Accordion
+                      type="single"
+                      collapsible
+                      key={item.id}
+                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                    >
+                      <AccordionItem
+                        value={item.id}
+                        className="shadow-[0_2px_4px_-1px_rgba(0,0,0,0.06),0_1px_2px_-1px_rgba(0,0,0,0.06)]"
+                      >
+                        <AccordionTrigger className="px-4 py-2 font-medium h-[60px] flex items-center justify-between text-md">
+                          <div className="flex items-center">
+                            <div
+                              className={`w-2.5 h-8 rounded-sm mr-3 transition-all`}
+                              style={{
+                                backgroundColor: item.color
+                                  ? item.color
+                                  : "#f3f3f3",
+                              }}
+                            />
 
-                    <div className="flex flex-col">
-                      <label htmlFor={`value-${item.id}`} className="mb-1">
-                        Value
-                      </label>
-                      <Input
-                        id={`value-${item.id}`}
-                        type="number"
-                        name="value"
-                        value={item.value}
-                        placeholder="Enter value"
-                        min={0}
-                        onChange={(e) => {
-                          const value = e.target.value
-                            ? parseFloat(e.target.value)
-                            : 0;
-                          const nonNegativeValue = Math.max(0, value);
-                          handleUpdateSection(index, "value", nonNegativeValue);
-                        }}
-                        aria-label="Bar value"
-                      />
-                    </div>
-
-                    <div className="flex justify-between items-center pt-2 border-t border-gray-200 dark:border-gray-700">
-                      <div>
-                        {allowColor && (
-                          <div className="flex items-center gap-2">
-                            <label
-                              htmlFor={`color-${item.id}`}
-                              className="sr-only"
-                            >
-                              Bar Color
-                            </label>
-                            <Tooltip content={item.color || "Select a color"}>
-                              <input
-                                id={`color-${item.id}`}
-                                type="color"
-                                name="color"
-                                value={item.color || "#000000"}
-                                onChange={(e) =>
-                                  handleUpdateSection(
-                                    index,
-                                    "color",
-                                    e.target.value
-                                  )
-                                }
-                                className="rounded-full h-8 w-8 p-1 shadow-sm transition-all duration-200 hover:scale-110 hover:shadow-md cursor-pointer"
-                                aria-label="Bar color"
-                              />
-                            </Tooltip>
-
-                            <Tooltip
-                              content={
-                                item.color
-                                  ? "Use default color"
-                                  : "Use custom color"
-                              }
-                            >
-                              <Button
-                                isIconOnly
-                                size="sm"
-                                variant="flat"
-                                onPress={() =>
-                                  handleUpdateSection(
-                                    index,
-                                    "color",
-                                    item.color ? "" : "#3b82f6"
-                                  )
-                                }
-                                aria-label={
-                                  item.color
-                                    ? "Use default color"
-                                    : "Use custom color"
-                                }
-                              >
-                                {item.color ? (
-                                  <Palette size={16} />
-                                ) : (
-                                  <PaintRoller size={16} />
-                                )}
-                              </Button>
-                            </Tooltip>
+                            <span>{item.key || `Section ${index + 1}`}</span>
                           </div>
-                        )}
-                      </div>
+                        </AccordionTrigger>
 
-                      <Tooltip content={`Delete section`}>
-                        <Button
-                          isIconOnly
-                          variant="solid"
-                          color="danger"
-                          onPress={() => handleDeleteItem(index, item.key)}
-                          aria-label={`Delete ${item.key}`}
-                        >
-                          <TrashIcon size={16} />
-                        </Button>
-                      </Tooltip>
-                    </div>
+                        <AccordionContent>
+                          <div className="space-y-4 px-4">
+                            <div className="flex flex-row items-center w-full gap-2 mt-2">
+                              <div className="flex flex-col flex-1">
+                                <Label
+                                  htmlFor={`key-${item.id}`}
+                                  className="mb-1"
+                                >
+                                  Label
+                                </Label>
+                                <Input
+                                  id={`key-${item.id}`}
+                                  type="text"
+                                  name="key"
+                                  value={item.key}
+                                  placeholder="Enter section label"
+                                  onChange={(e) =>
+                                    handleUpdateSection(
+                                      index,
+                                      "key",
+                                      e.target.value
+                                    )
+                                  }
+                                  aria-label="Section label"
+                                />
+                              </div>
+
+                              <div className="flex flex-col">
+                                <Label
+                                  htmlFor={`value-${item.id}`}
+                                  className="mb-1"
+                                >
+                                  Value
+                                </Label>
+                                <Input
+                                  id={`value-${item.id}`}
+                                  type="number"
+                                  name="value"
+                                  value={item.value}
+                                  placeholder="Enter value"
+                                  min={0}
+                                  onChange={(e) => {
+                                    const value = e.target.value
+                                      ? parseFloat(e.target.value)
+                                      : 0;
+                                    const nonNegativeValue = Math.max(0, value);
+                                    handleUpdateSection(
+                                      index,
+                                      "value",
+                                      nonNegativeValue
+                                    );
+                                  }}
+                                  aria-label="Section value"
+                                />
+                              </div>
+                            </div>
+
+                            <div className="flex justify-between items-center pt-2">
+                              <div>
+                                <div className="flex items-center gap-2">
+                                  <Label
+                                    htmlFor={`color-${item.id}`}
+                                    className="sr-only"
+                                  >
+                                    Section Color
+                                  </Label>
+                                  <Tooltip
+                                    content={item.color || "Select a color"}
+                                  >
+                                    <div className="relative">
+                                      <input
+                                        type="color"
+                                        value={item.color || "#000000"}
+                                        onChange={(e) =>
+                                          handleUpdateSection(
+                                            index,
+                                            "color",
+                                            e.target.value
+                                          )
+                                        }
+                                        className="sr-only"
+                                        id={`color-${item.id}`}
+                                      />
+                                      <Label
+                                        htmlFor={`color-${item.id}`}
+                                        className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                        style={{
+                                          backgroundColor: item.color,
+                                        }}
+                                      />
+                                    </div>
+                                  </Tooltip>
+
+                                  <Tooltip
+                                    content={
+                                      item.color
+                                        ? "Use default color"
+                                        : "Use custom color"
+                                    }
+                                  >
+                                    <Button
+                                      size="icon"
+                                      variant="outline"
+                                      onClick={() =>
+                                        handleUpdateSection(
+                                          index,
+                                          "color",
+                                          item.color ? "" : "#3b82f6"
+                                        )
+                                      }
+                                      aria-label={
+                                        item.color
+                                          ? "Use default color"
+                                          : "Use custom color"
+                                      }
+                                    >
+                                      {item.color ? (
+                                        <Palette className="h-3.5 w-3.5" />
+                                      ) : (
+                                        <PaintRoller className="h-3.5 w-3.5" />
+                                      )}
+                                    </Button>
+                                  </Tooltip>
+                                </div>
+                              </div>
+
+                              <Tooltip content="Delete section">
+                                <Button
+                                  variant="ghost"
+                                  size="icon"
+                                  onClick={() =>
+                                    handleDeleteItem(
+                                      index,
+                                      item.key || `Section ${index + 1}`
+                                    )
+                                  }
+                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                  aria-label={`Delete ${
+                                    item.key || `Section ${index + 1}`
+                                  }`}
+                                >
+                                  <Trash2 className="h-3.5 w-3.5" />
+                                </Button>
+                              </Tooltip>
+                            </div>
+                          </div>
+                        </AccordionContent>
+                      </AccordionItem>
+                    </Accordion>
+                  );
+                }
+              )}
+            </div>
+          </div>
+        </TabsContent>
+
+        <TabsContent value="settings" className="p-0 mt-0">
+          <div className="py-5 space-y-4">
+            <div className="space-y-4">
+              <h3 className="text-sm font-medium text-gray-500 dark:text-gray-400">
+                Chart Properties
+              </h3>
+
+              <div className="space-y-3">
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="tooltips" className="text-sm">
+                      Show tooltips on hover
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Display additional information when hovering over data
+                      points
+                    </p>
                   </div>
-                </AccordionItem>
-              </Accordion>
-            );
-          }
-        )}
-      </div>
+                  <Switch
+                    id="tooltips"
+                    checked={withTooltip}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("withTooltip", checked === true)
+                    }
+                  />
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <div className="space-y-0.5">
+                    <Label htmlFor="animations" className="text-sm">
+                      Enable animations
+                    </Label>
+                    <p className="text-xs text-gray-500 dark:text-gray-400">
+                      Animate chart elements when data changes
+                    </p>
+                  </div>
+                  <Switch
+                    id="animations"
+                    checked={useAnimation}
+                    onCheckedChange={(checked) =>
+                      handleUpdateChartConfig("useAnimation", checked === true)
+                    }
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+        </TabsContent>
+      </Tabs>
 
       {/* Delete Confirmation Dialog */}
       <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
@@ -258,10 +363,14 @@ function BreakdownBuilder() {
             </DialogDescription>
           </DialogHeader>
           <DialogFooter className="flex justify-end gap-2">
-            <Button variant="flat" onPress={() => setDeleteDialogOpen(false)}>
+            <Button
+              variant="outline"
+              className="hover:bg-gray-100 hover:text-foreground"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
               Cancel
             </Button>
-            <Button color="danger" onPress={confirmDelete}>
+            <Button variant="destructive" onClick={confirmDelete}>
               Delete
             </Button>
           </DialogFooter>

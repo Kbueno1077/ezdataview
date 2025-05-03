@@ -137,7 +137,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
             transition: "transform 0.2s ease",
           }}
         >
-          <div className="flex justify-center items-center w-full px-4 py-4">
+          <div className="flex justify-center items-center w-full px-4 py-4 max-h-[calc(100vh-100px)]">
             {getChartTypeByName(currentChart.data, currentChart.chartType, {
               withTooltip: currentChart.withTooltip,
               withAnimation: currentChart.useAnimation,

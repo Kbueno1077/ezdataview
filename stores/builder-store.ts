@@ -24,7 +24,7 @@ export const initBuildStore = (): BuildState => {
 export interface ChartDataItem {
   id: string;
   data?: Array<{
-    date: string;
+    date: Date;
     value: number;
   }>;
   color?: string;
