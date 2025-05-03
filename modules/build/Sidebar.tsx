@@ -68,7 +68,7 @@ export function Sidebar({
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
       <div className="flex items-center justify-between p-2">
-        <h2 className="text-xl font-semibold">Chart Settings</h2>
+        <h2 className="text-xl font-semibold">Chart settings</h2>
         <div className="flex items-center gap-2">
           <DropdownMenu>
             <TooltipProvider>
@@ -81,7 +81,7 @@ export function Sidebar({
                   </DropdownMenuTrigger>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <p>Chart Type</p>
+                  <p>Chart types</p>
                 </TooltipContent>
               </Tooltip>
             </TooltipProvider>
@@ -118,7 +118,7 @@ export function Sidebar({
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
-                <p>Sidebar Settings</p>
+                <p>Sidebar toggle</p>
               </TooltipContent>
             </Tooltip>
           </TooltipProvider>
@@ -131,7 +131,7 @@ export function Sidebar({
       <Dialog open={confirmDialogOpen} onOpenChange={setConfirmDialogOpen}>
         <DialogContent>
           <DialogHeader>
-            <DialogTitle>Change Chart Type</DialogTitle>
+            <DialogTitle>Change chart type</DialogTitle>
             <DialogDescription>
               Changing the chart type will reset all current chart data. Make
               sure to save your work before proceeding.
@@ -153,7 +153,7 @@ export function Sidebar({
                 pendingChartType && applyChartTypeChange(pendingChartType)
               }
             >
-              Change Chart Type
+              Change chart type
             </Button>
           </DialogFooter>
         </DialogContent>

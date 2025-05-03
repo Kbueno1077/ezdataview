@@ -29,8 +29,13 @@ import {
 } from "@/components/ui/popover";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { cn } from "@/lib/utils";
-import { Tooltip } from "@heroui/tooltip";
 import { format as formatDate } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
@@ -306,17 +311,24 @@ function LineChartBuilder() {
                           </PopoverContent>
                         </Popover>
                       </div>
-                      <Tooltip content="Remove this date from all lines">
-                        <Button
-                          variant="ghost"
-                          size="icon"
-                          onClick={() => handleDeleteDate(valueIndex)}
-                          className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                          aria-label={`Remove date ${valueIndex + 1}`}
-                        >
-                          <Trash2 className="h-4 w-4" />
-                        </Button>
-                      </Tooltip>
+                      <TooltipProvider>
+                        <Tooltip>
+                          <TooltipTrigger asChild>
+                            <Button
+                              variant="ghost"
+                              size="icon"
+                              onClick={() => handleDeleteDate(valueIndex)}
+                              className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                              aria-label={`Remove date ${valueIndex + 1}`}
+                            >
+                              <Trash2 className="h-4 w-4" />
+                            </Button>
+                          </TooltipTrigger>
+                          <TooltipContent>
+                            Remove this date from all lines
+                          </TooltipContent>
+                        </Tooltip>
+                      </TooltipProvider>
                     </div>
                   ))
                 ) : (
@@ -474,80 +486,96 @@ function LineChartBuilder() {
                                     >
                                       Bar Color
                                     </Label>
-                                    <Tooltip
-                                      content={item.color || "Select a color"}
-                                    >
-                                      <div className="relative">
-                                        <input
-                                          type="color"
-                                          value={item.color || "#000000"}
-                                          onChange={(e) =>
-                                            handleUpdateLine(
-                                              index,
-                                              "color",
-                                              e.target.value
-                                            )
-                                          }
-                                          className="sr-only"
-                                          id={`color-${item.id}`}
-                                        />
-                                        <Label
-                                          htmlFor={`color-${item.id}`}
-                                          className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
-                                          style={{
-                                            backgroundColor: item.color,
-                                          }}
-                                        />
-                                      </div>
-                                    </Tooltip>
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <div className="relative">
+                                            <input
+                                              type="color"
+                                              value={item.color || "#000000"}
+                                              onChange={(e) =>
+                                                handleUpdateLine(
+                                                  index,
+                                                  "color",
+                                                  e.target.value
+                                                )
+                                              }
+                                              className="sr-only"
+                                              id={`color-${item.id}`}
+                                            />
+                                            <Label
+                                              htmlFor={`color-${item.id}`}
+                                              className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                              style={{
+                                                backgroundColor: item.color,
+                                              }}
+                                            />
+                                          </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          {item.color || "Select a color"}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
 
-                                    <Tooltip
-                                      content={
-                                        item.color
-                                          ? "Use default color"
-                                          : "Use custom color"
-                                      }
-                                    >
-                                      <Button
-                                        size="icon"
-                                        variant="outline"
-                                        onClick={() =>
-                                          handleUpdateLine(
-                                            index,
-                                            "color",
-                                            item.color ? "" : "#3b82f6"
-                                          )
-                                        }
-                                        aria-label={
-                                          item.color
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            size="icon"
+                                            variant="outline"
+                                            onClick={() =>
+                                              handleUpdateLine(
+                                                index,
+                                                "color",
+                                                item.color ? "" : "#3b82f6"
+                                              )
+                                            }
+                                            aria-label={
+                                              item.color
+                                                ? "Use default color"
+                                                : "Use custom color"
+                                            }
+                                          >
+                                            {item.color ? (
+                                              <Palette className="h-3.5 w-3.5" />
+                                            ) : (
+                                              <PaintRoller className="h-3.5 w-3.5" />
+                                            )}
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          {item.color
                                             ? "Use default color"
-                                            : "Use custom color"
-                                        }
-                                      >
-                                        {item.color ? (
-                                          <Palette className="h-3.5 w-3.5" />
-                                        ) : (
-                                          <PaintRoller className="h-3.5 w-3.5" />
-                                        )}
-                                      </Button>
-                                    </Tooltip>
+                                            : "Use custom color"}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
                                   </div>
                                 )}
                               </div>
 
-                              <Tooltip content={`Delete line`}>
-                                <Button
-                                  variant="ghost"
-                                  size="sm"
-                                  onClick={() =>
-                                    handleDeleteItem(index, `Line ${index + 1}`)
-                                  }
-                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                                  aria-label={`Delete Line ${index + 1}`}
-                                >
-                                  <Trash2 size={16} />
-                                </Button>
-                              </Tooltip>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="sm"
+                                      onClick={() =>
+                                        handleDeleteItem(
+                                          index,
+                                          `Line ${index + 1}`
+                                        )
+                                      }
+                                      className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                      aria-label={`Delete Line ${index + 1}`}
+                                    >
+                                      <Trash2 size={16} />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>Delete line</TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </div>
                           </div>
                         </AccordionContent>

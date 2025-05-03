@@ -27,7 +27,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip } from "@heroui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useState } from "react";
 
 function PieChartBuilder() {
@@ -258,97 +263,109 @@ function PieChartBuilder() {
                                     >
                                       From Color
                                     </Label>
-                                    <Tooltip
-                                      content={
-                                        item.colorFrom || "Select from color"
-                                      }
-                                    >
-                                      <div className="relative">
-                                        <input
-                                          type="color"
-                                          value={item.colorFrom || "#000000"}
-                                          onChange={(e) => {
-                                            handleUpdatePie(
-                                              index,
-                                              "colorFrom",
-                                              e.target.value
-                                            );
-                                            handleUpdatePie(
-                                              index,
-                                              "colorTo",
-                                              e.target.value
-                                            );
-                                          }}
-                                          className="sr-only"
-                                          id={`colorFrom-${item.id}`}
-                                        />
-                                        <Label
-                                          htmlFor={`colorFrom-${item.id}`}
-                                          className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
-                                          style={{
-                                            backgroundColor: item.colorFrom,
-                                          }}
-                                        />
-                                      </div>
-                                    </Tooltip>
 
-                                    <Tooltip
-                                      content={
-                                        item.colorFrom
-                                          ? "Use default colors"
-                                          : "Use custom colors"
-                                      }
-                                    >
-                                      <Button
-                                        size="icon"
-                                        variant="outline"
-                                        onClick={() => {
-                                          handleUpdatePie(
-                                            index,
-                                            "colorFrom",
-                                            item.colorFrom ? "" : "#3b82f6"
-                                          );
-                                          handleUpdatePie(
-                                            index,
-                                            "colorTo",
-                                            item.colorTo ? "" : "#3b82f6"
-                                          );
-                                        }}
-                                        aria-label={
-                                          item.colorFrom
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <div className="relative">
+                                            <input
+                                              type="color"
+                                              value={
+                                                item.colorFrom || "#000000"
+                                              }
+                                              onChange={(e) => {
+                                                handleUpdatePie(
+                                                  index,
+                                                  "colorFrom",
+                                                  e.target.value
+                                                );
+                                                handleUpdatePie(
+                                                  index,
+                                                  "colorTo",
+                                                  e.target.value
+                                                );
+                                              }}
+                                              className="sr-only"
+                                              id={`colorFrom-${item.id}`}
+                                            />
+                                            <Label
+                                              htmlFor={`colorFrom-${item.id}`}
+                                              className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                              style={{
+                                                backgroundColor: item.colorFrom,
+                                              }}
+                                            />
+                                          </div>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          {item.colorFrom || "Select a color"}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
+
+                                    <TooltipProvider>
+                                      <Tooltip>
+                                        <TooltipTrigger asChild>
+                                          <Button
+                                            size="icon"
+                                            variant="outline"
+                                            onClick={() => {
+                                              handleUpdatePie(
+                                                index,
+                                                "colorFrom",
+                                                item.colorFrom ? "" : "#3b82f6"
+                                              );
+                                              handleUpdatePie(
+                                                index,
+                                                "colorTo",
+                                                item.colorTo ? "" : "#3b82f6"
+                                              );
+                                            }}
+                                            aria-label={
+                                              item.colorFrom
+                                                ? "Use default colors"
+                                                : "Use custom colors"
+                                            }
+                                          >
+                                            {item.colorFrom ? (
+                                              <Palette className="h-3.5 w-3.5" />
+                                            ) : (
+                                              <PaintRoller className="h-3.5 w-3.5" />
+                                            )}
+                                          </Button>
+                                        </TooltipTrigger>
+                                        <TooltipContent>
+                                          {item.colorFrom
                                             ? "Use default colors"
-                                            : "Use custom colors"
-                                        }
-                                      >
-                                        {item.colorFrom ? (
-                                          <Palette className="h-3.5 w-3.5" />
-                                        ) : (
-                                          <PaintRoller className="h-3.5 w-3.5" />
-                                        )}
-                                      </Button>
-                                    </Tooltip>
+                                            : "Use custom colors"}
+                                        </TooltipContent>
+                                      </Tooltip>
+                                    </TooltipProvider>
                                   </div>
                                 )}
                               </div>
 
-                              <Tooltip content="Delete piece">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() =>
-                                    handleDeleteItem(
-                                      index,
-                                      item.name || `Piece ${index + 1}`
-                                    )
-                                  }
-                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                                  aria-label={`Delete ${
-                                    item.name || `Piece ${index + 1}`
-                                  }`}
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </Button>
-                              </Tooltip>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() =>
+                                        handleDeleteItem(
+                                          index,
+                                          item.name || `Piece ${index + 1}`
+                                        )
+                                      }
+                                    >
+                                      <Trash2 className="h-4 w-4" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    <p>Delete piece</p>
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </div>
                           </div>
                         </AccordionContent>

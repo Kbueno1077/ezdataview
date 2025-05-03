@@ -21,7 +21,12 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Switch } from "@/components/ui/switch";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Tooltip } from "@heroui/tooltip";
+import {
+  Tooltip,
+  TooltipContent,
+  TooltipProvider,
+  TooltipTrigger,
+} from "@/components/ui/tooltip";
 import { useState } from "react";
 
 function BreakdownBuilder() {
@@ -212,84 +217,100 @@ function BreakdownBuilder() {
                                   >
                                     Section Color
                                   </Label>
-                                  <Tooltip
-                                    content={item.color || "Select a color"}
-                                  >
-                                    <div className="relative">
-                                      <input
-                                        type="color"
-                                        value={item.color || "#000000"}
-                                        onChange={(e) =>
-                                          handleUpdateSection(
-                                            index,
-                                            "color",
-                                            e.target.value
-                                          )
-                                        }
-                                        className="sr-only"
-                                        id={`color-${item.id}`}
-                                      />
-                                      <Label
-                                        htmlFor={`color-${item.id}`}
-                                        className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
-                                        style={{
-                                          backgroundColor: item.color,
-                                        }}
-                                      />
-                                    </div>
-                                  </Tooltip>
 
-                                  <Tooltip
-                                    content={
-                                      item.color
-                                        ? "Use default color"
-                                        : "Use custom color"
-                                    }
-                                  >
-                                    <Button
-                                      size="icon"
-                                      variant="outline"
-                                      onClick={() =>
-                                        handleUpdateSection(
-                                          index,
-                                          "color",
-                                          item.color ? "" : "#3b82f6"
-                                        )
-                                      }
-                                      aria-label={
-                                        item.color
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <div className="relative">
+                                          <input
+                                            type="color"
+                                            value={item.color || "#000000"}
+                                            onChange={(e) =>
+                                              handleUpdateSection(
+                                                index,
+                                                "color",
+                                                e.target.value
+                                              )
+                                            }
+                                            className="sr-only"
+                                            id={`color-${item.id}`}
+                                          />
+                                          <Label
+                                            htmlFor={`color-${item.id}`}
+                                            className="w-7 h-7 rounded-full cursor-pointer flex items-center justify-center overflow-hidden border border-gray-400 dark:border-gray-700"
+                                            style={{
+                                              backgroundColor: item.color,
+                                            }}
+                                          />
+                                        </div>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        {item.color || "Select a color"}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
+
+                                  <TooltipProvider>
+                                    <Tooltip>
+                                      <TooltipTrigger asChild>
+                                        <Button
+                                          size="icon"
+                                          variant="outline"
+                                          onClick={() =>
+                                            handleUpdateSection(
+                                              index,
+                                              "color",
+                                              item.color ? "" : "#3b82f6"
+                                            )
+                                          }
+                                          aria-label={
+                                            item.color
+                                              ? "Use default color"
+                                              : "Use custom color"
+                                          }
+                                        >
+                                          {item.color ? (
+                                            <Palette className="h-3.5 w-3.5" />
+                                          ) : (
+                                            <PaintRoller className="h-3.5 w-3.5" />
+                                          )}
+                                        </Button>
+                                      </TooltipTrigger>
+                                      <TooltipContent>
+                                        {item.color
                                           ? "Use default color"
-                                          : "Use custom color"
-                                      }
-                                    >
-                                      {item.color ? (
-                                        <Palette className="h-3.5 w-3.5" />
-                                      ) : (
-                                        <PaintRoller className="h-3.5 w-3.5" />
-                                      )}
-                                    </Button>
-                                  </Tooltip>
+                                          : "Use custom color"}
+                                      </TooltipContent>
+                                    </Tooltip>
+                                  </TooltipProvider>
                                 </div>
                               </div>
 
-                              <Tooltip content="Delete section">
-                                <Button
-                                  variant="ghost"
-                                  size="icon"
-                                  onClick={() =>
-                                    handleDeleteItem(
-                                      index,
-                                      item.key || `Section ${index + 1}`
-                                    )
-                                  }
-                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-                                  aria-label={`Delete ${
-                                    item.key || `Section ${index + 1}`
-                                  }`}
-                                >
-                                  <Trash2 className="h-3.5 w-3.5" />
-                                </Button>
-                              </Tooltip>
+                              <TooltipProvider>
+                                <Tooltip>
+                                  <TooltipTrigger asChild>
+                                    <Button
+                                      variant="ghost"
+                                      size="icon"
+                                      onClick={() =>
+                                        handleDeleteItem(
+                                          index,
+                                          item.key || `Section ${index + 1}`
+                                        )
+                                      }
+                                      className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                      aria-label={`Delete ${
+                                        item.key || `Section ${index + 1}`
+                                      }`}
+                                    >
+                                      <Trash2 className="h-3.5 w-3.5" />
+                                    </Button>
+                                  </TooltipTrigger>
+                                  <TooltipContent>
+                                    Delete section
+                                  </TooltipContent>
+                                </Tooltip>
+                              </TooltipProvider>
                             </div>
                           </div>
                         </AccordionContent>
