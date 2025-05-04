@@ -1,5 +1,3 @@
-import { heroui } from "@heroui/react";
-
 /** @type {import('tailwindcss').Config} */
 const config = {
   content: [
@@ -7,7 +5,6 @@ const config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./modules/**/*.{js,ts,jsx,tsx,mdx}",
-    "./node_modules/@heroui/theme/dist/**/*.{js,ts,jsx,tsx}",
   ],
   safelist: [
     // Safelist patterns for dynamic colors
@@ -124,7 +121,7 @@ const config = {
   },
 
   darkMode: "class",
-  plugins: [heroui()],
+  plugins: [],
 };
 
 export default config;

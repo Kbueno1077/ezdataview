@@ -11,7 +11,7 @@ interface ShowcaseProps {
   title?: string;
 }
 
-function Showcase({ data, title = "Charts" }: ShowcaseProps) {
+function Showcase({ data, title = "" }: ShowcaseProps) {
   const [viewMode, setViewMode] = useState<ViewMode>("grid");
   const [activeDashboardPage, setActiveDashboardPage] = useState(0);
   const chartsPerPage = 6;

@@ -15,14 +15,15 @@ const Pagination: React.FC<PaginationProps> = React.memo(
 
     return (
       <div className="flex justify-center mt-8">
-        <div className="flex items-center  bg-gray-100 rounded-lg shadow-sm overflow-hidden">
+        <nav className="flex items-center space-x-1 rounded-lg bg-white/80 backdrop-blur-sm p-1 shadow-sm border border-gray-200">
           <button
             onClick={() => onPageChange(Math.max(0, currentPage - 1))}
             disabled={currentPage === 0}
-            className="h-full px-3 transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-gray-600 hover:bg-gray-200 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50"
+            className="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
             aria-label="Previous page"
           >
-            <ChevronLeft size={20} />
+            <ChevronLeft size={18} className="mr-1.5" />
+            <span>Previous</span>
           </button>
 
           {totalPages <= 5 ? (
@@ -31,11 +32,11 @@ const Pagination: React.FC<PaginationProps> = React.memo(
               <button
                 key={idx}
                 onClick={() => onPageChange(idx)}
-                className={`p-3 min-w-[40px] transition-all duration-300 ${
+                className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
                   currentPage === idx
-                    ? "bg-purple-500 text-white font-medium shadow-md"
-                    : "text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                } focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50`}
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
+                }`}
                 aria-label={`Page ${idx + 1}`}
                 aria-current={currentPage === idx ? "page" : undefined}
               >
@@ -48,11 +49,11 @@ const Pagination: React.FC<PaginationProps> = React.memo(
               {/* First page */}
               <button
                 onClick={() => onPageChange(0)}
-                className={`p-3 min-w-[40px] transition-all duration-300 ${
+                className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
                   currentPage === 0
-                    ? "bg-purple-500 text-white font-medium shadow-md"
-                    : "text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                } focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50`}
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
+                }`}
                 aria-label="Page 1"
                 aria-current={currentPage === 0 ? "page" : undefined}
               >
@@ -64,19 +65,21 @@ const Pagination: React.FC<PaginationProps> = React.memo(
                 (currentPage === 2 ? (
                   <button
                     onClick={() => onPageChange(1)}
-                    className="p-3 min-w-[40px] transition-all duration-300 text-gray-600 hover:bg-gray-200 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50"
+                    className="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
                     aria-label="Page 2"
                   >
                     2
                   </button>
                 ) : (
-                  <span className="p-3 text-gray-400 select-none">•••</span>
+                  <span className="flex items-center justify-center px-3 py-2 text-sm text-gray-400 select-none">
+                    •••
+                  </span>
                 ))}
 
               {/* Current page (if not first or last) */}
               {currentPage !== 0 && currentPage !== totalPages - 1 && (
                 <button
-                  className="p-3 min-w-[40px] transition-all duration-300 bg-purple-500 text-white font-medium shadow-md focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50"
+                  className="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
                   aria-label={`Page ${currentPage + 1}`}
                   aria-current="page"
                 >
@@ -89,23 +92,25 @@ const Pagination: React.FC<PaginationProps> = React.memo(
                 (currentPage === totalPages - 3 ? (
                   <button
                     onClick={() => onPageChange(totalPages - 2)}
-                    className="p-3 min-w-[40px] transition-all duration-300 text-gray-600 hover:bg-gray-200 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50"
+                    className="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
                     aria-label={`Page ${totalPages - 1}`}
                   >
                     {totalPages - 1}
                   </button>
                 ) : (
-                  <span className="p-3 text-gray-400 select-none">•••</span>
+                  <span className="flex items-center justify-center px-3 py-2 text-sm text-gray-400 select-none">
+                    •••
+                  </span>
                 ))}
 
               {/* Last page */}
               <button
                 onClick={() => onPageChange(totalPages - 1)}
-                className={`p-3 min-w-[40px] transition-all duration-300 ${
+                className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
                   currentPage === totalPages - 1
-                    ? "bg-purple-500 text-white font-medium shadow-md"
-                    : "text-gray-600 hover:bg-gray-200 hover:text-gray-800"
-                } focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50`}
+                    ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+                    : "text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
+                }`}
                 aria-label={`Page ${totalPages}`}
                 aria-current={
                   currentPage === totalPages - 1 ? "page" : undefined
@@ -121,12 +126,13 @@ const Pagination: React.FC<PaginationProps> = React.memo(
               onPageChange(Math.min(totalPages - 1, currentPage + 1))
             }
             disabled={currentPage === totalPages - 1}
-            className="h-full px-3 transition-all duration-300 cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed text-gray-600 hover:bg-gray-200 hover:text-gray-800 focus:outline-none focus:ring-2 focus:ring-purple-300 focus:ring-opacity-50"
+            className="flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 disabled:pointer-events-none disabled:opacity-50 text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
             aria-label="Next page"
           >
-            <ChevronRight size={20} />
+            <span>Next</span>
+            <ChevronRight size={18} className="ml-1.5" />
           </button>
-        </div>
+        </nav>
       </div>
     );
   }

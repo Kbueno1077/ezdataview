@@ -12,45 +12,48 @@ interface ViewModeSelectorProps {
 const ViewModeSelector: React.FC<ViewModeSelectorProps> = React.memo(
   ({ viewMode, onViewModeChange }) => {
     return (
-      <div className="flex rounded-md overflow-hidden">
+      <div className="flex items-center bg-white/80 backdrop-blur-sm rounded-lg p-1 shadow-sm border border-gray-200">
         <button
           onClick={() => onViewModeChange("list")}
-          className={`p-3 transition-all duration-200 cursor-pointer ${
+          className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
             viewMode === "list"
-              ? "bg-blue-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-md"
+              : "text-gray-700 hover:bg-gray-100/80 hover:text-blue-600"
           }`}
           aria-label="List view"
           aria-pressed={viewMode === "list"}
           title="Switch to list view"
         >
-          <List size={20} />
+          <List size={18} className="mr-1.5" />
+          <span>List</span>
         </button>
         <button
           onClick={() => onViewModeChange("grid")}
-          className={`p-3 transition-all duration-200 cursor-pointer ${
+          className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 mx-1 ${
             viewMode === "grid"
-              ? "bg-purple-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-gradient-to-r from-purple-500 to-purple-600 text-white shadow-md"
+              : "text-gray-700 hover:bg-gray-100/80 hover:text-purple-600"
           }`}
           aria-label="Grid view"
           aria-pressed={viewMode === "grid"}
           title="Switch to grid view"
         >
-          <Grid size={20} />
+          <Grid size={18} className="mr-1.5" />
+          <span>Grid</span>
         </button>
         <button
           onClick={() => onViewModeChange("dashboard")}
-          className={`p-3 transition-all duration-200 cursor-pointer ${
+          className={`flex items-center justify-center rounded-md px-3 py-2 text-sm font-medium transition-all duration-200 ${
             viewMode === "dashboard"
-              ? "bg-teal-500 text-white"
-              : "bg-gray-100 text-gray-600 hover:bg-gray-200"
+              ? "bg-gradient-to-r from-teal-500 to-teal-600 text-white shadow-md"
+              : "text-gray-700 hover:bg-gray-100/80 hover:text-teal-600"
           }`}
           aria-label="Dashboard view"
           aria-pressed={viewMode === "dashboard"}
           title="Switch to dashboard view"
         >
-          <LayoutGrid size={20} />
+          <LayoutGrid size={18} className="mr-1.5" />
+          <span>Dashboard</span>
         </button>
       </div>
     );
