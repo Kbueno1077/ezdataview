@@ -315,13 +315,13 @@ function LineChartBuilder() {
                         <Tooltip>
                           <TooltipTrigger asChild>
                             <Button
+                              className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                               variant="ghost"
                               size="icon"
                               onClick={() => handleDeleteDate(valueIndex)}
-                              className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                               aria-label={`Remove date ${valueIndex + 1}`}
                             >
-                              <Trash2 className="h-4 w-4" />
+                              <Trash2 />
                             </Button>
                           </TooltipTrigger>
                           <TooltipContent>
@@ -365,7 +365,7 @@ function LineChartBuilder() {
                       type="single"
                       collapsible
                       key={item.id}
-                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                      className="-ml-2 w-[calc(100%+16px)] border border-border rounded-md"
                     >
                       <AccordionItem
                         value={item.id}
@@ -401,7 +401,7 @@ function LineChartBuilder() {
                                       key={valueIndex}
                                       className="flex gap-2 items-center"
                                     >
-                                      <div className="flex-1 pl-2 bg-gray-100 dark:bg-gray-800 p-1 rounded-md">
+                                      <div className="flex-1 pl-2 bg-gray-100 dark:bg-zinc-700 p-1 rounded-md">
                                         <Label
                                           htmlFor={`date-display-${item.id}-${valueIndex}`}
                                           className="text-md mt-1 text-gray-500 mb-1 block"
@@ -523,7 +523,7 @@ function LineChartBuilder() {
                                         <TooltipTrigger asChild>
                                           <Button
                                             size="icon"
-                                            variant="outline"
+                                            variant="ghost"
                                             onClick={() =>
                                               handleUpdateLine(
                                                 index,
@@ -559,6 +559,7 @@ function LineChartBuilder() {
                                 <Tooltip>
                                   <TooltipTrigger asChild>
                                     <Button
+                                      className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                       variant="ghost"
                                       size="sm"
                                       onClick={() =>
@@ -567,10 +568,9 @@ function LineChartBuilder() {
                                           `Line ${index + 1}`
                                         )
                                       }
-                                      className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                       aria-label={`Delete Line ${index + 1}`}
                                     >
-                                      <Trash2 size={16} />
+                                      <Trash2 />
                                     </Button>
                                   </TooltipTrigger>
                                   <TooltipContent>Delete line</TooltipContent>
@@ -659,7 +659,7 @@ function LineChartBuilder() {
             <Button
               variant="outline"
               onClick={() => setDeleteDialogOpen(false)}
-              className="hover:bg-gray-100 hover:text-foreground"
+              className="hover:bg-muted hover:text-foreground"
             >
               Cancel
             </Button>

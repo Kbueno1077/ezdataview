@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { getChartTypeByName } from "../rosencharts/utils/utils";
 import styles from "./NativeCharts.module.css";
 import NativeModal from "./NativeModal";
+import { useTheme } from "@/providers/theme-provider";
 
 interface Chart {
   id: string;
@@ -13,13 +14,15 @@ interface Chart {
 }
 
 function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
+  const theme = useTheme();
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [headerGradient, setHeaderGradient] = useState("");
 
   // Generate random gradient colors on component mount
   useEffect(() => {
-    const colors = [
+    // Different color sets for light and dark themes
+    const lightColors = [
       "#f9fafb", // Light gray
       "#f0f9ff", // Light blue
       "#f0fdf4", // Light green
@@ -29,13 +32,28 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
       "#fdf2f8", // Light pink
     ];
 
+    const darkColors = [
+      "#4b5563", // Softer dark gray
+      "#3b82f6", // Softer blue
+      "#10b981", // Softer green
+      "#ef4444", // Softer red
+      "#f59e0b", // Softer yellow
+      "#8b5cf6", // Softer purple
+      "#ec4899", // Softer pink
+    ];
+
+    // Choose colors based on current theme
+    const colors = theme.theme === "light" ? lightColors : darkColors;
     const startColor = colors[Math.floor(Math.random() * colors.length)];
-    const endColor = "rgba(249, 250, 251, 0)";
+    const endColor =
+      theme.theme === "light"
+        ? "rgba(249, 250, 251, 0)"
+        : "rgba(17, 24, 39, 0)";
 
     setHeaderGradient(
       `linear-gradient(to bottom, ${startColor} 0%, ${endColor} 100%)`
     );
-  }, []);
+  }, [theme.theme]);
 
   //@ts-expect-error - This is a workaround to get the chart type by name
   const previewChartNode = getChartTypeByName(chart.data, chart.type, {
@@ -59,13 +77,13 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
       </NativeModal>
 
       <div
-        className={styles.chartButton}
+        className={`${styles.chartButton} shadow-sm hover:shadow-md dark:shadow-gray-800 dark:hover:shadow-gray-700`}
         onClick={handleChartClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
       >
         <div
-          className="py-3 px-4 font-semibold text-base flex items-center justify-between"
+          className="py-3 px-4 font-semibold text-base text-foreground/80 flex items-center justify-between"
           style={{
             background: headerGradient,
           }}
@@ -73,7 +91,7 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
           {title}
           <ExternalLink
             size={10}
-            className="ml-2 text-xs text-gray-600 transition-opacity duration-200 ease-in-out"
+            className="ml-2 text-xs text-foreground/80 transition-opacity duration-200 ease-in-out"
             style={{ opacity: isHovered ? 1 : 0 }}
           />
         </div>

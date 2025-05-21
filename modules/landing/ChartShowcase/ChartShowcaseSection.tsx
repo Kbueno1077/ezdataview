@@ -107,7 +107,7 @@ const ChartShowcaseSection: React.FC<Props> = ({
               "justify-end": !imageAtRight,
             })}
           >
-            <div className="relative w-[calc(100vw-40px)] sm:w-[480px] md:w-[520px] lg:w-[520px] xl:w-[520px] h-[384px] flex items-center px-5 justify-center overflow-hidden rounded-xl shadow-lg">
+            <div className="relative w-[calc(100vw-40px)] sm:w-[480px] md:w-[520px] lg:w-[520px] xl:w-[520px] h-[384px] flex items-center px-5 justify-center overflow-hidden rounded-xl shadow-lg dark:shadow-gray-700/30">
               {chartType}
             </div>
           </div>

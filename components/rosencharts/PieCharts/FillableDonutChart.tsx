@@ -145,6 +145,7 @@ export function FillableDonutChart({
             textAnchor="middle"
             fontSize={28}
             fontWeight="bold"
+            fill="currentColor"
             className="text-violet-600 dark:text-violet-400"
             y="20"
           >

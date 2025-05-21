@@ -4,6 +4,7 @@ import { Manrope, Source_Sans_3 } from "next/font/google";
 import { ClerkProvider } from "@clerk/nextjs";
 import { Toaster } from "sonner";
 import { siteDetails } from "../modules/landing/data/siteDetails";
+import { ThemeProvider } from "../providers/theme-provider";
 import "./globals.css";
 
 const manrope = Manrope({ subsets: ["latin"] });
@@ -41,19 +42,15 @@ export default function RootLayout({
 }>) {
   return (
     <ClerkProvider>
-      <html lang="en">
-        <head>
-          <script
-            crossOrigin="anonymous"
-            src="//unpkg.com/react-scan/dist/auto.global.js"
-          />
-          {/* rest of your scripts go under */}
-        </head>
+      <html lang="en" suppressHydrationWarning>
+        <head>{/* Scripts will be loaded asynchronously */}</head>
         <body
-          className={`${manrope.className} ${sourceSans.className} antialiased`}
+          className={`${manrope.className} ${sourceSans.className} antialiased min-h-screen bg-background text-foreground`}
         >
-          {children}
-          <Toaster />
+          <ThemeProvider defaultTheme="system">
+            {children}
+            <Toaster />
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

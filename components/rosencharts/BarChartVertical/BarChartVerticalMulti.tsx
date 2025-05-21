@@ -201,7 +201,7 @@ export function BarChartVerticalMulti({
                   </AnimatedVerticalBar>
                 </TooltipTrigger>
                 <TooltipContent>
-                  <div className="text-sm text-gray-400 border-b border-gray-200 dark:border-gray-800 pb-1 mb-1.5">
+                  <div className="text-sm text-gray-400 border-b border-gray-200 dark:border-zinc-700 pb-1 mb-1.5">
                     {d.key}
                   </div>
                   <div className="flex flex-col gap-2">

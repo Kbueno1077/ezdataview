@@ -19,6 +19,7 @@ import { useBuildStore } from "../../providers/store-provider";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Input } from "@/components/ui/input";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const { workspaceCharts, currentChartIndex, updateChartItem } = useBuildStore(
@@ -49,10 +50,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
       <div className="flex items-center justify-between">
         <Input
           placeholder="Title for this workspace"
-          className="border-none outline-none shadow-none bg-gray-100 dark:bg-gray-800 max-w-[250px]"
+          className="border-none outline-none shadow-none bg-gray-100 dark:bg-zinc-700 max-w-[250px] h-[40px]"
         />
 
-        <div className="flex items-center gap-2 bg-gray-50 dark:bg-gray-800 rounded-lg p-1.5 shadow-sm border border-gray-200 dark:border-gray-700">
+        <div className="flex items-center gap-2 bg-gray-100 dark:bg-zinc-700 rounded-lg p-1.5 shadow-sm ">
           <Drawer>
             <DrawerTrigger asChild>
               <Button size="icon" variant="ghost">
@@ -126,6 +127,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           </Button>
         </div>
       </div>
+      <ThemeToggle />
 
       {currentChart.data.length > 0 ? (
         <div
@@ -148,10 +150,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
       ) : (
         <div className="flex justify-center items-center w-full h-[calc(100vh-100px)] px-4">
           <div className="text-center">
-            <p className="text-lg text-gray-500 mb-2">
+            <p className="text-lg text-foreground/40 mb-2">
               No chart data available
             </p>
-            <p className="text-sm text-gray-400">
+            <p className="text-sm text-foreground/40">
               Add some data to start creating your chart
             </p>
           </div>

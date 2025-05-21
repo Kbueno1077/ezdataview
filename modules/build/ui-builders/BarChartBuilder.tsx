@@ -156,7 +156,7 @@ function BarChartBuilder() {
                       type="single"
                       collapsible
                       key={item.id}
-                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                      className="-ml-2 w-[calc(100%+16px)] border border-border rounded-md"
                     >
                       <AccordionItem
                         value={item.id}
@@ -326,7 +326,7 @@ function BarChartBuilder() {
                                               <TooltipTrigger asChild>
                                                 <Button
                                                   size="icon"
-                                                  variant="outline"
+                                                  variant="ghost"
                                                   onClick={() => {
                                                     const multipleColors = [
                                                       ...(item.multipleColors ||
@@ -415,6 +415,7 @@ function BarChartBuilder() {
                                               <TooltipTrigger asChild>
                                                 <Button
                                                   size="icon"
+                                                  className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                                   variant="ghost"
                                                   onClick={() => {
                                                     const newValues = [
@@ -430,10 +431,9 @@ function BarChartBuilder() {
                                                       newValues
                                                     );
                                                   }}
-                                                  className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                                   aria-label="Remove value"
                                                 >
-                                                  <Trash2 className="h-4 w-4" />
+                                                  <Trash2 />
                                                 </Button>
                                               </TooltipTrigger>
                                               <TooltipContent>
@@ -528,7 +528,7 @@ function BarChartBuilder() {
                                         <TooltipTrigger asChild>
                                           <Button
                                             size="icon"
-                                            variant="outline"
+                                            variant="ghost"
                                             onClick={() =>
                                               handleUpdateBar(
                                                 index,
@@ -569,10 +569,10 @@ function BarChartBuilder() {
                                       onClick={() =>
                                         handleDeleteItem(index, item.key || "")
                                       }
-                                      className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
+                                      className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                       aria-label={`Delete ${item.key || ""}`}
                                     >
-                                      <Trash2 className="h-3.5 w-3.5" />
+                                      <Trash2 />
                                     </Button>
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -655,7 +655,7 @@ function BarChartBuilder() {
           <DialogFooter className="flex justify-end gap-2">
             <Button
               variant="outline"
-              className="hover:bg-gray-100 hover:text-foreground"
+              className="hover:bg-muted hover:text-foreground"
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel

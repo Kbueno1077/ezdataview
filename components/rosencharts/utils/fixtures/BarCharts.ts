@@ -138,37 +138,37 @@ export const dataImage: ImageBarData[] = [
     key: "Portugal",
     value: 55.8,
     image: "https://hatscripts.github.io/circle-flags/flags/pt.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
   {
     key: "France",
     value: 34.3,
     image: "https://hatscripts.github.io/circle-flags/flags/fr.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
   {
     key: "Sweden",
     value: 27.1,
     image: "https://hatscripts.github.io/circle-flags/flags/se.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
   {
     key: "Spain",
     value: 22.5,
     image: "https://hatscripts.github.io/circle-flags/flags/es.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
   {
     key: "Italy",
     value: 18.7,
     image: "https://hatscripts.github.io/circle-flags/flags/it.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
   {
     key: "Germany",
     value: 10.8,
     image: "https://hatscripts.github.io/circle-flags/flags/de.svg",
-    color: "bg-gray-300 dark:bg-gray-800",
+    color: "bg-gray-300 dark:bg-zinc-700",
   },
 ];
 

@@ -54,7 +54,7 @@ const Footer: React.FC = () => {
                 {siteDetails.siteName}
               </h3>
             </Link>
-            <p className="text-gray-600 leading-relaxed">
+            <p className="text-foreground/80 leading-relaxed">
               {footerDetails.subheading}
             </p>
 
@@ -72,12 +72,13 @@ const Footer: React.FC = () => {
             <h4 className="text-lg font-semibold mb-6 bg-gradient-to-r from-blue-500 to-purple-600 bg-clip-text text-transparent">
               Quick Links
             </h4>
+
             <ul className="space-y-3">
               {footerDetails.quickLinks.map((link) => (
                 <li key={link.text}>
                   <Link
                     href={link.url}
-                    className="text-gray-600 hover:text-gray-900 transition-colors relative group flex items-center"
+                    className=" text-foreground/80 transition-colors relative group flex items-center"
                   >
                     <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
                     <span className="relative">{link.text}</span>
@@ -96,7 +97,7 @@ const Footer: React.FC = () => {
             {footerDetails.email && (
               <a
                 href={`mailto:${footerDetails.email}`}
-                className="flex items-center text-gray-600 hover:text-gray-900 transition-colors group"
+                className="flex items-center text-foreground/80 transition-colors group"
               >
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -112,7 +113,7 @@ const Footer: React.FC = () => {
                     d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
                   />
                 </svg>
-                <span className="relative">
+                <span className="relative text-foreground/80">
                   {footerDetails.email}
                   <span className="absolute left-0 bottom-0 w-0 h-0.5 bg-gradient-to-r from-blue-500 to-purple-600 transition-all duration-300 group-hover:w-full"></span>
                 </span>
@@ -144,7 +145,7 @@ const Footer: React.FC = () => {
         </div>
 
         {/* Bottom copyright section */}
-        <div className="mt-8 text-center text-gray-500 pt-4 flex flex-col md:flex-row justify-between items-center">
+        <div className="mt-8 text-center text-foreground/80 pt-4 flex flex-col md:flex-row justify-between items-center">
           <p>
             &copy; {currentYear} {siteDetails.siteName}. All rights reserved.
           </p>
@@ -153,13 +154,13 @@ const Footer: React.FC = () => {
           <div className="flex space-x-4 mt-4 md:mt-0">
             <Link
               href="/terms"
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-foreground/80 hover:text-gray-700 transition-colors"
             >
               Terms
             </Link>
             <Link
               href="/privacy"
-              className="text-gray-500 hover:text-gray-700 transition-colors"
+              className="text-foreground/80 hover:text-gray-700 transition-colors"
             >
               Privacy
             </Link>

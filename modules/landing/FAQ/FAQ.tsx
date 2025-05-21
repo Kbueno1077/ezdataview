@@ -35,10 +35,7 @@ export const faqs: IFAQ[] = [
 
 const FAQ: React.FC = () => {
   return (
-    <section
-      id="faq"
-      className="py-16 lg:py-24 bg-gradient-to-b from-transparent to-gray-50/30"
-    >
+    <section id="faq" className="py-16 lg:py-24 ">
       <div className="container mx-auto px-4">
         <div className="flex flex-col lg:flex-row gap-16 items-start">
           <div className="lg:sticky lg:top-24 lg:w-1/3">

@@ -17,6 +17,9 @@ const config = {
         foreground: "var(--foreground)",
         popover: "var(--popover)",
         popoverForeground: "var(--popover-foreground)",
+        input: "var(--input)",
+        ring: "var(--ring)",
+        border: "var(--border)",
         primary: {
           DEFAULT: "var(--primary)",
           foreground: "var(--primary-foreground)",

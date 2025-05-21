@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { menuItems } from "../modules/landing/data/menuItems";
 import { siteDetails } from "../modules/landing/data/siteDetails";
+import { ThemeToggle } from "./theme-toggle";
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -50,15 +51,15 @@ const Header: React.FC = () => {
     <header
       className={`fixed top-0 left-0 right-0 z-50 w-full transition-all duration-300 ${
         scrolled
-          ? "bg-white/80 backdrop-blur-lg shadow-lg py-2"
-          : "bg-white/30 backdrop-blur-sm py-4 md:py-8"
+          ? "bg-background/80 backdrop-blur-lg shadow-lg py-2"
+          : "bg-background/30 backdrop-blur-sm py-4 md:py-8"
       } ${visible ? "translate-y-0" : "-translate-y-full"}`}
     >
       <div className="w-full max-w-7xl mx-auto px-4">
         <nav className="flex justify-between items-center">
           {/* Logo */}
           <Link href="/" className="flex items-center group">
-            <div className="relative overflow-hidden rounded-full bg-gray-200/20 p-0.5">
+            <div className="relative overflow-hidden rounded-full bg-gray-200/20 dark:bg-zinc-700/20 p-0.5">
               <Image
                 src="/ez-charts-logo-nobg.png"
                 alt="logo"
@@ -82,7 +83,7 @@ const Header: React.FC = () => {
               <li key={item.text}>
                 <Link
                   href={item.url}
-                  className="font-medium text-gray-700 transition-all duration-300 relative overflow-hidden group px-1"
+                  className="font-medium text-foreground/80 hover:text-foreground transition-all duration-300 relative overflow-hidden group px-1"
                 >
                   <span className="relative z-10">{item.text}</span>
                   <span className="absolute inset-0 bg-gradient-to-r from-blue-500/10 to-purple-600/10 transform scale-x-0 origin-left transition-transform duration-300 group-hover:scale-x-100"></span>
@@ -99,6 +100,7 @@ const Header: React.FC = () => {
               </Link>
             </li>
           </ul>
+          <ThemeToggle />
 
           {/* Mobile Menu Button */}
           <button
@@ -136,13 +138,13 @@ const Header: React.FC = () => {
 
         {/* Mobile Menu */}
         {mobileMenuOpen && (
-          <div className="md:hidden pt-4 pb-6 px-4 mt-2 bg-white/90 backdrop-blur-lg rounded-lg shadow-lg">
+          <div className="md:hidden pt-4 pb-6 px-4 mt-2 bg-background/90 backdrop-blur-lg rounded-lg shadow-lg">
             <ul className="flex flex-col space-y-4">
               {menuItems.map((item) => (
                 <li key={item.text}>
                   <Link
                     href={item.url}
-                    className="text-gray-800 hover:text-blue-600 font-medium block py-1 transition-colors relative group"
+                    className="text-foreground hover:text-blue-600 font-medium block py-1 transition-colors relative group"
                     onClick={() => setMobileMenuOpen(false)}
                   >
                     {item.text}

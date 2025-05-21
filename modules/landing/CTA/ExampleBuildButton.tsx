@@ -12,8 +12,10 @@ const ExampleBuildButton = ({ dark }: { dark?: boolean }) => {
           "group flex items-center cursor-pointer justify-center min-w-[205px] mt-3 px-6 h-14 rounded-full w-full sm:w-fit",
           "transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-lg",
           {
-            "text-white bg-foreground hover:bg-foreground/90": dark,
-            "text-foreground bg-white hover:bg-gray-50": !dark,
+            "text-white bg-foreground hover:bg-foreground/90 dark:text-background":
+              dark,
+            "text-foreground bg-white hover:bg-gray-50 dark:text-background":
+              !dark,
           }
         )}
       >

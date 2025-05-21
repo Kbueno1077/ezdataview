@@ -130,7 +130,7 @@ function BreakdownBuilder() {
                       type="single"
                       collapsible
                       key={item.id}
-                      className="-ml-2 w-[calc(100%+16px)] border border-gray-200 dark:border-gray-700 rounded-md"
+                      className="-ml-2 w-[calc(100%+16px)] border border-border rounded-md"
                     >
                       <AccordionItem
                         value={item.id}
@@ -255,7 +255,7 @@ function BreakdownBuilder() {
                                       <TooltipTrigger asChild>
                                         <Button
                                           size="icon"
-                                          variant="outline"
+                                          variant="ghost"
                                           onClick={() =>
                                             handleUpdateSection(
                                               index,
@@ -290,6 +290,7 @@ function BreakdownBuilder() {
                                 <Tooltip>
                                   <TooltipTrigger asChild>
                                     <Button
+                                      className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                       variant="ghost"
                                       size="icon"
                                       onClick={() =>
@@ -298,12 +299,11 @@ function BreakdownBuilder() {
                                           item.key || `Section ${index + 1}`
                                         )
                                       }
-                                      className="h-7 w-7 text-gray-500 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
                                       aria-label={`Delete ${
                                         item.key || `Section ${index + 1}`
                                       }`}
                                     >
-                                      <Trash2 className="h-3.5 w-3.5" />
+                                      <Trash2 />
                                     </Button>
                                   </TooltipTrigger>
                                   <TooltipContent>
@@ -386,7 +386,7 @@ function BreakdownBuilder() {
           <DialogFooter className="flex justify-end gap-2">
             <Button
               variant="outline"
-              className="hover:bg-gray-100 hover:text-foreground"
+              className="hover:bg-muted hover:text-foreground"
               onClick={() => setDeleteDialogOpen(false)}
             >
               Cancel

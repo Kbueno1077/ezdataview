@@ -62,8 +62,8 @@ export function Sidebar({
 
   return (
     <aside
-      className={`w-full min-w-[380px] max-w-[512px] h-full overflow-y-auto border-l rounded-lg shadow-md bg-white dark:bg-gray-800 z-10 p-4
-        lg:relative lg:translate-x-0
+      className={`w-full min-w-[380px] max-w-[512px] h-full overflow-y-auto border-l rounded-lg shadow-md bg-background z-10 p-4
+        lg:relative lg:translate-x-0 dark:border-zinc-700
         fixed top-0 right-0 transform transition-transform duration-300 ease-in-out
         ${isOpen ? "translate-x-0" : "translate-x-full"}`}
     >
@@ -75,7 +75,11 @@ export function Sidebar({
               <Tooltip>
                 <TooltipTrigger asChild>
                   <DropdownMenuTrigger asChild>
-                    <Button className="h-8 w-8" size="icon">
+                    <Button
+                      size="icon"
+                      variant="default"
+                      aria-label="Change chart type"
+                    >
                       {getChartTypeIcon(currentChartType)}
                     </Button>
                   </DropdownMenuTrigger>
@@ -109,12 +113,13 @@ export function Sidebar({
             <Tooltip>
               <TooltipTrigger asChild>
                 <Button
-                  size="sm"
+                  size="icon"
                   onClick={onClose}
                   className="lg:hidden"
                   aria-label="Close sidebar"
+                  variant="outline"
                 >
-                  <Settings className="h-4 w-4" />
+                  <Settings />
                 </Button>
               </TooltipTrigger>
               <TooltipContent>
@@ -140,15 +145,13 @@ export function Sidebar({
           <DialogFooter className="flex justify-end gap-2">
             <Button
               variant="outline"
-              color="default"
-              className="hover:bg-gray-100 hover:text-foreground"
+              className="hover:bg-muted hover:text-foreground"
               onClick={() => setConfirmDialogOpen(false)}
             >
               Cancel
             </Button>
             <Button
-              variant="default"
-              color="primary"
+              className="bg-primary hover:bg-primary/80"
               onClick={() =>
                 pendingChartType && applyChartTypeChange(pendingChartType)
               }

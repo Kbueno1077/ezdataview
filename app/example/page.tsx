@@ -8,7 +8,7 @@ const ExamplePage: React.FC = () => {
   return (
     <>
       <Header />
-      <main>
+      <main className="mb-5">
         <Container>
           <div className="py-10 mt-20">
             <Showcase data={data} />
