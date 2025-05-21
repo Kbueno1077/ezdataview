@@ -3,7 +3,17 @@
 
 "use client";
 
-import { ListFilterPlus, Settings, ZoomIn, ZoomOut } from "lucide-react";
+import { ThemeToggle } from "@/components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import {
+  ListFilterPlus,
+  SendHorizonal,
+  Settings,
+  ZoomIn,
+  ZoomOut,
+} from "lucide-react";
 import { useState } from "react";
 import { getChartTypeByName } from "../../components/rosencharts/utils/utils";
 import {
@@ -16,10 +26,6 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { useBuildStore } from "../../providers/store-provider";
-import { Button } from "@/components/ui/button";
-import { Textarea } from "@/components/ui/textarea";
-import { Input } from "@/components/ui/input";
-import { ThemeToggle } from "@/components/theme-toggle";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const { workspaceCharts, currentChartIndex, updateChartItem } = useBuildStore(
@@ -113,6 +119,18 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[40px] text-center">
                 {zoomLevel}%
               </span>
+
+              <Button
+                variant="ghost"
+                aria-label="Preview chart"
+                className="group relative flex items-center gap-2 overflow-hidden"
+              >
+                <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-16 origin-left">
+                  Preview
+                </span>
+
+                <SendHorizonal className="h-4 w-4 flex-shrink-0" />
+              </Button>
             </>
           )}
 
@@ -127,7 +145,6 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           </Button>
         </div>
       </div>
-      <ThemeToggle />
 
       {currentChart.data.length > 0 ? (
         <div

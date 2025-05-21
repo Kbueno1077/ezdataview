@@ -1,46 +1,62 @@
 "use client";
 
-import { Moon, Sun } from "lucide-react";
+import { Monitor, Moon, Sun } from "lucide-react";
 import { useTheme } from "../providers/theme-provider";
+import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 
 export function ThemeToggle() {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="flex items-center gap-2">
-      <button
-        onClick={() => setTheme("light")}
-        className={`p-2 rounded-md ${
+    <div className="inline-flex gap-1 bg-white/10 backdrop-blur-lg rounded-full p-1 shadow-md border border-white/20">
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn(
+          "h-8 w-8 rounded-full transition-colors",
           theme === "light"
-            ? "bg-primary text-primary-foreground"
-            : "hover:bg-muted"
-        }`}
-        aria-label="Light theme"
+            ? "bg-amber-100 dark:bg-amber-400/10 text-amber-500 hover:bg-amber-100 hover:text-amber-500 dark:hover:bg-amber-400/10 dark:hover:text-amber-500 "
+            : "text-muted-foreground hover:bg-amber-100 hover:text-amber-500 dark:hover:bg-amber-400/10 dark:hover:text-amber-500"
+        )}
+        onClick={() => setTheme("light")}
+        aria-pressed={theme === "light"}
       >
         <Sun className="h-4 w-4" />
-      </button>
-      <button
-        onClick={() => setTheme("dark")}
-        className={`p-2 rounded-md ${
+        <span className="sr-only">Light mode</span>
+      </Button>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn(
+          "h-8 w-8 rounded-full transition-colors",
           theme === "dark"
-            ? "bg-primary text-primary-foreground"
-            : "hover:bg-muted"
-        }`}
-        aria-label="Dark theme"
+            ? "bg-indigo-100 dark:bg-indigo-400/10 text-indigo-500 hover:bg-indigo-100 hover:text-indigo-500 dark:hover:bg-indigo-400/10 dark:hover:text-indigo-500"
+            : "text-muted-foreground hover:bg-indigo-100 hover:text-indigo-500 dark:hover:bg-indigo-400/10 dark:hover:text-indigo-500"
+        )}
+        onClick={() => setTheme("dark")}
+        aria-pressed={theme === "dark"}
       >
         <Moon className="h-4 w-4" />
-      </button>
-      <button
-        onClick={() => setTheme("system")}
-        className={`p-2 rounded-md ${
+        <span className="sr-only">Dark mode</span>
+      </Button>
+
+      <Button
+        variant="ghost"
+        size="icon"
+        className={cn(
+          "h-8 w-8 rounded-full transition-colors",
           theme === "system"
-            ? "bg-primary text-primary-foreground"
-            : "hover:bg-muted"
-        }`}
-        aria-label="System theme"
+            ? "bg-green-100 dark:bg-green-400/10 text-green-500 hover:bg-green-100 hover:text-green-500 dark:hover:bg-green-400/10 dark:hover:text-green-500"
+            : "text-muted-foreground hover:bg-green-100 hover:text-green-500 dark:hover:bg-green-400/10 dark:hover:text-green-500"
+        )}
+        onClick={() => setTheme("system")}
+        aria-pressed={theme === "system"}
       >
-        <span className="text-xs">System</span>
-      </button>
+        <Monitor className="h-4 w-4" />
+        <span className="sr-only">System mode</span>
+      </Button>
     </div>
   );
 }

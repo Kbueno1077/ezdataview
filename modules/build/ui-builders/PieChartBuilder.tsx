@@ -34,6 +34,7 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function PieChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
@@ -376,6 +377,10 @@ function PieChartBuilder() {
                 }
               )}
             </div>
+          </div>
+
+          <div className="flex justify-end absolute bottom-0 right-0 p-4">
+            <ThemeToggle />
           </div>
         </TabsContent>
 

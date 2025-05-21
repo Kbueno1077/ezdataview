@@ -40,6 +40,7 @@ import { format as formatDate } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { ThemeToggle } from "@/components/theme-toggle";
 
 function LineChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
@@ -634,6 +635,10 @@ function LineChartBuilder() {
                 </div>
               </div>
             </div>
+          </div>
+
+          <div className="flex justify-end absolute bottom-0 right-0 p-4">
+            <ThemeToggle />
           </div>
         </TabsContent>
       </Tabs>
