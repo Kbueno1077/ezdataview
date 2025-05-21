@@ -3,19 +3,30 @@
 
 "use client";
 
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
+  ChevronLeft,
+  ChevronRight,
   ListFilterPlus,
+  Plus,
   SendHorizonal,
   Settings,
+  Trash2,
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
 import { useState } from "react";
 import { getChartTypeByName } from "../../components/rosencharts/utils/utils";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -28,10 +39,16 @@ import {
 import { useBuildStore } from "../../providers/store-provider";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
-  const { workspaceCharts, currentChartIndex, updateChartItem } = useBuildStore(
-    (state) => state
-  );
+  const {
+    workspaceCharts,
+    currentChartIndex,
+    updateChartItem,
+    moveToPreviousChartIndex,
+    moveToNextChartIndex,
+    removeChart,
+  } = useBuildStore((state) => state);
   const [zoomLevel, setZoomLevel] = useState(90);
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
 
   const currentChart = workspaceCharts[currentChartIndex];
 
@@ -176,6 +193,83 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
           </div>
         </div>
       )}
+
+      <div className="flex items-center justify-end">
+        <div className="flex items-center gap-3">
+          {workspaceCharts.length > 1 && (
+            <Button
+              size="icon"
+              variant="ghost"
+              onClick={() => setDeleteDialogOpen(true)}
+              className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950 ml-auto"
+              aria-label="Delete chart"
+            >
+              <Trash2 className="h-4 w-4" />
+            </Button>
+          )}
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={moveToPreviousChartIndex}
+            disabled={currentChartIndex === 0}
+            className="hover:bg-gray-200 dark:hover:bg-zinc-600"
+            aria-label="Previous chart"
+          >
+            <ChevronLeft className="h-4 w-4" />
+          </Button>
+          <span className="text-sm font-medium">
+            Chart {currentChartIndex + 1} of {workspaceCharts.length}
+          </span>
+          <Button
+            size="icon"
+            variant="ghost"
+            onClick={moveToNextChartIndex}
+            className="hover:bg-gray-200 dark:hover:bg-zinc-600"
+            aria-label={
+              currentChartIndex === workspaceCharts.length - 1
+                ? "Add new chart"
+                : "Next chart"
+            }
+          >
+            {currentChartIndex === workspaceCharts.length - 1 ? (
+              <Plus className="h-4 w-4" />
+            ) : (
+              <ChevronRight className="h-4 w-4" />
+            )}
+          </Button>
+        </div>
+      </div>
+
+      {/* Delete Chart Confirmation Dialog */}
+      <Dialog open={deleteDialogOpen} onOpenChange={setDeleteDialogOpen}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Delete Chart</DialogTitle>
+            <DialogDescription>
+              Are you sure you want to delete this chart? This action cannot be
+              undone.
+            </DialogDescription>
+          </DialogHeader>
+          <DialogFooter className="flex justify-end gap-2">
+            <Button
+              variant="outline"
+              className="hover:bg-muted hover:text-foreground"
+              onClick={() => setDeleteDialogOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="destructive"
+              onClick={() => {
+                removeChart(currentChartIndex);
+                setDeleteDialogOpen(false);
+              }}
+            >
+              Delete
+            </Button>
+          </DialogFooter>
+        </DialogContent>
+      </Dialog>
     </>
   );
 }

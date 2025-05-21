@@ -95,6 +95,26 @@ export const createBuildStore = (initState: BuildState = defaultInitState) => {
     changeCurrentChartIndex: (index: number) =>
       set(() => ({ currentChartIndex: index })),
 
+    moveToNextChartIndex: () =>
+      set((state) => {
+        const isLastChart =
+          state.currentChartIndex === state.workspaceCharts.length - 1;
+        if (isLastChart) {
+          return {
+            workspaceCharts: [...state.workspaceCharts, defaultChart],
+            currentChartIndex: state.currentChartIndex + 1,
+          };
+        }
+        return {
+          currentChartIndex: state.currentChartIndex + 1,
+        };
+      }),
+
+    moveToPreviousChartIndex: () =>
+      set((state) => ({
+        currentChartIndex: Math.max(state.currentChartIndex - 1, 0),
+      })),
+
     changeChartType: (type: string) => {
       const currentChart = get().workspaceCharts?.[get().currentChartIndex];
 
@@ -188,8 +208,20 @@ export const createBuildStore = (initState: BuildState = defaultInitState) => {
       set((state) => ({ workspaceCharts: [...state.workspaceCharts, chart] })),
 
     removeChart: (index: number) =>
-      set((state) => ({
-        workspaceCharts: state.workspaceCharts.filter((_, i) => i !== index),
-      })),
+      set((state) => {
+        // Don't allow deletion if it's the last chart
+        if (state.workspaceCharts.length <= 1) {
+          return state;
+        }
+        const newCharts = state.workspaceCharts.filter((_, i) => i !== index);
+        const newIndex = Math.min(
+          state.currentChartIndex,
+          newCharts.length - 1
+        );
+        return {
+          workspaceCharts: newCharts,
+          currentChartIndex: newIndex,
+        };
+      }),
   }));
 };
