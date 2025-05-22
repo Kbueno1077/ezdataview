@@ -40,7 +40,6 @@ import { format as formatDate } from "date-fns";
 import { CalendarIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
-import { ThemeToggle } from "@/components/theme-toggle";
 import Controls from "../Controls";
 
 function LineChartBuilder() {

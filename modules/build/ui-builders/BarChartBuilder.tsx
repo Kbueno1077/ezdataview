@@ -27,7 +27,6 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
-import { ThemeToggle } from "@/components/theme-toggle";
 import Controls from "../Controls";
 function BarChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
