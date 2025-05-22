@@ -29,6 +29,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useState } from "react";
 import { ThemeToggle } from "@/components/theme-toggle";
+import Controls from "../Controls";
 
 function BreakdownBuilder() {
   const [activeTab, setActiveTab] = useState("data");
@@ -372,9 +373,7 @@ function BreakdownBuilder() {
             </div>
           </div>
 
-          <div className="flex justify-end absolute bottom-0 right-0 p-4">
-            <ThemeToggle />
-          </div>
+          <Controls />
         </TabsContent>
       </Tabs>
 

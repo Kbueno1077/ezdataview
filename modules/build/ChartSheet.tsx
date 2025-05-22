@@ -37,6 +37,7 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { useBuildStore } from "../../providers/store-provider";
+import { usePathname, useRouter } from "next/navigation";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const {
@@ -49,6 +50,8 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   } = useBuildStore((state) => state);
   const [zoomLevel, setZoomLevel] = useState(90);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
+  const pathname = usePathname();
+  const router = useRouter();
 
   const currentChart = workspaceCharts[currentChartIndex];
 
@@ -66,6 +69,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     updateChartConfig("description", e.target.value);
+  };
+
+  const handlePreview = () => {
+    router.push(`/preview/${pathname.split("/")[2]}`);
   };
 
   return (
@@ -141,6 +148,7 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
                 variant="ghost"
                 aria-label="Preview chart"
                 className="group relative flex items-center gap-2 overflow-hidden"
+                onClick={handlePreview}
               >
                 <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-16 origin-left">
                   Preview
