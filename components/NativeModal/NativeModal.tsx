@@ -2,22 +2,29 @@
 
 import { useEffect, useRef, useState } from "react";
 import styles from "./NativeModal.module.css";
-import { X } from "lucide-react";
+import { Info, X } from "lucide-react";
 import Portal from "./Portal";
 
 interface NativeModalProps {
   onClose: () => void;
   title: string;
+  description: string;
   children: React.ReactNode;
   isOpen: boolean;
 }
 
-function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
+function NativeModal({
+  onClose,
+  title,
+  description,
+  children,
+  isOpen,
+}: NativeModalProps) {
   const modalRef = useRef<HTMLDivElement>(null);
   const [animationState, setAnimationState] = useState<
     "entering" | "entered" | "exiting" | "exited"
   >(isOpen ? "entering" : "exited");
-  // const [isFullyExpanded, setIsFullyExpanded] = useState(false);
+  const [showDescription, setShowDescription] = useState(false);
 
   useEffect(() => {
     if (modalRef.current) {
@@ -30,9 +37,6 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
     const animationTimers: NodeJS.Timeout[] = [];
 
     if (isOpen) {
-      // Reset fully expanded state
-      // setIsFullyExpanded(false);
-
       // Use requestAnimationFrame for more reliable animation timing
       requestAnimationFrame(() => {
         setAnimationState("entering");
@@ -45,16 +49,9 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
             20
           );
           animationTimers.push(enteredTimer);
-
-          // Set fully expanded state after animation completes with a slightly longer timeout
-          // const expandTimer = setTimeout(() => setIsFullyExpanded(true), 550);
-          // animationTimers.push(expandTimer);
         });
       });
     } else {
-      // Remove fully expanded state first
-      // setIsFullyExpanded(false);
-
       // Immediately start exiting animation
       setAnimationState("exiting");
 
@@ -109,13 +106,30 @@ function NativeModal({ onClose, title, children, isOpen }: NativeModalProps) {
       >
         <div className={styles.modalHeader}>
           <h2 className={styles.modalTitle}>{title}</h2>
-          <button className={styles.modalClose} onClick={onClose}>
-            <X size={24} className="text-foreground" />
-          </button>
+          <div className="flex gap-2">
+            {description && (
+              <button
+                className={styles.modalClose}
+                onClick={() => setShowDescription(!showDescription)}
+                aria-label="Toggle description"
+              >
+                <Info size={24} className="text-foreground" />
+              </button>
+            )}
+            <button className={styles.modalClose} onClick={onClose}>
+              <X size={24} className="text-foreground" />
+            </button>
+          </div>
         </div>
 
         <div className={styles.modalContent}>
-          <div className={styles.modalContentInner}> {children}</div>
+          <div className={styles.modalContentInner}>
+            {showDescription ? (
+              <p className="text-foreground/80 text-sm">{description}</p>
+            ) : (
+              children
+            )}
+          </div>
         </div>
 
         <div className={styles.modalFooter}></div>

@@ -13,7 +13,15 @@ interface Chart {
   data: unknown;
 }
 
-function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
+function NativeCharts({
+  title,
+  description,
+  chart,
+}: {
+  title: string;
+  description: string;
+  chart: Chart;
+}) {
   const theme = useTheme();
   const [showModal, setShowModal] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
@@ -72,12 +80,17 @@ function NativeCharts({ title, chart }: { title: string; chart: Chart }) {
 
   return (
     <div>
-      <NativeModal title={title} isOpen={showModal} onClose={handleCloseModal}>
+      <NativeModal
+        title={title}
+        description={description}
+        isOpen={showModal}
+        onClose={handleCloseModal}
+      >
         <div className={styles.modalChart}>{previewChartNode}</div>
       </NativeModal>
 
       <div
-        className={`${styles.chartButton} shadow-sm hover:shadow-md dark:shadow-gray-800 dark:hover:shadow-gray-700`}
+        className={`${styles.chartButton} border-2 border-zinc-100 dark:border-zinc-700 shadow-sm hover:shadow-md dark:shadow-gray-800 dark:hover:shadow-gray-700 hover:border-zinc-200 dark:hover:border-zinc-600`}
         onClick={handleChartClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}

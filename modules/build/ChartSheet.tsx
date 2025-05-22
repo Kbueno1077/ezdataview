@@ -4,6 +4,14 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import {
@@ -17,16 +25,10 @@ import {
   ZoomIn,
   ZoomOut,
 } from "lucide-react";
+import { usePathname, useRouter } from "next/navigation";
 import { useState } from "react";
+import { toast } from "sonner";
 import { getChartTypeByName } from "../../components/rosencharts/utils/utils";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import {
   Drawer,
   DrawerContent,
@@ -37,12 +39,13 @@ import {
   DrawerTrigger,
 } from "../../components/ui/drawer";
 import { useBuildStore } from "../../providers/store-provider";
-import { usePathname, useRouter } from "next/navigation";
 
 function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const {
     workspaceCharts,
+    workspaceName,
     currentChartIndex,
+    changeWorkspaceName,
     moveToPreviousChartIndex,
     moveToNextChartIndex,
     removeChart,
@@ -72,6 +75,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   };
 
   const handlePreview = () => {
+    if (!workspaceName) {
+      toast.error("Please enter a workspace name");
+      return;
+    }
     router.push(`/preview/${pathname.split("/")[2]}`);
   };
 
@@ -79,6 +86,8 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
     <>
       <div className="flex items-center justify-between">
         <Input
+          value={workspaceName}
+          onChange={(e) => changeWorkspaceName(e.target.value)}
           placeholder="Title for this workspace"
           className="border-none outline-none shadow-none bg-gray-100 dark:bg-zinc-700 max-w-[250px] h-[40px]"
         />

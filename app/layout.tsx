@@ -6,6 +6,7 @@ import { Toaster } from "sonner";
 import { siteDetails } from "../modules/landing/data/siteDetails";
 import { ThemeProvider } from "../providers/theme-provider";
 import "./globals.css";
+import { BuildStoreProvider } from "@/providers/store-provider";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const sourceSans = Source_Sans_3({ subsets: ["latin"] });
@@ -48,8 +49,10 @@ export default function RootLayout({
           className={`${manrope.className} ${sourceSans.className} antialiased min-h-screen bg-background text-foreground`}
         >
           <ThemeProvider defaultTheme="system">
-            {children}
-            <Toaster />
+            <BuildStoreProvider>
+              {children}
+              <Toaster />
+            </BuildStoreProvider>
           </ThemeProvider>
         </body>
       </html>
