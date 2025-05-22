@@ -42,10 +42,10 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   const {
     workspaceCharts,
     currentChartIndex,
-    updateChartItem,
     moveToPreviousChartIndex,
     moveToNextChartIndex,
     removeChart,
+    updateChartConfig,
   } = useBuildStore((state) => state);
   const [zoomLevel, setZoomLevel] = useState(90);
   const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
@@ -61,11 +61,11 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
   };
 
   const handleTitleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateChartItem(currentChartIndex, "chartName", e.target.value);
+    updateChartConfig("chartName", e.target.value);
   };
 
   const handleDescriptionChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    updateChartItem(currentChartIndex, "description", e.target.value);
+    updateChartConfig("description", e.target.value);
   };
 
   return (

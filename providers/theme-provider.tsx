@@ -2,8 +2,6 @@
 
 import { createContext, useContext, useEffect, useState } from "react";
 
-export const prerender = false;
-
 type Theme = "dark" | "light" | "system";
 
 type ThemeProviderProps = {
