@@ -5,11 +5,15 @@ import { useTheme } from "../providers/theme-provider";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 
-export function ThemeToggle() {
+interface ThemeToggleProps {
+  children?: React.ReactNode;
+}
+
+const ThemeToggle = () => {
   const { theme, setTheme } = useTheme();
 
   return (
-    <div className="inline-flex gap-1 bg-white/10 backdrop-blur-lg rounded-full p-1 shadow-md border border-white/20">
+    <>
       <Button
         variant="ghost"
         size="icon"
@@ -57,6 +61,18 @@ export function ThemeToggle() {
         <Monitor className="h-4 w-4" />
         <span className="sr-only">System mode</span>
       </Button>
+    </>
+  );
+};
+
+export function Controls({ children }: ThemeToggleProps) {
+  return (
+    <div className="inline-flex items-center gap-1 bg-white/10 backdrop-blur-lg rounded-full p-1 shadow-md border border-white/20">
+      {children}
+      {children && (
+        <div className="h-6 w-[1px] bg-zinc-200 dark:bg-zinc-600 mx-2" />
+      )}
+      <ThemeToggle />
     </div>
   );
 }

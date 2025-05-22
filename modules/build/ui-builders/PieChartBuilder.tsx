@@ -8,6 +8,7 @@ interface PieChartDataItem extends ChartDataItem {
   colorTo?: string;
 }
 
+import { Controls } from "@/components/Controls";
 import {
   Accordion,
   AccordionContent,
@@ -33,11 +34,13 @@ import {
   TooltipProvider,
   TooltipTrigger,
 } from "@/components/ui/tooltip";
+import { Home } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
-import Controls from "../Controls";
 
 function PieChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
+  const router = useRouter();
 
   const {
     workspaceCharts,
@@ -379,7 +382,19 @@ function PieChartBuilder() {
             </div>
           </div>
 
-          <Controls />
+          <div className="flex w-full justify-end absolute bottom-0 left-0 p-4">
+            <Controls>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/")}
+                className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+                aria-label="Go to home"
+              >
+                <Home />
+              </Button>
+            </Controls>
+          </div>
         </TabsContent>
 
         <TabsContent value="settings" className="p-0 mt-0">

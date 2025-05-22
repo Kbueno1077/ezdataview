@@ -1,9 +1,10 @@
 "use client";
 
-import { PaintRoller, Palette, Plus, Trash2 } from "lucide-react";
+import { Home, PaintRoller, Palette, Plus, Trash2 } from "lucide-react";
 import { useBuildStore } from "../../../providers/store-provider";
 import { ChartDataItem } from "../../../stores/builder-store";
 
+import { Controls } from "@/components/Controls";
 import {
   Accordion,
   AccordionContent,
@@ -38,12 +39,13 @@ import {
 import { cn } from "@/lib/utils";
 import { format as formatDate } from "date-fns";
 import { CalendarIcon } from "lucide-react";
+import { useRouter } from "next/navigation";
 import { useState } from "react";
 import { toast } from "sonner";
-import Controls from "../Controls";
 
 function LineChartBuilder() {
   const [activeTab, setActiveTab] = useState("data");
+  const router = useRouter();
 
   const {
     workspaceCharts,
@@ -637,7 +639,19 @@ function LineChartBuilder() {
             </div>
           </div>
 
-          <Controls />
+          <div className="flex w-full justify-end absolute bottom-0 left-0 p-4">
+            <Controls>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/")}
+                className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+                aria-label="Go to home"
+              >
+                <Home />
+              </Button>
+            </Controls>
+          </div>
         </TabsContent>
       </Tabs>
 

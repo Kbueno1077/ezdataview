@@ -1,8 +1,9 @@
 "use client";
 
+import { Controls } from "@/components/Controls";
 import { NativeCharts } from "@/components/NativeModal";
-import { ThemeToggle } from "@/components/theme-toggle";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import { useBuildStore } from "@/providers/store-provider";
 import { Grid, Hammer, Home, Layout } from "lucide-react";
 import { usePathname, useRouter } from "next/navigation";
@@ -22,37 +23,45 @@ function PreviewWrapper() {
         </h1>
 
         <div className="flex items-center gap-2">
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() =>
-              setViewMode(viewMode === "grid" ? "carousel" : "grid")
-            }
-            aria-label="Toggle view mode"
-          >
-            {viewMode === "grid" ? <Layout /> : <Grid />}
-          </Button>
+          <Controls>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() =>
+                setViewMode(viewMode === "grid" ? "carousel" : "grid")
+              }
+              aria-label="Toggle view mode"
+              className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+            >
+              {viewMode === "grid" ? (
+                <Layout className="h-4 w-4" />
+              ) : (
+                <Grid className="h-4 w-4" />
+              )}
+            </Button>
 
-          <Button
-            variant="outline"
-            size="icon"
-            onClick={() => router.push(`/build/${pathname.split("/")[2]}`)}
-            aria-label="Go to home"
-            className="hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950"
-          >
-            <Hammer />
-          </Button>
+            <div className="h-6 w-[1px] bg-zinc-200 dark:bg-zinc-600 mx-2" />
 
-          <Button
-            variant="outline"
-            size="icon"
-            aria-label="Go to home"
-            onClick={() => router.push("/")}
-          >
-            <Home />
-          </Button>
+            <Button
+              variant="ghost"
+              size="icon"
+              onClick={() => router.push(`/build/${pathname.split("/")[2]}`)}
+              aria-label="Go to home"
+              className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+            >
+              <Hammer className="h-4 w-4" />
+            </Button>
 
-          <ThemeToggle />
+            <Button
+              variant="ghost"
+              size="icon"
+              aria-label="Go to home"
+              onClick={() => router.push("/")}
+              className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+            >
+              <Home className="h-4 w-4" />
+            </Button>
+          </Controls>
         </div>
       </div>
 

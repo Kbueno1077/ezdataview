@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { menuItems } from "../modules/landing/data/menuItems";
 import { siteDetails } from "../modules/landing/data/siteDetails";
-import { ThemeToggle } from "./theme-toggle";
+import { Controls } from "./Controls";
 
 const Header: React.FC = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -100,7 +100,7 @@ const Header: React.FC = () => {
               </Link>
             </li>
           </ul>
-          <ThemeToggle />
+          <Controls />
 
           {/* Mobile Menu Button */}
           <button

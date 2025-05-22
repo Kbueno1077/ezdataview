@@ -28,10 +28,13 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useState } from "react";
-import Controls from "../Controls";
+import { useRouter } from "next/navigation";
+import { Home } from "lucide-react";
+import { Controls } from "@/components/Controls";
 
 function BreakdownBuilder() {
   const [activeTab, setActiveTab] = useState("data");
+  const router = useRouter();
 
   const {
     workspaceCharts,
@@ -372,7 +375,19 @@ function BreakdownBuilder() {
             </div>
           </div>
 
-          <Controls />
+          <div className="flex w-full justify-end absolute bottom-0 left-0 p-4">
+            <Controls>
+              <Button
+                variant="ghost"
+                size="icon"
+                onClick={() => router.push("/")}
+                className="h-8 w-8 rounded-full transition-colors text-muted-foreground hover:bg-muted hover:text-muted-foreground dark:hover:bg-zinc-600"
+                aria-label="Go to home"
+              >
+                <Home />
+              </Button>
+            </Controls>
+          </div>
         </TabsContent>
       </Tabs>
 
