@@ -152,21 +152,21 @@ function ChartSheet({ openSidebar }: { openSidebar: () => void }) {
               <span className="text-xs font-medium text-gray-600 dark:text-gray-300 min-w-[40px] text-center">
                 {zoomLevel}%
               </span>
-
-              <Button
-                variant="ghost"
-                aria-label="Preview chart"
-                className="group relative flex items-center gap-2 overflow-hidden"
-                onClick={handlePreview}
-              >
-                <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-16 origin-left">
-                  Preview
-                </span>
-
-                <SendHorizonal className="h-4 w-4 flex-shrink-0" />
-              </Button>
             </>
           )}
+
+          <Button
+            variant="ghost"
+            aria-label="Preview chart"
+            className="group relative flex items-center gap-2 overflow-hidden"
+            onClick={handlePreview}
+          >
+            <span className="w-0 overflow-hidden transition-all duration-200 group-hover:w-16 origin-left">
+              Preview
+            </span>
+
+            <SendHorizonal className="h-4 w-4 flex-shrink-0" />
+          </Button>
 
           <Button
             variant="ghost"

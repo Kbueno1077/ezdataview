@@ -2,11 +2,11 @@ import type { Metadata } from "next";
 import { Manrope, Source_Sans_3 } from "next/font/google";
 
 import { ClerkProvider } from "@clerk/nextjs";
-import { Toaster } from "sonner";
 import { siteDetails } from "../modules/landing/data/siteDetails";
 import { ThemeProvider } from "../providers/theme-provider";
 import "./globals.css";
 import { BuildStoreProvider } from "@/providers/store-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const manrope = Manrope({ subsets: ["latin"] });
 const sourceSans = Source_Sans_3({ subsets: ["latin"] });

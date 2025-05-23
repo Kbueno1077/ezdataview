@@ -332,25 +332,35 @@ function BarChartBuilder() {
                                                   size="icon"
                                                   variant="ghost"
                                                   onClick={() => {
-                                                    const multipleColors = [
-                                                      ...(item.multipleColors ||
-                                                        []),
-                                                    ];
-                                                    if (
-                                                      multipleColors[valueIndex]
-                                                    ) {
-                                                      multipleColors[
-                                                        valueIndex
-                                                      ] = "";
-                                                    } else {
-                                                      multipleColors[
-                                                        valueIndex
-                                                      ] = "#3b82f6";
-                                                    }
-                                                    handleUpdateBar(
-                                                      index,
-                                                      "multipleColors",
-                                                      multipleColors
+                                                    const defaultColor =
+                                                      "#3b82f6";
+                                                    workspaceCharts[
+                                                      currentChartIndex
+                                                    ].data.forEach(
+                                                      (barItem, barIndex) => {
+                                                        const multipleColors = [
+                                                          ...(barItem.multipleColors ||
+                                                            []),
+                                                        ];
+                                                        if (
+                                                          multipleColors[
+                                                            valueIndex
+                                                          ]
+                                                        ) {
+                                                          multipleColors[
+                                                            valueIndex
+                                                          ] = "";
+                                                        } else {
+                                                          multipleColors[
+                                                            valueIndex
+                                                          ] = defaultColor;
+                                                        }
+                                                        handleUpdateBar(
+                                                          barIndex,
+                                                          "multipleColors",
+                                                          multipleColors
+                                                        );
+                                                      }
                                                     );
                                                   }}
                                                   aria-label={
